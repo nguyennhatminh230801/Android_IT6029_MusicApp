@@ -1,5 +1,5 @@
-# Android_IT6029_MusicApp
-App nhạc được phát triển nhóm 6 - Lớp IT6029.4 
+# Android_IT6029_MotobikeDriverLicenseApp
+App ôn thi GPLX được phát triển nhóm 6 - Lớp IT6029.4 
 
 ## Thành viên nhóm:
 1. Nguyễn Nhật Minh
