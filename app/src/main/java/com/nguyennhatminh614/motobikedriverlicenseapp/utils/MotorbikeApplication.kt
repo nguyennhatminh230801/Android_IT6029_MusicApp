@@ -43,9 +43,10 @@ class MotorbikeApplication : Application() {
             )
         }
 
-        val isDarkModeOn = inject<SharedPreferences>().value.getBoolean(AppConstant.DARK_MODE, false)
+        val isDarkModeOn =
+            inject<SharedPreferences>().value.getBoolean(AppConstant.DARK_MODE, false)
 
-        if(isDarkModeOn) {
+        if (isDarkModeOn) {
             AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
         } else {
             AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)

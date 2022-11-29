@@ -14,6 +14,14 @@ class TipsHighScoreAdapter :
     BaseRecyclerViewAdapter<TipsHighScore, ItemTipsHighScoreLayoutBinding, TipsHighScoreAdapter.ViewHolder>(
         TipsHighScore.getDiffCallBack()) {
 
+    private val listState = mutableListOf<Boolean>()
+
+    fun updateListState(list: MutableList<Boolean>) {
+        this.listState.clear()
+        this.listState.addAll(list)
+        notifyDataSetChanged()
+    }
+
     override fun registerOnClickItemEvent(onClickItem: OnClickItem<TipsHighScore>) {
         this.clickItemInterface = onClickItem
     }
@@ -33,26 +41,26 @@ class TipsHighScoreAdapter :
                 textTipsTitle.text = data.title
                 textTipsContent.text = data.content.processEndline()
 
+                if (listState.isNotEmpty() && listState[adapterPosition]) {
+                    binding.buttonSpanDetailContent.animate().rotation(DEGREE_0)
+                    binding.expandableView.isVisible = true
+                } else {
+                    binding.buttonSpanDetailContent.animate().rotation(DEGREE_180)
+                    binding.expandableView.isVisible = false
+                }
+
                 root.setOnClickListener {
-                    toggleWithAnimation(data, binding)
+                    clickItemInterface?.let { function ->
+                        function(data)
+                    }
                 }
 
                 buttonSpanDetailContent.setOnClickListener {
-                    toggleWithAnimation(data, binding)
+                    clickItemInterface?.let { function ->
+                        function(data)
+                    }
                 }
             }
-        }
-
-        private fun toggleWithAnimation(data: TipsHighScore, binding: ItemTipsHighScoreLayoutBinding) {
-            if (data.isVisible) {
-                binding.buttonSpanDetailContent.animate().rotation(DEGREE_180)
-                binding.expandableView.isVisible = false
-            } else {
-                binding.buttonSpanDetailContent.animate().rotation(DEGREE_0)
-                binding.expandableView.isVisible = true
-            }
-
-            data.isVisible = data.isVisible.not()
         }
     }
 

@@ -39,11 +39,14 @@ class BottomSheetQuestionDialog {
                 height = WindowManager.LayoutParams.MATCH_PARENT
             }
             dialogBinding.recyclerViewQuestionIconList.adapter = bottomSheetAdapter
+
             dialogBinding.textCurrentQuestions.text =
                 "Câu ${currentSelectedPos + 1}/${listQuestionOptions?.size}"
             bottomSheetAdapter.apply {
                 submitList(listQuestionOptions)
                 setSingleSelection(currentSelectedPos)
+                dialogBinding.recyclerViewQuestionIconList.layoutManager?.scrollToPosition(
+                    currentSelectedPos)
             }
         }
     }
@@ -77,6 +80,7 @@ class BottomSheetQuestionDialog {
                 dialogBinding.textCurrentQuestions.text =
                     "Câu ${data + 1}/${bottomSheetAdapter.currentList.size}"
                 bottomSheetAdapter.setSingleSelection(data)
+                dialogBinding.recyclerViewQuestionIconList.layoutManager?.scrollToPosition(data)
             }
 
             override fun onError(exception: Exception?) {
@@ -94,6 +98,7 @@ class BottomSheetQuestionDialog {
 
         bottomSheetAdapter.registerOnClickItemPositionEvent { position, data ->
             bottomSheetAdapter.setSingleSelection(position)
+            dialogBinding.recyclerViewQuestionIconList.layoutManager?.scrollToPosition(position)
             dialogBinding.textCurrentQuestions.text =
                 "Câu ${position + 1}/${bottomSheetAdapter.currentList.size}"
             bottomSheetListener.onClickMoveToPosition(position, data)

@@ -11,18 +11,18 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Exam
 @Dao
 interface ExamDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNewExam(vararg exam: Exam)
+    suspend fun insertNewExam(exam: Exam)
 
     @Update
     suspend fun updateExam(exam: Exam)
 
     @Delete
-    suspend fun deleteExam(vararg exam: Exam)
+    suspend fun deleteExam(exam: Exam)
 
     @Query("select * from EXAM")
-    suspend fun getAllExam() : MutableList<Exam>
+    suspend fun getAllExam(): MutableList<Exam>
 
     @Query("select * from EXAM where id=:id")
-    suspend fun getDetailExamByID(id: Int) : Exam
+    suspend fun getDetailExamByID(id: Int): Exam
 
 }

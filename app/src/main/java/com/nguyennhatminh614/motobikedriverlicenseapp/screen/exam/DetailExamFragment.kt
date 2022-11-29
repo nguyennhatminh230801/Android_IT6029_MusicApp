@@ -1,14 +1,13 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.addCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentDetailExamLayoutBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.adapter.ViewPagerAdapter
@@ -37,18 +36,22 @@ class DetailExamFragment :
     }
 
     private val backPressedCallback by lazy {
-        object : OnBackPressedCallback(true){
+        object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                AlertDialog.Builder(context)
-                    .setTitle(DIALOG_TITLE)
-                    .setMessage(DIALOG_MESSAGE)
-                    .setPositiveButton(YES_BUTTON) { _, _ ->
-                        viewModel.saveCurrentExamState()
-                        findNavController().navigateUp()
-                    }
-                    .setNegativeButton(NO_BUTTON) { _, _ -> }
-                    .create()
-                    .show()
+                if (viewModel.getCurrentExam()?.examState == ExamState.UNDEFINED.value) {
+                    AlertDialog.Builder(context)
+                        .setTitle(DIALOG_TITLE)
+                        .setMessage(DIALOG_MESSAGE)
+                        .setPositiveButton(YES_BUTTON) { _, _ ->
+                            viewModel.saveCurrentExamState()
+                            findNavController().navigateUp()
+                        }
+                        .setNegativeButton(NO_BUTTON) { _, _ -> }
+                        .create()
+                        .show()
+                } else {
+                    findNavController().navigateUp()
+                }
             }
         }
     }
@@ -102,6 +105,7 @@ class DetailExamFragment :
                     viewModel.getCurrentExam()?.listQuestionOptions,
                     viewBinding.viewPagerQuestions.currentItem,
                 )
+
                 bottomSheetDialog.setDialogEvent(
                     object : IBottomSheetListener {
                         override fun onNextQuestion(listener: IResponseListener<Int>) {
@@ -114,7 +118,7 @@ class DetailExamFragment :
                         }
 
                         override fun onPreviousQuestion(listener: IResponseListener<Int>) {
-                            if (viewBinding.viewPagerQuestions.currentItem > AppConstant.FIRST_INDEX) {
+                            if (viewBinding.viewPagerQuestions.currentItem > FIRST_INDEX) {
                                 viewBinding.viewPagerQuestions.currentItem--
                                 listener.onSuccess(viewBinding.viewPagerQuestions.currentItem)
                             } else {
@@ -143,24 +147,28 @@ class DetailExamFragment :
         }
 
         viewModel.currentExamQuestionPosition.observe(viewLifecycleOwner) {
-            lifecycleScope.launch {
-                delay(CHANGE_TO_NEXT_QUESTION_DELAY_TIME)
-                viewBinding.viewPagerQuestions.currentItem = it
+            if (it != AppConstant.NONE_POSITION) {
+                lifecycleScope.launch {
+                    delay(CHANGE_TO_NEXT_QUESTION_DELAY_TIME)
+                    viewBinding.viewPagerQuestions.currentItem = it
+                }
             }
         }
 
         viewModel.listExam.observe(viewLifecycleOwner) {
             val currentExamPosition =
                 viewModel.currentExamPosition.value ?: AppConstant.NONE_POSITION
-            val currentExam = it[currentExamPosition]
-            listQuestionSize = currentExam.listQuestions.size
-            var index = FIRST_INDEX
-            questionAdapter.clearAllFragments()
-            currentExam.listQuestions.forEach {
-                questionAdapter.addFragment(
-                    QuestionExamFragment.newInstance(index, it)
-                )
-                index++
+            if (currentExamPosition != AppConstant.NONE_POSITION) {
+                val currentExam = it[currentExamPosition]
+                listQuestionSize = currentExam.listQuestions.size
+                var index = FIRST_INDEX
+                questionAdapter.clearAllFragments()
+                currentExam.listQuestions.forEach {
+                    questionAdapter.addFragment(
+                        QuestionExamFragment.newInstance(index, it)
+                    )
+                    index++
+                }
             }
         }
     }
@@ -180,4 +188,3 @@ class DetailExamFragment :
         private const val NO_BUTTON = "Không"
     }
 }
-

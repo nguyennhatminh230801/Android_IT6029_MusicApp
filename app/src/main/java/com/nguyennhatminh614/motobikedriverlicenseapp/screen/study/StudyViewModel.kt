@@ -20,6 +20,7 @@ class StudyViewModel(
     private val studyRepository: StudyRepository,
     private val wrongAnswerRepository: WrongAnswerRepository,
 ) : BaseViewModel() {
+
     private val listDefaultStudyCategory = listOf(
         StudyCategory(
             R.drawable.ic_caution,
@@ -137,7 +138,8 @@ class StudyViewModel(
             lastData.iconResourceID,
             lastData.title,
             listQuestion,
-            if (lastData.listQuestionsState.isEmpty())
+            if (lastData.listQuestionsState.isEmpty() ||
+                lastData.listQuestionsState.size != listQuestion.size)
                 generateEmptyQuestionStateList(listQuestion.size)
             else lastData.listQuestionsState,
             listQuestion.size,
@@ -164,12 +166,39 @@ class StudyViewModel(
 
     fun getQuestionOptionSelectedByQuestionPosition(questionsPosition: Int): QuestionOptions? {
         val currentStudyCategoryPos = currentStudyCategory.value
-        currentStudyCategoryPos?.let { currentPos ->
+
+        if (currentStudyCategoryPos != null
+            && currentStudyCategoryPos != AppConstant.NONE_POSITION
+            && questionsPosition != AppConstant.NONE_POSITION
+        ) {
             _listStudyCategory.value?.let { notNullList ->
-                return notNullList[currentPos].listQuestionsState[questionsPosition]
+                if (questionsPosition < notNullList[currentStudyCategoryPos].listQuestionsState.size) {
+                    return notNullList[currentStudyCategoryPos].listQuestionsState[questionsPosition]
+                }
             }
         }
+
         return null
+    }
+
+    fun resetAllStudyCategoryState() {
+        launchTask {
+            val newList = listStudyCategory.value
+
+            newList?.forEach {
+                it.numbersOfSelectedQuestions = DEFAULT_NOT_SELECTED_STATE
+                val listSize = it.listQuestionsState.size
+                it.listQuestionsState.clear()
+                it.listQuestionsState.addAll(generateEmptyQuestionStateList(listSize))
+            }
+
+            _listStudyCategory.value = newList
+
+            newList?.let {
+                studyRepository.saveProgress(it)
+                hideLoading()
+            }
+        }
     }
 
     companion object {
@@ -181,5 +210,6 @@ class StudyViewModel(
         const val CONCEPT_AND_RULES_POSITION = 1
         const val TRAFFIC_SIGNAL_POSITION = 2
         const val SAT_FIGURE_POSITION = 3
+        const val DEFAULT_NOT_SELECTED_STATE = 0
     }
 }

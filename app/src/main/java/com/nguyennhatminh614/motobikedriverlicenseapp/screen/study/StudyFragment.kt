@@ -4,15 +4,19 @@ import androidx.navigation.fragment.findNavController
 import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentStudyBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseFragment
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class StudyFragment : BaseFragment<FragmentStudyBinding>(FragmentStudyBinding::inflate) {
 
     override val viewModel by sharedViewModel<StudyViewModel>()
 
+    val baseViewModel by sharedViewModel<BaseViewModel>()
+
     private val studyAdapter by lazy { StudyAdapter() }
 
     override fun initData() {
+        baseViewModel.setVisibleResetButton(true)
         viewBinding.recyclerViewQuestionCategory.adapter = studyAdapter
     }
 
@@ -25,7 +29,12 @@ class StudyFragment : BaseFragment<FragmentStudyBinding>(FragmentStudyBinding::i
 
     override fun bindData() {
         viewModel.listStudyCategory.observe(viewLifecycleOwner) {
-            studyAdapter.submitList(it)
+            studyAdapter.submitList(it.map { it.copy() })
         }
+    }
+
+    override fun onStop() {
+        baseViewModel.setVisibleResetButton(false)
+        super.onStop()
     }
 }

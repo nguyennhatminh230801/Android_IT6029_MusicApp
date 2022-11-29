@@ -22,7 +22,7 @@ class MainCategoryListAdapter :
 
     inner class ViewHolder(
         override val binding: ItemMainScreenCategoryLayoutBinding,
-    ) : BaseViewHolder<MainCategoryModel, ItemMainScreenCategoryLayoutBinding>(binding){
+    ) : BaseViewHolder<MainCategoryModel, ItemMainScreenCategoryLayoutBinding>(binding) {
         override fun onBindData(data: MainCategoryModel) {
             binding.apply {
                 imageCategory.setImageResource(data.resourceID)

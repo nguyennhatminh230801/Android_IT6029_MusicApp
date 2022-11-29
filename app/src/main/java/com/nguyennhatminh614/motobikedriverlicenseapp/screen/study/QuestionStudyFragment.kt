@@ -122,8 +122,10 @@ class QuestionStudyFragment :
     override fun bindData() {
         viewModel.listStudyCategory.observe(viewLifecycleOwner) {
             val data = viewModel.getQuestionOptionSelectedByQuestionPosition(questionsPosition)
-            questionOptionAdapter.updateStateListWithPosition(updateStateListUI(data),
-                data?.position ?: AppConstant.NONE_POSITION)
+            data?.let {
+                questionOptionAdapter.updateStateListWithPosition(updateStateListUI(data),
+                    data.position)
+            }
         }
     }
 

@@ -7,7 +7,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
 
 class WrongAnswerRemoteDataSource(
-    private val fireStoreDB : FirebaseFirestore
+    private val fireStoreDB: FirebaseFirestore,
 ) : IWrongAnswerDataSource.Remote {
 
     private val questionCollections by lazy {

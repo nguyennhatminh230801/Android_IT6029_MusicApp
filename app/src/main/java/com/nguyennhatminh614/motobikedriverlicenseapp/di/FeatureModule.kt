@@ -45,7 +45,6 @@ val studyDataSourceModule = module {
 val wrongAnswerDataSourceModule = module {
     single<IWrongAnswerDataSource.Local> { WrongAnswerLocalDataSource(get()) }
     single<IWrongAnswerDataSource.Remote> { WrongAnswerRemoteDataSource(get()) }
-
 }
 
 val trafficSignDataSourceModule = module {

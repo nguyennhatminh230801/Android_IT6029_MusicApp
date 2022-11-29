@@ -5,8 +5,8 @@ import androidx.recyclerview.widget.DiffUtil
 data class MainCategoryModel(
     val resourceID: Int,
     val title: String,
-    val type: CategoryType
-){
+    val type: CategoryType,
+) {
     companion object {
         fun getDiffCallBack() = object :
             DiffUtil.ItemCallback<MainCategoryModel>() {

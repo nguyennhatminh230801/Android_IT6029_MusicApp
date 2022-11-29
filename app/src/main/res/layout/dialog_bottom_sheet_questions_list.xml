@@ -62,14 +62,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintHorizontal_bias="0.7"
-            android:visibility="invisible"/>
+            android:visibility="invisible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_question_icon_list"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_420"
-        android:background="@color/background_color"
+        android:background="?attr/backgroundColor"
         app:layout_constraintTop_toBottomOf="@id/bottom_bar"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="5"

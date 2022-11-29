@@ -49,7 +49,7 @@ class QuestionExamFragment
                 val initListQuestionOptions = processQuestionOptionsList(question.option)
                 questionOptionAdapter.submitList(initListQuestionOptions)
 
-                if(viewModel.getCurrentExam()?.examState != ExamState.UNDEFINED.value) {
+                if (viewModel.getCurrentExam()?.examState != ExamState.UNDEFINED.value) {
                     questionOptionAdapter.disableClickEvent()
                 }
             }
@@ -57,7 +57,7 @@ class QuestionExamFragment
     }
 
     override fun handleEvent() {
-        if(viewModel.getCurrentExam()?.examState == ExamState.UNDEFINED.value) {
+        if (viewModel.getCurrentExam()?.examState == ExamState.UNDEFINED.value) {
             questionOptionAdapter.registerOnClickItemEvent { item ->
                 questionOptionAdapter.updateStateListWithPosition(updateStateListUI(item),
                     item.position)
@@ -91,7 +91,7 @@ class QuestionExamFragment
         viewModel.listExam.observe(viewLifecycleOwner) {
             val data = viewModel.getCurrentExam()?.listQuestionOptions
             data?.let {
-                if(questionsPosition != AppConstant.NONE_POSITION) {
+                if (questionsPosition != AppConstant.NONE_POSITION) {
                     val currentState = data[questionsPosition]
                     questionOptionAdapter.updateStateListWithPosition(updateStateListUI(currentState),
                         currentState.position)

@@ -1,14 +1,13 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.remote.trafficsign
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Questions
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.TrafficSigns
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.ITrafficSignalDataSource
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
 
 class TrafficSignRemoteDataSource(
-    private val fireStoreDB : FirebaseFirestore
+    private val fireStoreDB: FirebaseFirestore,
 ) : ITrafficSignalDataSource.Remote {
 
     private val trafficSignsCollections by lazy {

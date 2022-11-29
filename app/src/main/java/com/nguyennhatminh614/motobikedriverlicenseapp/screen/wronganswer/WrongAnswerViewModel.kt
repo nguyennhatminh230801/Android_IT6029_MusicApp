@@ -7,6 +7,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Questions
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.WrongAnswerObject
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.WrongAnswerRepository
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.generateEmptyQuestionStateList
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
 
@@ -102,6 +103,8 @@ class WrongAnswerViewModel(
     }
 
     fun getQuestionOptionSelectedByQuestionPosition(questionsPosition: Int): QuestionOptions? {
-        return _listQuestionState.value?.get(questionsPosition)
+        return if (questionsPosition != AppConstant.NONE_POSITION) {
+            _listQuestionState.value?.get(questionsPosition)
+        } else null
     }
 }
