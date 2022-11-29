@@ -6,6 +6,6 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponse
 class TrafficRepository(
     private val remote: ITrafficSignalDataSource.Remote,
 ) : ITrafficSignalDataSource.Remote {
-    override fun getAllTrafficSignal(listener: IResponseListener<MutableList<TrafficSigns>>)
-        = remote.getAllTrafficSignal(listener)
+    override fun getAllTrafficSignal(listener: IResponseListener<MutableList<TrafficSigns>>) =
+        remote.getAllTrafficSignal(listener)
 }

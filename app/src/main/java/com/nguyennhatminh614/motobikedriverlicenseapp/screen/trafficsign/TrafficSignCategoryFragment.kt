@@ -1,10 +1,6 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.trafficsign
 
-import android.util.Log
-import android.widget.TableLayout
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
-import com.nguyennhatminh614.motobikedriverlicenseapp.R
+import androidx.core.view.isVisible
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.TrafficSigns
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentTrafficSignCategoryBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseFragment
@@ -21,6 +17,8 @@ class TrafficSignCategoryFragment :
     override fun initData() {
         viewBinding.recyclerViewTrafficSign.adapter = adapter
         adapter.submitList(listTrafficSignData)
+        viewBinding.recyclerViewTrafficSign.isVisible = listTrafficSignData.isEmpty().not()
+        viewBinding.layoutVisibleWhenDataIsEmpty.root.isVisible = listTrafficSignData.isEmpty()
     }
 
     override fun handleEvent() {

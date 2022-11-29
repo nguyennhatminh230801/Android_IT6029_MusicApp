@@ -1,7 +1,7 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.mainscreen
 
+
 import android.app.AlertDialog
-import android.content.res.Configuration
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
@@ -20,6 +20,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.screen.settings.SettingsVi
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.study.StudyViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.wronganswer.WrongAnswerViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseActivity
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.network.ConnectivityObserver
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.network.InternetConnection
 import kotlinx.coroutines.launch
@@ -28,6 +29,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
 
+    val baseViewModel by viewModel<BaseViewModel>()
     val studyViewModel by viewModel<StudyViewModel>()
     val wrongAnswerViewModel by viewModel<WrongAnswerViewModel>()
     val examViewModel by viewModel<ExamViewModel>()
@@ -71,14 +73,53 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             setupActionBarWithNavController(navController, appBarConfiguration)
             navView.setupWithNavController(navController)
 
+            navView.setNavigationItemSelectedListener { menuItem ->
+                navController.popBackStack(R.id.nav_main, false)
+
+                when (menuItem.itemId) {
+                    R.id.nav_study -> navController.navigate(R.id.action_nav_main_to_nav_study)
+                    R.id.nav_settings -> navController.navigate(R.id.action_nav_main_to_nav_settings)
+                    R.id.nav_exam -> navController.navigate(R.id.action_nav_main_to_nav_exam)
+                    R.id.nav_tips_high_score ->
+                        navController.navigate(R.id.action_nav_main_to_nav_tips_high_score)
+                    R.id.nav_traffic_sign -> navController.navigate(R.id.action_nav_main_to_nav_traffic_sign)
+                    R.id.nav_wrong_answer -> navController.navigate(R.id.action_nav_main_to_nav_wrong_answer)
+                }
+
+                drawerLayout.closeDrawers()
+
+                return@setNavigationItemSelectedListener true
+            }
+
             appBarMain.buttonFinishExam.setOnClickListener {
                 val builder = AlertDialog.Builder(this@MainActivity)
                     .setTitle(DIALOG_TITLE)
                     .setMessage(FINISH_EXAM_DIALOG_MESSAGE)
                     .setCancelable(false)
                     .setPositiveButton(FINISH_EXAM_YES_BUTTON) { _, _ ->
-                        examViewModel.processFinishExamEvent()
-                        findNavController(R.id.nav_host_fragment_content_main).navigateUp()
+                        examViewModel.processFinishExamEvent {
+                            findNavController(R.id.nav_host_fragment_content_main).navigateUp()
+                        }
+                    }
+                    .setNegativeButton(FINISH_EXAM_NO_BUTTON) { _, _ ->
+                        //Not-op
+                    }
+
+                val dialog = builder.create()
+                dialog.window?.attributes = WindowManager.LayoutParams().apply {
+                    width = WindowManager.LayoutParams.MATCH_PARENT
+                    height = WindowManager.LayoutParams.MATCH_PARENT
+                }
+                dialog.show()
+            }
+
+            appBarMain.buttonResetStudy.setOnClickListener {
+                val builder = AlertDialog.Builder(this@MainActivity)
+                    .setTitle(DIALOG_TITLE)
+                    .setMessage("Bạn có muốn reset không?")
+                    .setCancelable(false)
+                    .setPositiveButton(FINISH_EXAM_YES_BUTTON) { _, _ ->
+                        studyViewModel.resetAllStudyCategoryState()
                     }
                     .setNegativeButton(FINISH_EXAM_NO_BUTTON) { _, _ ->
                         //Not-op
@@ -95,19 +136,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     override fun bindData() {
+        baseViewModel.isVisibleResetButton.observe(this) {
+            viewBinding.appBarMain.buttonResetStudy.isVisible = it
+        }
+
         examViewModel.isVisibleFinishExamButton.observe(this) {
             viewBinding.appBarMain.buttonFinishExam.isVisible = it
         }
 
         settingsViewModel.isDarkModeOn.observe(this) {
             if (it) {
-                if (isUsingNightModeResources().not()) {
-                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
-                }
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
             } else {
-                if(isUsingNightModeResources()) {
-                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
-                }
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
             }
         }
 
@@ -122,17 +163,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     ConnectivityObserver.Status.LOST_CONNECTION -> {
                         notConnectDialog.show()
                     }
-                    else -> {}
                 }
             }
         }
-
     }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
 
-        return if(navController.currentDestination?.id == R.id.nav_detail_exam){
+        return if (navController.currentDestination?.id == R.id.nav_detail_exam) {
             onBackPressedDispatcher.onBackPressed()
             true
         } else navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
@@ -150,15 +189,5 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         private const val FINISH_EXAM_DIALOG_MESSAGE = "Bạn có muốn kết thúc bài thi này không?"
         private const val FINISH_EXAM_YES_BUTTON = "Có"
         private const val FINISH_EXAM_NO_BUTTON = "Không"
-    }
-
-    private fun isUsingNightModeResources(): Boolean {
-        return when (resources.configuration.uiMode and
-                Configuration.UI_MODE_NIGHT_MASK) {
-            Configuration.UI_MODE_NIGHT_YES -> true
-            Configuration.UI_MODE_NIGHT_NO -> false
-            Configuration.UI_MODE_NIGHT_UNDEFINED -> false
-            else -> false
-        }
     }
 }

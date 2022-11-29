@@ -51,13 +51,17 @@ class ExamAdapter :
                 val idColor = when (data.examState) {
                     ExamState.PASSED.value -> R.color.green_pastel
                     ExamState.FAILED.value -> R.color.red_pastel
-                    else -> R.color.white
+                    else -> null
                 }
 
-                root.setCardBackgroundColor(getSelectedColor(binding, idColor))
+                idColor?.let {
+                    root.setCardBackgroundColor(getSelectedColor(binding, idColor))
+                }
 
                 if (data.examState != ExamState.UNDEFINED.value) {
                     buttonDoExam.text = WATCH_RESULT
+                    textDescription.text =
+                        "Đúng ${data.numbersOfCorrectAnswer} / ${data.listQuestions.size} câu"
                 }
 
                 buttonDoExam.setOnClickListener {

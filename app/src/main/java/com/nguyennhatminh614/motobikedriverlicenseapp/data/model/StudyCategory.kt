@@ -16,7 +16,7 @@ data class StudyCategory(
     val listQuestionsState: MutableList<QuestionOptions> = mutableListOf(),
     val totalNumberOfQuestions: Int = DEFAULT_VALUE_TOTAL_QUESTION,
     var numbersOfSelectedQuestions: Int = DEFAULT_VALUE_SELECTED_QUESTION,
-): Parcelable {
+) : Parcelable {
     companion object {
         const val STUDY_CATEGORY_TABLE = "STUDY_CATEGORY"
         const val DEFAULT_VALUE_TOTAL_QUESTION = 1

@@ -6,7 +6,7 @@
         android:id="@+id/action_finish_exam"
         android:title="Kết thúc"
         app:showAsAction="ifRoom"
-        android:visible="true"/>
+        android:visible="true" />
 
     <item
         android:id="@+id/action_info"

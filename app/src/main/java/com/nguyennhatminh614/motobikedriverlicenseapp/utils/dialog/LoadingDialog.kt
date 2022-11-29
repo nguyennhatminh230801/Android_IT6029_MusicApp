@@ -14,7 +14,7 @@ object LoadingDialog {
         windowLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
         windowLayoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
 
-        if(dialog == null) {
+        if (dialog == null) {
             dialog = AlertDialog.Builder(context)
                 .setView(DialogLoadingLayoutBinding.inflate(LayoutInflater.from(context)).root)
                 .setCancelable(false)

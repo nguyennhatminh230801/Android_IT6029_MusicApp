@@ -29,8 +29,6 @@ class WrongAnswerFragment :
     }
 
     override fun initData() {
-
-
         viewBinding.viewPagerQuestions.adapter = questionAdapter
     }
 

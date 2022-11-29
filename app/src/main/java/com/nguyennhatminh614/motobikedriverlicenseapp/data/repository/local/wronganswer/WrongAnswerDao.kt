@@ -2,6 +2,7 @@ package com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.local.wro
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.WrongAnswerObject
@@ -13,9 +14,9 @@ interface WrongAnswerDao {
     suspend fun getAllWrongAnswerQuestion(): MutableList<WrongAnswerObject>
 
     @Query("select count(*) from wrong_answer_table where questionsID = :id")
-    suspend fun checkWrongAnswerQuestionExists(id: Int) : Int
+    suspend fun checkWrongAnswerQuestionExists(id: Int): Int
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNewWrongAnswerQuestion(vararg wrongAnswerObject: WrongAnswerObject)
 
     @Update

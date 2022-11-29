@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:overScrollMode="never"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_exam_list_layout"/>
+        tools:listitem="@layout/item_exam_list_layout" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/button_shuffle"

@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.firebase.firestore.PropertyName
+import com.google.gson.annotations.SerializedName
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Questions.Companion.TABLE_QUESTION
 import kotlinx.android.parcel.Parcelize
 
@@ -19,6 +20,7 @@ class Questions : Parcelable {
 
     @set:PropertyName("image_url")
     @get:PropertyName("image_url")
+    @SerializedName("image_url")
     var imageUrl = ""
 
     var hasImageBanner = false
@@ -27,6 +29,7 @@ class Questions : Parcelable {
 
     @set:PropertyName("question_type")
     @get:PropertyName("question_type")
+    @SerializedName("question_type")
     var questionType = ""
 
     override fun equals(other: Any?): Boolean {

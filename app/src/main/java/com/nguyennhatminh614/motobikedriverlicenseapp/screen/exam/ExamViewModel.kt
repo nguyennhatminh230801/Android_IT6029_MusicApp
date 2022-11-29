@@ -90,13 +90,12 @@ class ExamViewModel(
                     CountDownInstance.CurrentTimeStamp
             },
             onFinishEvent = {
-                processFinishExamEvent()
-                onFinishExamEvent()
+                processFinishExamEvent(onFinishExamEvent)
             }
         )
     }
 
-    fun processFinishExamEvent() {
+    fun processFinishExamEvent(onFinishExamEvent: () -> Unit) {
         launchTask {
             val currentExam = _listExam.value?.get(_currentExamPosition.value
                 ?: AppConstant.NONE_POSITION)
@@ -132,7 +131,7 @@ class ExamViewModel(
                     index++
                 }
 
-                if (exam.numbersOfCorrectAnswer <= MINIMUM_CORRECT_QUESTION_TO_PASS_EXAM ||
+                if (exam.numbersOfCorrectAnswer < MINIMUM_CORRECT_QUESTION_TO_PASS_EXAM ||
                     isWrongTheQuestionThatFailedTestImmediately
                 ) {
                     exam.examState = ExamState.FAILED.value
@@ -140,17 +139,13 @@ class ExamViewModel(
                     exam.examState = ExamState.PASSED.value
                 }
 
-                examRepository.updateExam(exam)
-                val data = examRepository.getAllExam()
-                _listExam.postValue(data)
+                addExamToDatabase(exam)
+                delay(DELAY_ON_FINISH_EXAM)
             }
-
             _currentExamQuestionPosition.postValue(FIRST_INDEX)
             _currentExamPosition.postValue(AppConstant.NONE_POSITION)
-            _currentExamQuestionPosition.postValue(AppConstant.NONE_POSITION)
-
-            delay(DELAY_ON_FINISH_EXAM)
             hideLoading()
+            onFinishExamEvent()
         }
     }
 
@@ -208,9 +203,9 @@ class ExamViewModel(
 
     companion object {
         const val NUMBERS_OF_MUST_NOT_WRONG_ANSWER = 5
-        const val NUMBERS_OF_CONCEPT_AND_RULES = 15
+        const val NUMBERS_OF_CONCEPT_AND_RULES = 10
         const val NUMBERS_OF_TRAFFIC_SIGNAL = 5
-        const val NUMBERS_OF_SITUATION_BY_PICTURE = 0
+        const val NUMBERS_OF_SITUATION_BY_PICTURE = 5
         const val MINIMUM_CORRECT_QUESTION_TO_PASS_EXAM = 21
         const val DELAY_ON_FINISH_EXAM = 500L
         const val END_TIME_STAMP = 0L

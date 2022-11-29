@@ -16,6 +16,11 @@ class TipsHighScoreViewModel(
     val listTipsHighScore: LiveData<MutableList<TipsHighScore>>
         get() = _listTipsHighScore
 
+    private val _listStateVisible = MutableLiveData<MutableList<Boolean>>()
+
+    val listStateVisible: LiveData<MutableList<Boolean>>
+        get() = _listStateVisible
+
     init {
         fetchData()
     }
@@ -26,6 +31,10 @@ class TipsHighScoreViewModel(
                 object : IResponseListener<MutableList<TipsHighScore>> {
                     override fun onSuccess(data: MutableList<TipsHighScore>) {
                         _listTipsHighScore.postValue(data)
+                        val tempStateList = mutableListOf<Boolean>().apply {
+                            repeat(data.size) { add(false) }
+                        }
+                        _listStateVisible.postValue(tempStateList)
                         hideLoading()
                     }
 
@@ -35,6 +44,20 @@ class TipsHighScoreViewModel(
                     }
                 }
             )
+        }
+    }
+
+    fun onClickedChangeVisibleItemState(item: TipsHighScore) {
+        val position = _listTipsHighScore.value?.indexOf(item)
+        if (position != null) {
+            val state = _listStateVisible.value?.get(position) ?: false
+            val newList = mutableListOf<Boolean>().apply {
+                _listStateVisible.value?.let {
+                    addAll(it)
+                    this[position] = state.not()
+                }
+            }
+            _listStateVisible.value = newList
         }
     }
 }

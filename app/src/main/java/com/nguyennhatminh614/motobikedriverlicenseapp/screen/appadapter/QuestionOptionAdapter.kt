@@ -95,7 +95,7 @@ class QuestionOptionAdapter :
                     }
                 }
 
-                if(isClickable) {
+                if (isClickable) {
                     root.setOnClickListener {
                         setSingleSelection(adapterPosition)
                         clickItemInterface?.let { function ->
