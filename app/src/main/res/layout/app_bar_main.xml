@@ -39,6 +39,15 @@
                 android:background="@color/transparent"
                 android:text="@string/button_reset"
                 android:visibility="gone" />
+            <ImageButton
+                android:id="@+id/button_instruction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="@dimen/dp_10"
+                android:background="@color/transparent"
+                android:src="@drawable/ic_baseline_rule_24"
+                 />
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 

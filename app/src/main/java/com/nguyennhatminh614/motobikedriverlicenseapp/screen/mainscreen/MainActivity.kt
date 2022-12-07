@@ -2,6 +2,8 @@ package com.nguyennhatminh614.motobikedriverlicenseapp.screen.mainscreen
 
 
 import android.app.AlertDialog
+import android.util.Log
+import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
@@ -131,6 +133,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     height = WindowManager.LayoutParams.MATCH_PARENT
                 }
                 dialog.show()
+            }
+
+            appBarMain.buttonInstruction.setOnClickListener {
+                navController.navigate(R.id.action_nav_main_to_nav_instruction)
             }
         }
     }
