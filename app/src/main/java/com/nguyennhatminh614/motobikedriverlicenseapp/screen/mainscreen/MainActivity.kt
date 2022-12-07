@@ -18,6 +18,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.ActivityMainBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.ExamViewModel
+import com.nguyennhatminh614.motobikedriverlicenseapp.screen.instruction.InstructionViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.settings.SettingsViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.study.StudyViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.wronganswer.WrongAnswerViewModel
@@ -36,6 +37,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     val wrongAnswerViewModel by viewModel<WrongAnswerViewModel>()
     val examViewModel by viewModel<ExamViewModel>()
     val settingsViewModel by viewModel<SettingsViewModel>()
+    val instructionViewModel by viewModel<InstructionViewModel>()
+
 
     val internetConnectionObserver by inject<InternetConnection>()
 
@@ -136,6 +139,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             }
 
             appBarMain.buttonInstruction.setOnClickListener {
+                // gỡ các fragment trước để đến nav_main
+                navController.popBackStack(R.id.nav_main, false)
                 navController.navigate(R.id.action_nav_main_to_nav_instruction)
             }
         }
@@ -171,6 +176,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     }
                 }
             }
+        }
+
+        instructionViewModel.isVisibleInstructionIcon.observe(this){
+            viewBinding.appBarMain.buttonInstruction.isVisible = it
         }
     }
 
