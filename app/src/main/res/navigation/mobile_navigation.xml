@@ -10,6 +10,10 @@
         android:name="com.nguyennhatminh614.motobikedriverlicenseapp.screen.mainscreen.MainFragment"
         android:label="@string/nav_header_title"
         tools:layout="@layout/fragment_main">
+
+        <action
+            android:id="@+id/action_nav_main_to_nav_instruction"
+            app:destination="@id/nav_instruction" />
         <action
             android:id="@+id/action_nav_main_to_nav_tips_high_score"
             app:destination="@id/nav_tips_high_score"
@@ -40,6 +44,10 @@
             app:destination="@id/nav_traffic_sign"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_nav_main_to_nav_instruction2"
+            app:destination="@id/nav_instruction" />
+
     </fragment>
 
     <fragment
@@ -97,4 +105,11 @@
         android:name="com.nguyennhatminh614.motobikedriverlicenseapp.screen.study.DetailStudyFragment"
         android:label="@string/text_temp_nav_detail_study"
         tools:layout="@layout/fragment_detail_study_layout" />
+    <fragment
+        android:id="@+id/nav_instruction"
+        android:name="com.nguyennhatminh614.motobikedriverlicenseapp.screen.instruction.InstructionFragment"
+        android:label="@string/text_temp_nav_instruction"
+        tools:layout="@layout/fragment_instruction"
+        >
+    </fragment>
 </navigation>
