@@ -13,3 +13,5 @@ fun String?.processDoubleQuotes(): String {
     }
     return this.replace("\\\"", "\"")
 }
+
+fun String.processExplainQuestion() = this.ifBlank { "Không có giải thích" }

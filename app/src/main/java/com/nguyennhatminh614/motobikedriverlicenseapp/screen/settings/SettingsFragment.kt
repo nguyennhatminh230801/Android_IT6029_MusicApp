@@ -1,5 +1,6 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.settings
 
+import android.util.Log
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentSettingsBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -9,7 +10,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(FragmentSettingsB
     override val viewModel by sharedViewModel<SettingsViewModel>()
 
     override fun initData() {
-        //Not-op
+        viewBinding.switchDarkMode.isChecked = viewModel.isDarkModeOn.value ?: false
     }
 
     override fun handleEvent() {
@@ -23,8 +24,6 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(FragmentSettingsB
     }
 
     override fun bindData() {
-        viewModel.isDarkModeOn.observe(viewLifecycleOwner) {
-            viewBinding.switchDarkMode.isChecked = it
-        }
+        //Not-op
     }
 }
