@@ -22,29 +22,45 @@ class InstructionFragment :
 
     override fun handleEvent() {
         viewBinding.cvInstructionTheory.setOnClickListener {
-            if(!viewBinding.expandableViewTheory.isVisible) {
-                viewBinding.buttonSpanDetailTheoryContent.animate().rotation(360F).start()
-                viewBinding.expandableViewTheory.isVisible = true
-            }else{
-                viewBinding.buttonSpanDetailTheoryContent.animate().rotation(180F).start()
-                viewBinding.expandableViewTheory.isVisible = false
-            }
+            setToggleTheoryInstruction()
+        }
+
+        viewBinding.buttonSpanDetailTheoryContent.setOnClickListener {
+            setToggleTheoryInstruction()
         }
 
         viewBinding.cvInstructionPractice.setOnClickListener {
-            if(!viewBinding.expandableViewPractice.isVisible) {
-                viewBinding.buttonSpanDetailPracticeContent.animate().rotation(360F).start()
-                viewBinding.expandableViewPractice.isVisible = true
-            }else{
-                viewBinding.buttonSpanDetailPracticeContent.animate().rotation(180F).start()
-                viewBinding.expandableViewPractice.isVisible = false
-            }
+            setTogglePracticeInstruction()
+        }
+
+        viewBinding.buttonSpanDetailPracticeContent.setOnClickListener {
+            setTogglePracticeInstruction()
         }
     }
 
     override fun bindData() {
+        //Not-op
     }
 
+    private fun setToggleTheoryInstruction() {
+        if(!viewBinding.expandableViewTheory.isVisible) {
+            viewBinding.buttonSpanDetailTheoryContent.animate().rotation(360F).start()
+            viewBinding.expandableViewTheory.isVisible = true
+        }else{
+            viewBinding.buttonSpanDetailTheoryContent.animate().rotation(180F).start()
+            viewBinding.expandableViewTheory.isVisible = false
+        }
+    }
+
+    private fun setTogglePracticeInstruction() {
+        if(!viewBinding.expandableViewPractice.isVisible) {
+            viewBinding.buttonSpanDetailPracticeContent.animate().rotation(360F).start()
+            viewBinding.expandableViewPractice.isVisible = true
+        }else{
+            viewBinding.buttonSpanDetailPracticeContent.animate().rotation(180F).start()
+            viewBinding.expandableViewPractice.isVisible = false
+        }
+    }
     override fun onDestroyView() {
         viewModel.setVisibleInstructionIcon(true)
         super.onDestroyView()

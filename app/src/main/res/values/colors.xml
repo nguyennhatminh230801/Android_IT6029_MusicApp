@@ -13,4 +13,6 @@
     <color name="transparent">#00000000</color>
     <color name="green_pastel">#FF77DD77</color>
     <color name="red_pastel">#FFFF6961</color>
+    <color name="yellow_pastel">#FFFDFD96</color>
+    <color name="yellow_pastel_low_alpha">#8CFDFD96</color>
 </resources>

@@ -14,6 +14,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.screen.appadapter.Question
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseFragment
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.loadGlideImageFromUrl
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.processExplainQuestion
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -31,7 +32,7 @@ class QuestionStudyFragment :
         questions?.let {
             viewBinding.apply {
                 textTitleQuestions.text = it.question
-                textQuestionExplain.text = it.explain
+                textQuestionExplain.text = it.explain.processExplainQuestion()
 
                 viewQuestionExplain.visibility = View.INVISIBLE
 
