@@ -173,10 +173,16 @@ class DetailExamFragment :
         }
     }
 
+    override fun onStop() {
+        viewModel.saveCurrentExamState()
+        super.onStop()
+    }
+
     override fun onDestroyView() {
         viewModel.setVisibleFinishExamButton(false)
         super.onDestroyView()
     }
+
     companion object {
         private const val CHANGE_TO_NEXT_QUESTION_DELAY_TIME = 700L
         private const val NO_TIME_LEFT = 0L
