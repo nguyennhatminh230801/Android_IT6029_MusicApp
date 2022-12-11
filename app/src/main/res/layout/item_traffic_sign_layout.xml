@@ -15,12 +15,14 @@
             android:id="@+id/image_traffic_sign"
             android:layout_width="@dimen/dp_100"
             android:layout_height="@dimen/dp_100"
+            android:adjustViewBounds="true"
             android:layout_margin="@dimen/dp_10"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_menu_traffic_sign"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/text_traffic_sign_title" />
 
         <TextView
             android:id="@+id/text_traffic_sign_title"
