@@ -190,13 +190,15 @@ class ExamViewModel(
 
     fun saveCurrentExamState() {
         viewModelScope.launch {
-            _listExam.value?.get(_currentExamPosition.value
-                ?: AppConstant.NONE_POSITION)?.let {
-                examRepository.updateExam(it)
-                CountDownInstance.cancelCountDown()
-                _currentExamQuestionPosition.postValue(FIRST_INDEX)
-                _currentExamPosition.postValue(AppConstant.NONE_POSITION)
-                _currentExamQuestionPosition.postValue(AppConstant.NONE_POSITION)
+            if(_currentExamPosition.value != AppConstant.NONE_POSITION) {
+                _listExam.value?.get(_currentExamPosition.value
+                    ?: AppConstant.NONE_POSITION)?.let {
+                    examRepository.updateExam(it)
+                    CountDownInstance.cancelCountDown()
+                    _currentExamQuestionPosition.postValue(FIRST_INDEX)
+                    _currentExamPosition.postValue(AppConstant.NONE_POSITION)
+                    _currentExamQuestionPosition.postValue(AppConstant.NONE_POSITION)
+                }
             }
         }
     }
