@@ -1,6 +1,7 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam
 
 import android.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Exam
@@ -11,6 +12,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant.FIRST_INDEX
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.showToast
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.generateEmptyQuestionStateList
+import kotlinx.android.synthetic.main.fragment_layout_not_found_data.view.text_not_founded
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::inflate) {
@@ -67,6 +69,14 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
     override fun bindData() {
         viewModel.listExam.observe(viewLifecycleOwner) {
             examAdapter.submitList(it)
+            if (it.isEmpty()) {
+                viewBinding.layoutVisibleWhenDataIsEmpty.root.isVisible = true
+                if (viewBinding.layoutVisibleWhenDataIsEmpty.root.text_not_founded != null) {
+                    viewBinding.layoutVisibleWhenDataIsEmpty.root.text_not_founded.text = "Vui lòng tạo đề mới"
+                }
+            } else {
+                viewBinding.layoutVisibleWhenDataIsEmpty.root.isVisible = false
+            }
         }
     }
 
