@@ -3,6 +3,7 @@ package com.nguyennhatminh614.motobikedriverlicenseapp.data.model
 import android.os.Parcelable
 import androidx.recyclerview.widget.DiffUtil
 import com.google.firebase.firestore.PropertyName
+import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -11,6 +12,7 @@ class TrafficSigns : Parcelable {
     var title = ""
     var description = ""
 
+    @SerializedName("image_url")
     @set:PropertyName("image_url")
     @get:PropertyName("image_url")
     var imageUrl = ""

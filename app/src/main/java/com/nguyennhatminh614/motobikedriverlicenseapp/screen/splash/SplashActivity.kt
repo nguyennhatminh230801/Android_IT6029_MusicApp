@@ -7,6 +7,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Questions
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.TrafficSigns
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.ActivitySplashBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.mainscreen.MainActivity
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseActivity
@@ -18,7 +19,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class SplashActivity : BaseActivity<ActivitySplashBinding>(ActivitySplashBinding::inflate) {
 
     private val viewModel by viewModel<SplashViewModel>()
-    val jsonString = ""
+
     override fun initData() {
         //Not-op
     }
@@ -34,7 +35,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(ActivitySplashBinding
             }
 
             viewModel.isLoadingDone.observe(this@SplashActivity) {
-                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+                //startActivity(Intent(this@SplashActivity, MainActivity::class.java))
             }
         }
 
@@ -43,21 +44,20 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(ActivitySplashBinding
 //        }
     }
 
-    suspend fun loadDataToFireBase() {
-        val fireStore = get<FirebaseFirestore>().collection(AppConstant.QUESTION_COLLECTION)
-
-        val jsonString =
-            resources.openRawResource(R.raw.bocauhoi).bufferedReader().use {
-                it.readLines().joinToString(separator = "") { it.trim() }
-            }
-
-        val typeToken = object : TypeToken<MutableList<Questions>>() {}.type
-        val list = Gson().fromJson<MutableList<Questions>>(jsonString, typeToken)
-//        Log.d("testLoadJson", list.size.toString())
-//        Log.d("testLoadJson", list[0].toString())
-        list.forEach {
-            fireStore.document(it.id.toString())
-                .set(it)
-        }
-    }
+//    suspend fun loadDataToFireBase() {
+//        val fireStore = get<FirebaseFirestore>().collection(AppConstant.QUESTION_COLLECTION)
+//
+//        val jsonString =
+//            resources.openRawResource(R.raw.traffic_sign).bufferedReader().use {
+//                it.readLines().joinToString(separator = "") { it.trim() }
+//            }
+//
+//        val typeToken = object : TypeToken<MutableList<TrafficSigns>>() {}.type
+//        val list = Gson().fromJson<MutableList<TrafficSigns>>(jsonString, typeToken)
+//
+//        list.forEach {
+//            fireStore.document(it.id)
+//                .set(it)
+//        }
+//    }
 }
