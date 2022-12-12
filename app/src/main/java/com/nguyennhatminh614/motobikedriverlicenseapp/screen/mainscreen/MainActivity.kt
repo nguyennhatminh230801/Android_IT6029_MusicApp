@@ -34,7 +34,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     val baseViewModel by viewModel<BaseViewModel>()
     val studyViewModel by viewModel<StudyViewModel>()
-    val wrongAnswerViewModel by viewModel<WrongAnswerViewModel>()
     val examViewModel by viewModel<ExamViewModel>()
     val settingsViewModel by viewModel<SettingsViewModel>()
     val instructionViewModel by viewModel<InstructionViewModel>()
