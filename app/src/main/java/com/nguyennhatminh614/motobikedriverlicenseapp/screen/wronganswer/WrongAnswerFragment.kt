@@ -11,12 +11,12 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.dialog.BottomSheetQu
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.dialog.LoadingDialog
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IBottomSheetListener
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class WrongAnswerFragment :
     BaseFragment<FragmentWrongAnswerBinding>(FragmentWrongAnswerBinding::inflate) {
 
-    override val viewModel by sharedViewModel<WrongAnswerViewModel>()
+    override val viewModel by viewModel<WrongAnswerViewModel>()
 
     private var listQuestionSize = AppConstant.EMPTY_SIZE
 
