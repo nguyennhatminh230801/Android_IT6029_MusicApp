@@ -33,8 +33,8 @@ class StudyFragment : BaseFragment<FragmentStudyBinding>(FragmentStudyBinding::i
         }
     }
 
-    override fun onStop() {
+    override fun onDestroyView() {
         baseViewModel.setVisibleResetButton(false)
-        super.onStop()
+        super.onDestroyView()
     }
 }

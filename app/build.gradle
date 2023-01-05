@@ -9,6 +9,7 @@ apply plugin: "kotlin-android-extensions"
 apply plugin: "io.gitlab.arturbosch.detekt"
 apply plugin: "com.google.gms.google-services"
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.firebase.crashlytics'
 
 android {
     namespace 'com.nguyennhatminh614.motobikedriverlicenseapp'
@@ -88,6 +89,9 @@ dependencies {
 
     implementation platform('com.google.firebase:firebase-bom:31.0.0')
 
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
     implementation 'androidx.room:room-runtime:2.4.3'
