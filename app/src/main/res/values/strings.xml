@@ -1,11 +1,11 @@
 <resources>
-    <string name="app_name">Ôn thi GPLX Xe máy A1</string>
+    <string name="app_name">Ứng dung ôn thi GPLX</string>
     <string name="text_temp_loading_splash_screen">Đang tải.</string>
     <string name="title_activity_main">Ôn thi GPLX</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Ứng dụng ôn thi GLPX</string>
-    <string name="nav_header_subtitle">Nhóm 6 IT6029.4</string>
+    <string name="nav_header_subtitle">Nguyễn Nhật Minh</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 

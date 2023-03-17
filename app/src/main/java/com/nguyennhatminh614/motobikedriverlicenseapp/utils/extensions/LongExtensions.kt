@@ -5,6 +5,10 @@ import java.util.concurrent.TimeUnit
 const val PATTERN_TIME = "%02d:%02d"
 const val PATTERN_DETAIL_TIME = "%02dp%02ds"
 
+fun Long.convertSecondToMilisecond(): Long {
+    return this * 1000;
+}
+
 fun Long.toDateTimeMMSS(): String {
     return String.format(
         PATTERN_TIME,

@@ -21,8 +21,9 @@ object LoadingDialog {
                 .create()
         }
 
-        dialog?.show()
         dialog?.window?.attributes = windowLayoutParams
+
+        dialog?.show()
     }
 
     fun hideLoadingDialog() {
