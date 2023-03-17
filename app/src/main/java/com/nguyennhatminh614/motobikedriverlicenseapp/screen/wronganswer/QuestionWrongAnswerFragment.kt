@@ -3,7 +3,6 @@ package com.nguyennhatminh614.motobikedriverlicenseapp.screen.wronganswer
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
-import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Questions
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.StateQuestionOption
@@ -37,8 +36,7 @@ class QuestionWrongAnswerFragment :
                 if (it.hasImageBanner) {
                     imageQuestions.loadGlideImageFromUrl(
                         context,
-                        it.imageUrl,
-                        R.drawable.image_main_banner
+                        it.imageUrl
                     )
                 } else {
                     imageQuestions.isVisible = false

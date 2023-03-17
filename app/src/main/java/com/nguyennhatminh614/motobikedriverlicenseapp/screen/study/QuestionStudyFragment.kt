@@ -4,7 +4,6 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Questions
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.StateQuestionOption
@@ -39,8 +38,7 @@ class QuestionStudyFragment :
                 if (it.hasImageBanner) {
                     imageQuestions.loadGlideImageFromUrl(
                         context,
-                        it.imageUrl,
-                        R.drawable.image_main_banner
+                        it.imageUrl
                     )
                 } else {
                     imageQuestions.isVisible = false
