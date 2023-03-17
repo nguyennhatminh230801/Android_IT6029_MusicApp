@@ -40,7 +40,9 @@ abstract class BaseFragment<VB : ViewBinding>(
 
         viewModel.isLoading.observe(viewLifecycleOwner) {
             if (it) {
-                LoadingDialog.showLoadingDialog(context)
+                if(activity?.isFinishing?.not() == true) {
+                    LoadingDialog.showLoadingDialog(context)
+                }
             } else {
                 LoadingDialog.hideLoadingDialog()
             }

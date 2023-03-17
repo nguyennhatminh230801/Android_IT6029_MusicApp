@@ -4,8 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.convertSecondToMilisecond
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
+import kotlin.time.Duration
 
 open class BaseViewModel : ViewModel() {
     protected val loading = MutableLiveData<Boolean>(false)
@@ -33,6 +36,13 @@ open class BaseViewModel : ViewModel() {
 
     protected fun showLoading() {
         loading.value = true
+
+        //Timeout 12s
+        viewModelScope.launch {
+            withTimeout(12L.convertSecondToMilisecond()) {
+                loading.value = false
+            }
+        }
     }
 
     protected fun hideLoading() {
@@ -47,3 +57,4 @@ open class BaseViewModel : ViewModel() {
         _isVisibleResetButton.value = isVisible
     }
 }
+
