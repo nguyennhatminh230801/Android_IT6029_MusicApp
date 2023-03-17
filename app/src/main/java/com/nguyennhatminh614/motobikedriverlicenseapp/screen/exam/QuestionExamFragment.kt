@@ -3,7 +3,6 @@ package com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
-import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Questions
@@ -41,8 +40,7 @@ class QuestionExamFragment
                 if (question.hasImageBanner) {
                     imageQuestions.loadGlideImageFromUrl(
                         context,
-                        question.imageUrl,
-                        R.drawable.image_main_banner
+                        question.imageUrl
                     )
                 } else {
                     imageQuestions.isVisible = false

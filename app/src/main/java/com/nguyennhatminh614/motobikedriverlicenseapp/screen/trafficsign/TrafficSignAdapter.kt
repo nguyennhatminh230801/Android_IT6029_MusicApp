@@ -2,7 +2,6 @@ package com.nguyennhatminh614.motobikedriverlicenseapp.screen.trafficsign
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.TrafficSigns
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.ItemTrafficSignLayoutBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.OnClickItem
@@ -36,7 +35,6 @@ class TrafficSignAdapter :
                 imageTrafficSign.loadGlideImageFromUrl(
                     root.context,
                     data.imageUrl,
-                    R.drawable.ic_signal,
                 )
                 textTrafficSignTitle.text = data.title
                 textTrafficSignDescription.text = data.description
