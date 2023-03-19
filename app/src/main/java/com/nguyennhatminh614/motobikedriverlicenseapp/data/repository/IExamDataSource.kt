@@ -1,6 +1,7 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.data.repository
 
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Exam
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Questions
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
 
@@ -14,6 +15,6 @@ interface IExamDataSource {
     }
 
     interface Remote {
-        suspend fun getListQuestion(listener: IResponseListener<MutableList<Questions>>)
+        suspend fun getListQuestion(listener: IResponseListener<MutableList<NewQuestion>>)
     }
 }

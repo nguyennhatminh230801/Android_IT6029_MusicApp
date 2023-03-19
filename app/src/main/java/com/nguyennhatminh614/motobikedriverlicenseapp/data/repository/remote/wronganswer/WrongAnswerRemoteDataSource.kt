@@ -1,6 +1,7 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.remote.wronganswer
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Questions
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.IWrongAnswerDataSource
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
@@ -11,16 +12,15 @@ class WrongAnswerRemoteDataSource(
 ) : IWrongAnswerDataSource.Remote {
 
     private val questionCollections by lazy {
-        fireStoreDB.collection(AppConstant.QUESTION_COLLECTION)
+        fireStoreDB.collection(AppConstant.NEW_QUESTION_COLLECTION)
     }
-
-    override suspend fun getAllListQuestion(listener: IResponseListener<MutableList<Questions>>) {
+    override suspend fun getAllListQuestion(listener: IResponseListener<MutableList<NewQuestion>>) {
         questionCollections.get().addOnCompleteListener { tasks ->
             if (tasks.isSuccessful) {
-                val listQuestions = mutableListOf<Questions>()
+                val listQuestions = mutableListOf<NewQuestion>()
 
                 tasks.result.documents.forEach {
-                    it.toObject(Questions::class.java)?.let { notNullObject ->
+                    it.toObject(NewQuestion::class.java)?.let { notNullObject ->
                         listQuestions.add(notNullObject)
                     }
                 }
