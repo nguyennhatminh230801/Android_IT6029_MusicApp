@@ -1,5 +1,6 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.data.repository
 
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Questions
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.StudyCategory
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
@@ -13,8 +14,9 @@ class StudyRepository(
         local.saveProgress(studyCategoryList)
 
     override suspend fun getAllInfoStudyCategory() = local.getAllInfoStudyCategory()
-
-    override suspend fun getListQuestion(listener: IResponseListener<MutableList<Questions>>) =
+    
+    override suspend fun getListQuestion(listener: IResponseListener<MutableList<NewQuestion>>) {
         remote.getListQuestion(listener)
+    }
 
 }
