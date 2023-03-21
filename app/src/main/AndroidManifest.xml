@@ -31,6 +31,7 @@
             android:name=".screen.splash.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait"
+            android:theme="@style/ThemeSplash"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
