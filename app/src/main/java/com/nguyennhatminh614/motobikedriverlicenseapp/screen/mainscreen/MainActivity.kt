@@ -21,6 +21,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.ExamViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.instruction.InstructionViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.settings.SettingsViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.study.StudyViewModel
+import com.nguyennhatminh614.motobikedriverlicenseapp.screen.trafficsign.TrafficSignViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.wronganswer.WrongAnswerViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseActivity
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
@@ -37,7 +38,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     val examViewModel by viewModel<ExamViewModel>()
     val settingsViewModel by viewModel<SettingsViewModel>()
     val instructionViewModel by viewModel<InstructionViewModel>()
-
+    val trafficSignViewModel by viewModel<TrafficSignViewModel>()
 
     val internetConnectionObserver by inject<InternetConnection>()
 

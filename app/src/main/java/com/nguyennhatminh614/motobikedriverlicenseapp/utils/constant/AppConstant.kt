@@ -1,6 +1,7 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant
 
 object AppConstant {
+    const val KEY_BUNDLE_TRAFFIC_SIGN = "TrafficSignBundle"
     const val DEFAULT_NOT_HAVE_TIME_STAMP = -1L
     const val TIME_TASK_DELAYED = 400L
     const val QUESTION_COLLECTION = "questions"

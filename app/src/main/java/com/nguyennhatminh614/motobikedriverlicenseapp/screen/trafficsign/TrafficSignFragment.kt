@@ -1,10 +1,16 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.trafficsign
 
+import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
+import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.TrafficSignCategory
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.TrafficSigns
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentTrafficSignBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.adapter.ViewPagerAdapter
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseFragment
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TrafficSignFragment :
@@ -27,24 +33,17 @@ class TrafficSignFragment :
     )
 
     private val viewPagerAdapter by lazy {
-        ViewPagerAdapter(parentFragmentManager, lifecycle)
+        TrafficSignScreenAdapter()
     }
 
-    override val viewModel by viewModel<TrafficSignViewModel>()
+    private val listData by lazy {
+        mutableListOf<MutableList<TrafficSigns>>()
+    }
+
+    override val viewModel by sharedViewModel<TrafficSignViewModel>()
 
     override fun initData() {
-        viewBinding.viewPagerTrafficSign.adapter = viewPagerAdapter
-        viewBinding.tabLayoutTrafficSignCategory.removeAllTabs()
-        listTab.forEach {
-            viewBinding.tabLayoutTrafficSignCategory
-                .addTab(viewBinding.tabLayoutTrafficSignCategory.newTab()
-                    .apply { text = it })
-        }
-
-        TabLayoutMediator(viewBinding.tabLayoutTrafficSignCategory,
-            viewBinding.viewPagerTrafficSign) { tab, position ->
-            tab.text = listTab[position]
-        }.attach()
+        // Not op
     }
 
     override fun handleEvent() {
@@ -53,14 +52,36 @@ class TrafficSignFragment :
 
     override fun bindData() {
         viewModel.listTrafficSign.observe(viewLifecycleOwner) {
-            viewPagerAdapter.clearAllFragments()
+            listData.clear()
 
             listCategory.forEach { category ->
                 val data = viewModel.getListByCategory(category)
-                viewPagerAdapter.addFragment(
-                    TrafficSignCategoryFragment.newInstance(data)
+                listData.add(data ?: mutableListOf())
+            }
+
+            viewBinding.tabLayoutTrafficSignCategory.removeAllTabs()
+
+            listTab.forEach {
+                viewBinding.tabLayoutTrafficSignCategory
+                    .addTab(viewBinding.tabLayoutTrafficSignCategory.newTab()
+                        .apply { text = it })
+            }
+
+            viewBinding.viewPagerTrafficSign.adapter = viewPagerAdapter
+
+            viewPagerAdapter.submitList(listData)
+
+            viewPagerAdapter.setItemClickEvent {
+                findNavController().navigate(
+                    R.id.action_nav_traffic_sign_to_nav_traffic_sign_detail,
+                    bundleOf(AppConstant.KEY_BUNDLE_TRAFFIC_SIGN to it)
                 )
             }
+
+            TabLayoutMediator(viewBinding.tabLayoutTrafficSignCategory,
+                viewBinding.viewPagerTrafficSign) { tab, position ->
+                tab.text = listTab[position]
+            }.attach()
         }
     }
 

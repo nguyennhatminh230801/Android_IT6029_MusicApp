@@ -14,7 +14,7 @@ class TrafficSignAdapter :
         TrafficSigns.getDiffUtilCallback()) {
 
     override fun registerOnClickItemEvent(onClickItem: OnClickItem<TrafficSigns>) {
-        //Not-op
+        this.clickItemInterface = onClickItem
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -37,7 +37,11 @@ class TrafficSignAdapter :
                     data.imageUrl,
                 )
                 textTrafficSignTitle.text = data.title
-                textTrafficSignDescription.text = data.description
+                textTrafficSignDescription.text = data.description.ifBlank { "Không có giải thích!!" }
+
+                root.setOnClickListener {
+                    clickItemInterface?.let { function -> function(data) }
+                }
             }
         }
     }
