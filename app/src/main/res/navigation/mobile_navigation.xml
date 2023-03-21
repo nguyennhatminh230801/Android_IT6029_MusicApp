@@ -86,7 +86,17 @@
         android:id="@+id/nav_traffic_sign"
         android:name="com.nguyennhatminh614.motobikedriverlicenseapp.screen.trafficsign.TrafficSignFragment"
         android:label="@string/text_traffic_sign_fragment_title"
-        tools:layout="@layout/fragment_traffic_sign" />
+        tools:layout="@layout/fragment_traffic_sign" >
+        <action
+            android:id="@+id/action_nav_traffic_sign_to_nav_traffic_sign_detail"
+            app:destination="@id/nav_traffic_sign_detail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_traffic_sign_detail"
+        android:name="com.nguyennhatminh614.motobikedriverlicenseapp.screen.trafficsign.DetailTrafficSignFragment"
+        android:label="@string/text_traffic_sign_fragment_title"
+        tools:layout="@layout/fragment_detail_traffic_sign" />
 
     <fragment
         android:id="@+id/nav_settings"
