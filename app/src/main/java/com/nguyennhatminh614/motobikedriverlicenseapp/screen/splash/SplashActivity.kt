@@ -45,7 +45,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(ActivitySplashBinding
     }
 
 //    suspend fun loadDataToFireBase() {
-//        val fireStore = get<FirebaseFirestore>().collection(AppConstant.QUESTION_COLLECTION)
+//        val fireStore = get<FirebaseFirestore>().collection(AppConstant.TRAFFIC_SIGN_COLLECTION)
 //
 //        val jsonString =
 //            resources.openRawResource(R.raw.traffic_sign).bufferedReader().use {
@@ -56,8 +56,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(ActivitySplashBinding
 //        val list = Gson().fromJson<MutableList<TrafficSigns>>(jsonString, typeToken)
 //
 //        list.forEach {
-//            fireStore.document(it.id)
-//                .set(it)
+//            fireStore.document(it.id).set(it)
 //        }
 //    }
 }
