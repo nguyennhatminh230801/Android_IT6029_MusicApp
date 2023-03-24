@@ -11,7 +11,7 @@ class StudyFragment : BaseFragment<FragmentStudyBinding>(FragmentStudyBinding::i
 
     override val viewModel by sharedViewModel<StudyViewModel>()
 
-    val baseViewModel by sharedViewModel<BaseViewModel>()
+    private val baseViewModel by sharedViewModel<BaseViewModel>()
 
     private val studyAdapter by lazy { StudyAdapter() }
 

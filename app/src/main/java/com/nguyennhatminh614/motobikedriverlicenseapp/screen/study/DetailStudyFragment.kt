@@ -1,15 +1,19 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.study
 
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.StateQuestionOption
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.WrongAnswerObject
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentDetailStudyLayoutBinding
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.adapter.ViewPagerAdapter
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.adapter.QuestionDetailAdapter
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseFragment
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.dialog.BottomSheetQuestionDialog
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IBottomSheetListener
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class DetailStudyFragment :
@@ -22,9 +26,7 @@ class DetailStudyFragment :
         BottomSheetQuestionDialog()
     }
 
-    private val questionAdapter by lazy {
-        ViewPagerAdapter(parentFragmentManager, lifecycle)
-    }
+    private val questionAdapter by lazy { QuestionDetailAdapter() }
 
     private val bottomSheetDialogCallBack by lazy {
         object : IBottomSheetListener {
@@ -53,6 +55,16 @@ class DetailStudyFragment :
     }
 
     override fun initData() {
+        viewBinding.viewPagerQuestions.registerOnPageChangeCallback(
+            object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    viewBinding.textCurrentQuestions.text =
+                        "Câu ${position + 1}/${listQuestionSize}"
+                }
+            }
+        )
+
         viewBinding.viewPagerQuestions.adapter = questionAdapter
     }
 
@@ -62,16 +74,6 @@ class DetailStudyFragment :
                 viewBinding.viewPagerQuestions.currentItem++
             }
         }
-
-        viewBinding.viewPagerQuestions.registerOnPageChangeCallback(
-            object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    super.onPageSelected(position)
-                    viewBinding.textCurrentQuestions.text =
-                        "Câu ${viewBinding.viewPagerQuestions.currentItem + 1}/${listQuestionSize}"
-                }
-            }
-        )
 
         viewBinding.buttonPreviousQuestion.setOnClickListener {
             if (viewBinding.viewPagerQuestions.currentItem > AppConstant.FIRST_INDEX) {
@@ -83,12 +85,29 @@ class DetailStudyFragment :
             context?.let { notNullContext ->
                 bottomSheetDialog.initDialog(
                     notNullContext,
-                    viewModel.listStudyCategory.value?.get(viewModel.currentStudyCategory.value
-                        ?: AppConstant.NONE_POSITION)
+                    viewModel.listStudyCategory.value?.get(
+                        viewModel.currentStudyCategory.value
+                            ?: AppConstant.NONE_POSITION
+                    )
                         ?.listQuestionsState,
-                    viewBinding.viewPagerQuestions.currentItem)
+                    viewBinding.viewPagerQuestions.currentItem
+                )
                 bottomSheetDialog.setDialogEvent(bottomSheetDialogCallBack)
                 bottomSheetDialog.showDialog()
+            }
+        }
+
+        questionAdapter.setOnClickSelectedQuestionOption { questionID, questionPos, questionOptions ->
+            viewModel.updateDataQuestionPos(questionID, questionPos, questionOptions)
+            viewModel.saveProgressToDatabase()
+
+            if (questionOptions.stateNumber == StateQuestionOption.INCORRECT.type) {
+                viewModel.saveWrongAnswerObjectToDatabase(
+                    WrongAnswerObject(
+                        questionOptions.questionsID,
+                        System.currentTimeMillis()
+                    )
+                )
             }
         }
     }
@@ -98,21 +117,15 @@ class DetailStudyFragment :
             val currentPosition =
                 viewModel.currentStudyCategory.value ?: AppConstant.NONE_POSITION
             listQuestionSize = it[currentPosition].totalNumberOfQuestions
+            questionAdapter.submitList(it[currentPosition].listQuestions)
+            questionAdapter.updateQuestionStateList(it[currentPosition].listQuestionsState)
 
-            var index = AppConstant.FIRST_INDEX
-            if (questionAdapter.isEmptyFragment()) {
-                it[currentPosition].listQuestions.forEach { question ->
-                    questionAdapter.addFragment(
-                        QuestionStudyFragment.newInstance(index, question)
-                    )
-                    index++
-                }
-            }
-
-            viewBinding.layoutVisibleWhenHaveData.isVisible =
-                it[currentPosition].listQuestions.isEmpty().not()
+            viewBinding.textCurrentQuestions.text =
+                "Câu ${viewBinding.viewPagerQuestions.currentItem + 1}/${listQuestionSize}"
             viewBinding.layoutVisibleWhenDataIsEmpty.root.isVisible =
                 it[currentPosition].listQuestions.isEmpty()
+            viewBinding.layoutVisibleWhenHaveData.isVisible =
+                it[currentPosition].listQuestions.isEmpty().not()
         }
     }
 }

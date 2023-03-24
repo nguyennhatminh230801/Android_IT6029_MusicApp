@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewbinding.ViewBinding
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.dialog.LoadingDialog
 
 abstract class BaseActivity<T : ViewBinding>(
     private val bindingInflater: (LayoutInflater) -> T,
@@ -23,6 +24,10 @@ abstract class BaseActivity<T : ViewBinding>(
         handleEvent()
         bindData()
     }
+
+    open fun showLoadingDialog() {}
+
+    open fun hideLoadingDialog() {}
 
     abstract fun initData()
 

@@ -33,12 +33,15 @@
 
             <TextView
                 android:id="@+id/text_question_category"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                app:layout_constraintHorizontal_bias="0"
                 android:layout_marginStart="@dimen/dp_20"
                 android:fontFamily="@font/comfortaa_bold"
                 android:text="@string/text_temp_question_category"
                 android:textAllCaps="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="@dimen/dp_20"
                 app:layout_constraintStart_toEndOf="@+id/image_questions_category_banner"
                 app:layout_constraintTop_toTopOf="@+id/image_questions_category_banner" />
 

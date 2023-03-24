@@ -9,11 +9,6 @@ object AppConstant {
     const val TRAFFIC_SIGN_COLLECTION = "trafficsign"
     const val TIPS_HIGH_SCORE_COLLECTION = "tipshighscore"
 
-    const val MUST_NOT_WRONG_ANSWER = "MustNotWrongAnswer"
-    const val CONCEPTS_AND_RULES = "ConceptAndRules"
-    const val TRAFFIC_SIGNAL = "TrafficSignal"
-    const val TRAFFIC_SITUATION_BY_PICTURE = "TrafficSituationByPicture"
-
     const val NONE_POSITION = -1
 
     const val FIRST_INDEX = 0
