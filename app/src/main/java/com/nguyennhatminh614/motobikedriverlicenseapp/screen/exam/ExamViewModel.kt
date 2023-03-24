@@ -5,8 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Exam
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Questions
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionType
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.StateQuestionOption
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.WrongAnswerObject
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.ExamRepository
@@ -15,6 +16,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.CountDownInstance
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant.FIRST_INDEX
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.generateEmptyQuestionStateList
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -28,8 +30,8 @@ class ExamViewModel(
     val listExam: LiveData<MutableList<Exam>>
         get() = _listExam
 
-    private val _listQuestions = MutableLiveData<MutableList<Questions>>()
-    val listQuestions: LiveData<MutableList<Questions>>
+    private val _listQuestions = MutableLiveData<MutableList<NewQuestion>>()
+    val listQuestions: LiveData<MutableList<NewQuestion>>
         get() = _listQuestions
 
     private val _currentExamPosition = MutableLiveData<Int>()
@@ -49,8 +51,8 @@ class ExamViewModel(
             _listExam.postValue(examRepository.getAllExam())
             hideLoading()
             examRepository.getListQuestion(
-                object : IResponseListener<MutableList<Questions>> {
-                    override fun onSuccess(data: MutableList<Questions>) {
+                object : IResponseListener<MutableList<NewQuestion>> {
+                    override fun onSuccess(data: MutableList<NewQuestion>) {
                         _listQuestions.postValue(data)
                         hideLoading()
                     }
@@ -64,7 +66,7 @@ class ExamViewModel(
         }
     }
 
-    fun addExamToDatabase(exam: Exam) {
+    private fun addExamToDatabase(exam: Exam) {
         launchTask {
             examRepository.insertNewExam(exam)
             val data = examRepository.getAllExam()
@@ -102,6 +104,7 @@ class ExamViewModel(
 
             CountDownInstance.cancelCountDown()
 
+            //Logic này cần được update ở tính năng đổi bằng
             currentExam?.let { exam ->
                 var index = FIRST_INDEX
                 var isWrongTheQuestionThatFailedTestImmediately = false
@@ -109,7 +112,7 @@ class ExamViewModel(
                 exam.currentTimeStamp = END_TIME_STAMP
 
                 exam.listQuestionOptions.forEach {
-                    if (it.data == exam.listQuestions[index].answer) {
+                    if (it.position == exam.listQuestions[index].correctAnswerPosition) {
                         exam.listQuestionOptions[index].stateNumber =
                             StateQuestionOption.CORRECT.type
                         exam.numbersOfCorrectAnswer++
@@ -117,7 +120,7 @@ class ExamViewModel(
                         exam.listQuestionOptions[index].stateNumber =
                             StateQuestionOption.INCORRECT.type
 
-                        if (exam.listQuestions[index].isFailedTestWhenWrong) {
+                        if (exam.listQuestions[index].isImmediateFailedTestWhenWrong) {
                             isWrongTheQuestionThatFailedTestImmediately = true
                         }
 
@@ -183,18 +186,18 @@ class ExamViewModel(
             ?: AppConstant.NONE_POSITION)?.currentTimeStamp
             ?: AppConstant.DEFAULT_NOT_HAVE_TIME_STAMP
 
-    fun getCategoryList(questions: MutableList<Questions>, key: String, takeAmount: Int) =
+    fun getCategoryList(questions: MutableList<NewQuestion>, key: String, takeAmount: Int) =
         questions.filter {
             return@filter it.questionType.lowercase() == key.lowercase()
         }.shuffled().take(takeAmount)
 
     fun saveCurrentExamState() {
         viewModelScope.launch {
+            CountDownInstance.cancelCountDown()
             if(_currentExamPosition.value != AppConstant.NONE_POSITION) {
                 _listExam.value?.get(_currentExamPosition.value
                     ?: AppConstant.NONE_POSITION)?.let {
                     examRepository.updateExam(it)
-                    CountDownInstance.cancelCountDown()
                     _currentExamQuestionPosition.postValue(FIRST_INDEX)
                     _currentExamPosition.postValue(AppConstant.NONE_POSITION)
                     _currentExamQuestionPosition.postValue(AppConstant.NONE_POSITION)
@@ -203,11 +206,26 @@ class ExamViewModel(
         }
     }
 
+    fun createExam(onComplete: () -> Unit) {
+        val exam = Exam(id = ExamFragment.DEFAULT_ID)
+        val listQuestions = listQuestions.value
+
+        listQuestions?.let { listQuestions ->
+            exam.listQuestions.apply {
+                enumValues<QuestionType>().forEach {
+                    if(it.type != QuestionType.ALL.type) {
+                        addAll(getCategoryList(listQuestions, it.type, 5))
+                    }
+                }
+            }
+            exam.listQuestionOptions.addAll(generateEmptyQuestionStateList(exam.listQuestions))
+        }
+
+        addExamToDatabase(exam)
+        onComplete()
+    }
+
     companion object {
-        const val NUMBERS_OF_MUST_NOT_WRONG_ANSWER = 5
-        const val NUMBERS_OF_CONCEPT_AND_RULES = 10
-        const val NUMBERS_OF_TRAFFIC_SIGNAL = 5
-        const val NUMBERS_OF_SITUATION_BY_PICTURE = 5
         const val MINIMUM_CORRECT_QUESTION_TO_PASS_EXAM = 21
         const val DELAY_ON_FINISH_EXAM = 500L
         const val END_TIME_STAMP = 0L

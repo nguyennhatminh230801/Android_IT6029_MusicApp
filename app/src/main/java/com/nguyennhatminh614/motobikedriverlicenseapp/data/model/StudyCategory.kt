@@ -1,6 +1,7 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.data.model
 
 import android.os.Parcelable
+import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -10,9 +11,14 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 @Entity(tableName = STUDY_CATEGORY_TABLE)
 data class StudyCategory(
-    @PrimaryKey val iconResourceID: Int,
+    @PrimaryKey
+    val id: Int,
+    @DrawableRes
+    val iconResourceID: Int,
     val title: String,
-    val listQuestions: MutableList<Questions> = mutableListOf(),
+    val startIDQuestion: Int,
+    val endIDQuestion: Int,
+    val listQuestions: MutableList<NewQuestion> = mutableListOf(),
     val listQuestionsState: MutableList<QuestionOptions> = mutableListOf(),
     val totalNumberOfQuestions: Int = DEFAULT_VALUE_TOTAL_QUESTION,
     var numbersOfSelectedQuestions: Int = DEFAULT_VALUE_SELECTED_QUESTION,

@@ -6,8 +6,10 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class QuestionOptions(
+    val questionsID: Int,
     val position: Int,
-    val data: String,
+    val title: String,
+    val isSelected: Boolean = false,
     var stateNumber: Int = StateQuestionOption.UNKNOWN.type,
 ) : Parcelable {
     companion object {

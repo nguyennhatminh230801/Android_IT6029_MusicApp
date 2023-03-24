@@ -63,8 +63,8 @@ class QuestionOptionAdapter :
         override fun onBindData(item: QuestionOptions) {
             binding.apply {
                 val currentDisplayPosition = adapterPosition + 1
+                textQuestionOptions.text = item.title
                 textItemPosition.text = currentDisplayPosition.toString()
-                textQuestionOptions.text = item.data
 
                 if (selectedPosition == adapterPosition) {
                     binding.layoutQuestionItem.setCardBackgroundColor(getSelectedColor(binding,
@@ -99,7 +99,12 @@ class QuestionOptionAdapter :
                     root.setOnClickListener {
                         setSingleSelection(adapterPosition)
                         clickItemInterface?.let { function ->
-                            function(QuestionOptions(adapterPosition, item.data, item.stateNumber))
+                            function(QuestionOptions(
+                                questionsID = item.questionsID,
+                                position = adapterPosition,
+                                title = item.title,
+                                isSelected = true,
+                            ))
                         }
                     }
                 }

@@ -4,8 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.nguyennhatminh614.motobikedriverlicenseapp.R
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Questions
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionType
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.StudyCategory
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.WrongAnswerObject
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.StudyRepository
@@ -23,36 +24,76 @@ class StudyViewModel(
 
     private val listDefaultStudyCategory = listOf(
         StudyCategory(
-            R.drawable.ic_caution,
-            MUST_NOT_WRONG_ANSWER_QUESTION,
+            id = QuestionType.ALL.position,
+            iconResourceID = R.drawable.ic_study,
+            title = QuestionType.ALL.title,
+            startIDQuestion = QuestionType.ALL.startIDQuestion,
+            endIDQuestion = QuestionType.ALL.endIDQuestion,
         ),
         StudyCategory(
-            R.drawable.ic_exam,
-            CONCEPT_AND_RULES_QUESTION,
+            id = QuestionType.TRAFFIC_CONCEPT_AND_RULES.position,
+            iconResourceID = R.drawable.ic_traffic_concept_and_rules,
+            title = QuestionType.TRAFFIC_CONCEPT_AND_RULES.title,
+            startIDQuestion = QuestionType.TRAFFIC_CONCEPT_AND_RULES.startIDQuestion,
+            endIDQuestion = QuestionType.TRAFFIC_CONCEPT_AND_RULES.endIDQuestion,
         ),
         StudyCategory(
-            R.drawable.ic_signal,
-            TRAFFIC_SIGNAL_QUESTION,
+            id = QuestionType.DRIVING_BUSINESS.position,
+            iconResourceID = R.drawable.ic_driving_business,
+            title = QuestionType.DRIVING_BUSINESS.title,
+            startIDQuestion = QuestionType.DRIVING_BUSINESS.startIDQuestion,
+            endIDQuestion = QuestionType.DRIVING_BUSINESS.endIDQuestion,
         ),
         StudyCategory(
-            R.drawable.ic_sat_figure,
-            SAT_FIGURE_QUESTION,
+            id = QuestionType.ETHICS_IN_DRIVING.position,
+            iconResourceID = R.drawable.ic_ethics_in_driving,
+            title = QuestionType.ETHICS_IN_DRIVING.title,
+            startIDQuestion = QuestionType.ETHICS_IN_DRIVING.startIDQuestion,
+            endIDQuestion = QuestionType.ETHICS_IN_DRIVING.endIDQuestion
+        ),
+        StudyCategory(
+            id = QuestionType.DRIVING_TECHNIQUE.position,
+            iconResourceID = R.drawable.ic_driving_technique,
+            title = QuestionType.DRIVING_TECHNIQUE.title,
+            startIDQuestion = QuestionType.DRIVING_TECHNIQUE.startIDQuestion,
+            endIDQuestion = QuestionType.DRIVING_TECHNIQUE.endIDQuestion
+        ),
+        StudyCategory(
+            id = QuestionType.FIXING_CAR_QUESTION.position,
+            iconResourceID = R.drawable.ic_fixing_car,
+            title = QuestionType.FIXING_CAR_QUESTION.title,
+            startIDQuestion = QuestionType.FIXING_CAR_QUESTION.startIDQuestion,
+            endIDQuestion = QuestionType.FIXING_CAR_QUESTION.endIDQuestion
+        ),
+        StudyCategory(
+            id = QuestionType.TRAFFIC_SIGNAL.position,
+            iconResourceID = R.drawable.ic_traffic_sign_question,
+            title = QuestionType.TRAFFIC_SIGNAL.title,
+            startIDQuestion = QuestionType.TRAFFIC_SIGNAL.startIDQuestion,
+            endIDQuestion = QuestionType.TRAFFIC_SIGNAL.endIDQuestion
+        ),
+        StudyCategory(
+            id = QuestionType.TRAFFIC_SITUATION.position,
+            iconResourceID = R.drawable.ic_traffic_situation,
+            title = QuestionType.TRAFFIC_SITUATION.type,
+            startIDQuestion = QuestionType.TRAFFIC_SITUATION.startIDQuestion,
+            endIDQuestion = QuestionType.TRAFFIC_SITUATION.endIDQuestion
         ),
     )
+
+    init {
+        onUpdateListStudyCategory()
+    }
 
     private val _listStudyCategory = MutableLiveData(listDefaultStudyCategory)
 
     val listStudyCategory: LiveData<List<StudyCategory>>
         get() = _listStudyCategory
 
-    private val _currentStudyCategoryIndex = MutableLiveData<Int>(AppConstant.NONE_POSITION)
+    private val _currentStudyCategoryIndex = MutableLiveData(AppConstant.NONE_POSITION)
 
     val currentStudyCategory: LiveData<Int>
         get() = _currentStudyCategoryIndex
-
-    init {
-        onUpdateListStudyCategory()
-    }
 
     fun setCurrentStudyCategoryPosition(index: Int) {
         _currentStudyCategoryIndex.postValue(index)
@@ -87,33 +128,25 @@ class StudyViewModel(
             }
 
             studyRepository.getListQuestion(
-                object : IResponseListener<MutableList<Questions>> {
-                    override fun onSuccess(data: MutableList<Questions>) {
+                object : IResponseListener<MutableList<NewQuestion>> {
+                    override fun onSuccess(data: MutableList<NewQuestion>) {
                         viewModelScope.launch {
                             val newList = mutableListOf<StudyCategory>()
                             val oldList = _listStudyCategory.value ?: listDefaultStudyCategory
 
                             newList.apply {
-                                add(data.processPullListData(
-                                    AppConstant.MUST_NOT_WRONG_ANSWER,
-                                    oldList[MUST_NOT_WRONG_ANSWER_POSITION]
-                                ))
-                                add(data.processPullListData(
-                                    AppConstant.CONCEPTS_AND_RULES,
-                                    oldList[CONCEPT_AND_RULES_POSITION]
-                                ))
-                                add(data.processPullListData(
-                                    AppConstant.TRAFFIC_SIGNAL,
-                                    oldList[TRAFFIC_SIGNAL_POSITION]
-                                ))
-                                add(data.processPullListData(
-                                    AppConstant.TRAFFIC_SITUATION_BY_PICTURE,
-                                    oldList[SAT_FIGURE_POSITION]
-                                ))
+                                enumValues<QuestionType>().forEach {
+                                    add(
+                                        data.processPullListData(
+                                            it.type,
+                                            oldList[it.position],
+                                            it.title
+                                        )
+                                    )
+                                }
                             }
 
                             studyRepository.saveProgress(newList)
-
                             _listStudyCategory.postValue(newList)
                             hideLoading()
                         }
@@ -128,38 +161,71 @@ class StudyViewModel(
         }
     }
 
-    private fun MutableList<Questions>.processPullListData(
+    private fun MutableList<NewQuestion>.processPullListData(
         categoryFilter: String,
         lastData: StudyCategory,
+        newTitleIfFix: String,
     ): StudyCategory {
-        val listQuestion =
-            this.filter { return@filter it.questionType == categoryFilter }.toMutableList()
+        val listQuestion = if (categoryFilter == QuestionType.ALL.type) this.toMutableList()
+        else this.filter { return@filter it.questionType == categoryFilter }.toMutableList()
         return StudyCategory(
+            lastData.id,
             lastData.iconResourceID,
-            lastData.title,
+            newTitleIfFix,
+            lastData.startIDQuestion,
+            lastData.endIDQuestion,
             listQuestion,
             if (lastData.listQuestionsState.isEmpty() ||
                 lastData.listQuestionsState.size != listQuestion.size)
-                generateEmptyQuestionStateList(listQuestion.size)
+                generateEmptyQuestionStateList(listQuestion)
             else lastData.listQuestionsState,
             listQuestion.size,
             lastData.numbersOfSelectedQuestions,
         )
     }
 
-    fun updateDataQuestionPos(questionsPosition: Int, item: QuestionOptions) {
+    fun updateDataQuestionPos(questionID: Int, questionsPosition: Int, item: QuestionOptions) {
         val currentStudyCategoryPos = currentStudyCategory.value
         val currentListStudy = _listStudyCategory.value
 
         if (currentStudyCategoryPos != null && currentListStudy != null) {
             val list = mutableListOf<StudyCategory>()
             list.addAll(currentListStudy)
-            list[currentStudyCategoryPos].listQuestionsState[questionsPosition] = item
-            list[currentStudyCategoryPos].numbersOfSelectedQuestions =
+
+            if (currentStudyCategoryPos != QuestionType.ALL.position) {
                 list[currentStudyCategoryPos]
+                list[currentStudyCategoryPos].listQuestionsState[questionsPosition] = item
+                list[currentStudyCategoryPos].numbersOfSelectedQuestions =
+                    list[currentStudyCategoryPos]
+                        .listQuestionsState.count { it.position != AppConstant.NONE_POSITION }
+            } else {
+                enumValues<QuestionType>().forEach {
+                    if (it.position != QuestionType.ALL.position) {
+                        val questionPos = list[it.position].listQuestionsState
+                            .indexOfFirst { elem -> elem.questionsID == questionID }
+
+                        if (questionPos != AppConstant.NONE_POSITION) {
+                            list[it.position].listQuestionsState[questionPos] = item
+                            list[it.position].numbersOfSelectedQuestions =
+                                list[it.position]
+                                    .listQuestionsState.count { elem ->
+                                        elem.position != AppConstant.NONE_POSITION
+                                    }
+                        }
+                    }
+                }
+            }
+
+            val questionIndex = list[QuestionType.ALL.position].listQuestionsState.indexOfFirst {
+                elem -> elem.questionsID == questionID
+            }
+
+            list[QuestionType.ALL.position].listQuestionsState[questionIndex] = item
+            list[QuestionType.ALL.position].numbersOfSelectedQuestions =
+                list[QuestionType.ALL.position]
                     .listQuestionsState
-                    .filter { return@filter it.position != AppConstant.NONE_POSITION }
-                    .count()
+                    .count { it.position != AppConstant.NONE_POSITION }
+
             _listStudyCategory.postValue(list)
         }
     }
@@ -187,9 +253,8 @@ class StudyViewModel(
 
             newList?.forEach {
                 it.numbersOfSelectedQuestions = DEFAULT_NOT_SELECTED_STATE
-                val listSize = it.listQuestionsState.size
                 it.listQuestionsState.clear()
-                it.listQuestionsState.addAll(generateEmptyQuestionStateList(listSize))
+                it.listQuestionsState.addAll(generateEmptyQuestionStateList(it.listQuestions))
             }
 
             _listStudyCategory.value = newList
@@ -202,14 +267,6 @@ class StudyViewModel(
     }
 
     companion object {
-        const val MUST_NOT_WRONG_ANSWER_QUESTION = "Câu hỏi điểm liệt"
-        const val CONCEPT_AND_RULES_QUESTION = "Khái niệm và luật"
-        const val TRAFFIC_SIGNAL_QUESTION = "Câu hỏi biển báo"
-        const val SAT_FIGURE_QUESTION = "Câu hỏi sa hình"
-        const val MUST_NOT_WRONG_ANSWER_POSITION = 0
-        const val CONCEPT_AND_RULES_POSITION = 1
-        const val TRAFFIC_SIGNAL_POSITION = 2
-        const val SAT_FIGURE_POSITION = 3
         const val DEFAULT_NOT_SELECTED_STATE = 0
     }
 }

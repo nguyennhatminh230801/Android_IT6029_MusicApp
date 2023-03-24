@@ -16,10 +16,10 @@ import kotlinx.android.parcel.Parcelize
 data class Exam(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val listQuestions: MutableList<Questions> = mutableListOf(),
+    val listQuestions: MutableList<NewQuestion> = mutableListOf(),
     var numbersOfCorrectAnswer: Int = DEFAULT_NOT_START_EXAM_CORRECT_ANSWER_COUNT,
     var currentTimeStamp: Long = AppConstant.DEFAULT_NOT_HAVE_TIME_STAMP,
-    val listQuestionOptions: MutableList<QuestionOptions> = mutableListOf(),
+    var listQuestionOptions: MutableList<QuestionOptions> = mutableListOf(),
     var examState: String = ExamState.UNDEFINED.value,
 ) : Parcelable {
 

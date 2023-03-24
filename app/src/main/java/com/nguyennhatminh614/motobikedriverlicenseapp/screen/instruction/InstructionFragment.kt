@@ -13,7 +13,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class InstructionFragment :
     BaseFragment<FragmentInstructionBinding>(FragmentInstructionBinding::inflate) {
 
-    override val viewModel by sharedViewModel<InstructionViewModel>()
+    override val viewModel by viewModel<InstructionViewModel>()
 
     override fun initData() {
         viewModel.setVisibleInstructionIcon(false)

@@ -10,12 +10,14 @@ import androidx.viewpager2.widget.ViewPager2
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentDetailExamLayoutBinding
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.adapter.QuestionDetailAdapter
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.adapter.ViewPagerAdapter
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseFragment
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant.EMPTY_SIZE
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant.FIRST_INDEX
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.dialog.BottomSheetQuestionDialog
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.generateEmptyQuestionStateList
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IBottomSheetListener
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
 import kotlinx.coroutines.delay
@@ -32,7 +34,7 @@ class DetailExamFragment :
     }
 
     private val questionAdapter by lazy {
-        ViewPagerAdapter(parentFragmentManager, lifecycle)
+        QuestionDetailAdapter()
     }
 
     private val backPressedCallback by lazy {
@@ -67,15 +69,22 @@ class DetailExamFragment :
                     findNavController().navigateUp()
                 }
             )
+            questionAdapter.disableShowExplanation()
+            questionAdapter.disableShowCorrectAnswer()
         } else {
             viewBinding.textCurrentTime.isVisible = false
             (viewBinding.textCurrentQuestions.layoutParams as?
                     ConstraintLayout.LayoutParams)?.horizontalBias = CENTER_TEXT_QUESTION
             viewBinding.root.requestLayout()
+            questionAdapter.disableClickEvent()
         }
     }
 
     override fun handleEvent() {
+        questionAdapter.setOnClickSelectedQuestionOption { questionID, questionPos, questionOptions ->
+            viewModel.updateStateQuestion(questionPos, questionOptions)
+            viewModel.navigateToNextQuestion(viewBinding.viewPagerQuestions.currentItem)
+        }
         viewBinding.buttonNextQuestion.setOnClickListener {
             if (viewBinding.viewPagerQuestions.currentItem < listQuestionSize) {
                 viewBinding.viewPagerQuestions.currentItem++
@@ -161,25 +170,15 @@ class DetailExamFragment :
             if (currentExamPosition != AppConstant.NONE_POSITION) {
                 val currentExam = it[currentExamPosition]
                 listQuestionSize = currentExam.listQuestions.size
-                var index = FIRST_INDEX
-                questionAdapter.clearAllFragments()
-                currentExam.listQuestions.forEach {
-                    questionAdapter.addFragment(
-                        QuestionExamFragment.newInstance(index, it)
-                    )
-                    index++
-                }
+                questionAdapter.submitList(currentExam.listQuestions)
+                questionAdapter.updateQuestionStateList(generateEmptyQuestionStateList(currentExam.listQuestions))
             }
         }
     }
 
-    override fun onStop() {
-        viewModel.saveCurrentExamState()
-        super.onStop()
-    }
-
     override fun onDestroyView() {
         viewModel.setVisibleFinishExamButton(false)
+        viewModel.saveCurrentExamState()
         super.onDestroyView()
     }
 

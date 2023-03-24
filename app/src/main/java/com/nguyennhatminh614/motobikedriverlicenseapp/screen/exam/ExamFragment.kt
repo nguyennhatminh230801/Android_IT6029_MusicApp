@@ -21,20 +21,6 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
 
     private val examAdapter by lazy { ExamAdapter() }
 
-    private val listTitle = listOf(
-        AppConstant.MUST_NOT_WRONG_ANSWER,
-        AppConstant.CONCEPTS_AND_RULES,
-        AppConstant.TRAFFIC_SIGNAL,
-        AppConstant.TRAFFIC_SITUATION_BY_PICTURE,
-    )
-
-    private val listNumbersOfQuestion = listOf(
-        ExamViewModel.NUMBERS_OF_MUST_NOT_WRONG_ANSWER,
-        ExamViewModel.NUMBERS_OF_CONCEPT_AND_RULES,
-        ExamViewModel.NUMBERS_OF_TRAFFIC_SIGNAL,
-        ExamViewModel.NUMBERS_OF_SITUATION_BY_PICTURE,
-    )
-
     override fun initData() {
         viewBinding.recyclerViewExam.adapter = examAdapter
     }
@@ -56,7 +42,11 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                 .setMessage(DIALOG_MESSAGE)
                 .setPositiveButton(
                     DIALOG_POSITIVE_BUTTON_TEXT
-                ) { _, _ -> createExam() }
+                ) { _, _ ->
+                    viewModel.createExam {
+                        showToast(MESSAGE_SUCCESS_ADD_EXAM)
+                    }
+                }
                 .setNegativeButton(DIALOG_NEGATIVE_BUTTON_TEXT) { _, _ ->
                     //Not-op
                 }
@@ -72,33 +62,13 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
             if (it.isEmpty()) {
                 viewBinding.layoutVisibleWhenDataIsEmpty.root.isVisible = true
                 if (viewBinding.layoutVisibleWhenDataIsEmpty.root.text_not_founded != null) {
-                    viewBinding.layoutVisibleWhenDataIsEmpty.root.text_not_founded.text = "Vui lòng tạo đề mới"
+                    viewBinding.layoutVisibleWhenDataIsEmpty.root.text_not_founded.text =
+                        "Vui lòng tạo đề mới"
                 }
             } else {
                 viewBinding.layoutVisibleWhenDataIsEmpty.root.isVisible = false
             }
         }
-    }
-
-    private fun createExam() {
-        val exam = Exam(id = DEFAULT_ID)
-        val listQuestions = viewModel.listQuestions.value
-        var tempIndex = FIRST_INDEX
-
-        listQuestions?.let { listQuestions ->
-            exam.listQuestions.apply {
-                repeat(REPEAT_TIMES) {
-                    this.addAll(viewModel.getCategoryList(listQuestions,
-                        listTitle[tempIndex],
-                        listNumbersOfQuestion[tempIndex]))
-                    tempIndex++
-                }
-            }
-            exam.listQuestionOptions.addAll(generateEmptyQuestionStateList(exam.listQuestions.size))
-        }
-
-        viewModel.addExamToDatabase(exam)
-        showToast(MESSAGE_SUCCESS_ADD_EXAM)
     }
 
     companion object {
@@ -108,6 +78,5 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
         const val DIALOG_MESSAGE = "Bạn có muốn tạo mới 1 đề không ?"
         const val DIALOG_POSITIVE_BUTTON_TEXT = "Có"
         const val DIALOG_NEGATIVE_BUTTON_TEXT = "Không"
-        const val REPEAT_TIMES = 4
     }
 }

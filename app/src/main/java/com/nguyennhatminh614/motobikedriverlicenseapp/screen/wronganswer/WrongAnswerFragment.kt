@@ -4,13 +4,16 @@ import androidx.core.view.isVisible
 import androidx.viewpager2.widget.ViewPager2
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentWrongAnswerBinding
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.adapter.QuestionDetailAdapter
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.adapter.ViewPagerAdapter
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseFragment
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.dialog.BottomSheetQuestionDialog
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.dialog.LoadingDialog
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.generateEmptyQuestionStateList
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IBottomSheetListener
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.processQuestionOptionsList
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class WrongAnswerFragment :
@@ -25,7 +28,7 @@ class WrongAnswerFragment :
     }
 
     private val questionAdapter by lazy {
-        ViewPagerAdapter(parentFragmentManager, lifecycle)
+        QuestionDetailAdapter()
     }
 
     override fun initData() {
@@ -33,6 +36,10 @@ class WrongAnswerFragment :
     }
 
     override fun handleEvent() {
+        questionAdapter.setOnClickSelectedQuestionOption { questionID, questionPos, questionOptions ->
+            viewModel.updateDataQuestionPos(questionPos, questionOptions)
+        }
+
         viewBinding.buttonNextQuestion.setOnClickListener {
             if (viewBinding.viewPagerQuestions.currentItem < listQuestionSize) {
                 viewBinding.viewPagerQuestions.currentItem++
@@ -103,21 +110,13 @@ class WrongAnswerFragment :
             viewBinding.textCurrentQuestions.text =
                 "Câu ${viewBinding.viewPagerQuestions.currentItem + 1}/${listQuestionSize}"
 
-            var index = AppConstant.FIRST_INDEX
-            questionAdapter.clearAllFragments()
-            it.forEach { question ->
-                questionAdapter.addFragment(
-                    QuestionWrongAnswerFragment.newInstance(
-                        index,
-                        question,
-                    )
-                )
-                index++
-            }
+            questionAdapter.submitList(it)
+            questionAdapter.updateQuestionStateList(generateEmptyQuestionStateList(it))
         }
 
         viewModel.listQuestionOptions.observe(viewLifecycleOwner) {
             bottomSheetDialog.updateDataAdapter(it)
+            questionAdapter.updateQuestionStateList(it)
         }
 
         viewModel.updateNewDataFromDatabase(

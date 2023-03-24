@@ -25,6 +25,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.screen.trafficsign.Traffic
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.wronganswer.WrongAnswerViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseActivity
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.dialog.LoadingDialog
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.network.ConnectivityObserver
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.network.InternetConnection
 import kotlinx.coroutines.launch
@@ -71,6 +72,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         }
     }
 
+    override fun showLoadingDialog() {
+        super.showLoadingDialog()
+        LoadingDialog.showLoadingDialog(this)
+    }
+
+    override fun hideLoadingDialog() {
+        super.hideLoadingDialog()
+        LoadingDialog.hideLoadingDialog()
+    }
     override fun handleEvent() {
         viewBinding.apply {
             setSupportActionBar(appBarMain.toolbar)
