@@ -17,7 +17,6 @@ class InstructionFragment :
 
     override fun initData() {
         viewModel.setVisibleInstructionIcon(false)
-
     }
 
     override fun handleEvent() {

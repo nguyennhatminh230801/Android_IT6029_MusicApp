@@ -19,9 +19,7 @@ class TipHighScoreFragment :
     }
 
     override fun handleEvent() {
-        adapter.registerOnClickItemEvent {
-            viewModel.onClickedChangeVisibleItemState(it)
-        }
+        // Nothing
     }
 
     override fun bindData() {
@@ -29,10 +27,6 @@ class TipHighScoreFragment :
             adapter.submitList(it)
             viewBinding.recyclerViewTipsHighScore.isVisible = adapter.currentList.isEmpty().not()
             viewBinding.layoutVisibleWhenDataIsEmpty.root.isVisible = adapter.currentList.isEmpty()
-        }
-
-        viewModel.listStateVisible.observe(viewLifecycleOwner) {
-            adapter.updateListState(it)
         }
     }
 }
