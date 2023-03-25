@@ -9,11 +9,11 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.DialogLoadingL
 object LoadingDialog {
     private var dialog: AlertDialog? = null
     fun showLoadingDialog(context: Context?) {
-        val windowLayoutParams = WindowManager.LayoutParams()
-        windowLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
-        windowLayoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
-
         if (dialog == null) {
+            val windowLayoutParams = WindowManager.LayoutParams()
+            windowLayoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
+            windowLayoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
+
             val dialogBinding = DialogLoadingLayoutBinding.inflate(
                 LayoutInflater.from(context),
                 null,
@@ -23,14 +23,17 @@ object LoadingDialog {
                 .setView(dialogBinding.root)
                 .setCancelable(false)
                 .create()
+            dialog?.window?.attributes = windowLayoutParams
         }
-
-        dialog?.window?.attributes = windowLayoutParams
 
         dialog?.show()
     }
 
     fun hideLoadingDialog() {
-        dialog?.dismiss()
+        dialog?.hide()
+    }
+
+    fun shutDownDialog() {
+        dialog = null
     }
 }
