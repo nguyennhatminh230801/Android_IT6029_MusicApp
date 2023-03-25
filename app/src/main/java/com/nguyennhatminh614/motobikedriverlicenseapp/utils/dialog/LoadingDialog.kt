@@ -31,6 +31,6 @@ object LoadingDialog {
     }
 
     fun hideLoadingDialog() {
-        dialog?.hide()
+        dialog?.dismiss()
     }
 }

@@ -11,6 +11,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.OnClickItem
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseRecyclerViewAdapter
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewHolder
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getResourceColor
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.toDateTimeDetail
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.toDateTimeMMSS
 
@@ -38,7 +39,7 @@ class ExamAdapter :
     }
 
     private fun getSelectedColor(binding: ItemExamListLayoutBinding, color: Int) =
-        binding.root.context.resources.getColor(color)
+        binding.root.context.getResourceColor(color)
 
     companion object {
         private const val WATCH_RESULT = "Xem lại"

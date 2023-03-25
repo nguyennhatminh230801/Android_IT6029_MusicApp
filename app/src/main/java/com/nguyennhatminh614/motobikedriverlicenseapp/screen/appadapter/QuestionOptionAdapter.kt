@@ -10,6 +10,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.OnClickItem
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseRecyclerViewAdapter
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewHolder
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getResourceColor
 
 class QuestionOptionAdapter :
     BaseRecyclerViewAdapter<QuestionOptions, ItemOptionsQuestionLayoutBinding, QuestionOptionAdapter.ViewHolder>(
@@ -43,7 +44,7 @@ class QuestionOptionAdapter :
     }
 
     private fun getSelectedColor(binding: ItemOptionsQuestionLayoutBinding, color: Int) =
-        binding.root.context.resources.getColor(color)
+        binding.root.context.getResourceColor(color)
 
     private fun setSingleSelection(adapterPosition: Int) {
         selectedPosition = adapterPosition

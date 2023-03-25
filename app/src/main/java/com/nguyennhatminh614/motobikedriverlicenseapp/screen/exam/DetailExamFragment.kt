@@ -14,6 +14,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.adapter.QuestionDeta
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.adapter.ViewPagerAdapter
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseFragment
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant.DEFAULT_NOT_HAVE_TIME_STAMP
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant.EMPTY_SIZE
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant.FIRST_INDEX
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.dialog.BottomSheetQuestionDialog
@@ -40,7 +41,10 @@ class DetailExamFragment :
     private val backPressedCallback by lazy {
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (viewModel.getCurrentExam()?.examState == ExamState.UNDEFINED.value) {
+                val isExamNotFinished =
+                    viewModel.getCurrentExam()?.examState == ExamState.UNDEFINED.value
+
+                if (isExamNotFinished) {
                     AlertDialog.Builder(context)
                         .setTitle(DIALOG_TITLE)
                         .setMessage(DIALOG_MESSAGE)
@@ -63,20 +67,22 @@ class DetailExamFragment :
     override fun initData() {
         viewBinding.viewPagerQuestions.adapter = questionAdapter
 
-        if (viewModel.getCurrentExamTimestampLeft() != NO_TIME_LEFT) {
+        val isExamNotFinished = viewModel.getCurrentExamTimestampLeft() != NO_TIME_LEFT
+
+        if (isExamNotFinished) {
+            questionAdapter.disableShowExplanation()
+            questionAdapter.disableShowCorrectAnswer()
             viewModel.startCountDownEvent(
                 onFinishExamEvent = {
                     findNavController().navigateUp()
                 }
             )
-            questionAdapter.disableShowExplanation()
-            questionAdapter.disableShowCorrectAnswer()
         } else {
             viewBinding.textCurrentTime.isVisible = false
+            questionAdapter.disableClickEvent()
             (viewBinding.textCurrentQuestions.layoutParams as?
                     ConstraintLayout.LayoutParams)?.horizontalBias = CENTER_TEXT_QUESTION
             viewBinding.root.requestLayout()
-            questionAdapter.disableClickEvent()
         }
     }
 
@@ -140,8 +146,10 @@ class DetailExamFragment :
                         }
                     })
 
-                bottomSheetDialog.examDialogMode(isExam = true,
-                    isRunning = viewModel.getCurrentExamTimestampLeft() != NO_TIME_LEFT)
+                bottomSheetDialog.examDialogMode(
+                    isExam = true,
+                    isRunning = viewModel.getCurrentExamTimestampLeft() != NO_TIME_LEFT
+                )
 
                 bottomSheetDialog.showDialog()
             }
@@ -171,7 +179,21 @@ class DetailExamFragment :
                 val currentExam = it[currentExamPosition]
                 listQuestionSize = currentExam.listQuestions.size
                 questionAdapter.submitList(currentExam.listQuestions)
-                questionAdapter.updateQuestionStateList(generateEmptyQuestionStateList(currentExam.listQuestions))
+
+                //Xử lý điều kiện đã thi xong
+                val isFinishedExam =
+                    viewModel.getCurrentExamTimestampLeft() == NO_TIME_LEFT
+
+                if (isFinishedExam) {
+                    questionAdapter.updateQuestionStateList(currentExam.listQuestionOptions)
+                } else {
+                    questionAdapter.updateQuestionStateList(
+                        generateEmptyQuestionStateList(
+                            currentExam.listQuestions
+                        )
+                    )
+                }
+
             }
         }
     }

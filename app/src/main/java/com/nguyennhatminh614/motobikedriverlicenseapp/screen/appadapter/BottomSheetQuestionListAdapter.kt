@@ -12,6 +12,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.OnClickItemPosition
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseRecyclerViewAdapter
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewHolder
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant.NONE_POSITION
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getResourceColor
 
 class BottomSheetQuestionListAdapter :
     BaseRecyclerViewAdapter<QuestionOptions, ItemExamQuestionBottomSheetDialogBinding,
@@ -39,7 +40,7 @@ class BottomSheetQuestionListAdapter :
     }
 
     private fun getSelectedColor(binding: ItemExamQuestionBottomSheetDialogBinding, color: Int) =
-        binding.root.context.resources.getColor(color)
+        binding.root.context.getResourceColor(color)
 
     fun setSingleSelection(adapterPosition: Int) {
         currentQuestionIndex = adapterPosition

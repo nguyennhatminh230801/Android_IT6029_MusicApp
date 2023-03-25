@@ -37,12 +37,12 @@ open class BaseViewModel : ViewModel() {
     protected fun showLoading() {
         loading.value = true
 
-//        //Timeout 12s
-//        viewModelScope.launch {
-//            withTimeout(12L.convertSecondToMilisecond()) {
-//                loading.value = false
-//            }
-//        }
+        //Timeout 12s
+        viewModelScope.launch {
+            withTimeout(12L.convertSecondToMilisecond()) {
+                loading.value = false
+            }
+        }
     }
 
     protected fun hideLoading() {

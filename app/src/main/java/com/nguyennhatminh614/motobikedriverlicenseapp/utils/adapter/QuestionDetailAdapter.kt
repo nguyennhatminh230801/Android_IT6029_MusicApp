@@ -35,7 +35,7 @@ class QuestionDetailAdapter :
     }
 
     fun enableClickEvent() {
-        _isDisableClickEvent = true
+        _isDisableClickEvent = false
     }
 
     fun setOnClickSelectedQuestionOption(callback: (Int, Int, QuestionOptions) -> Unit) {
@@ -43,7 +43,7 @@ class QuestionDetailAdapter :
     }
 
     fun disableClickEvent() {
-        _isDisableClickEvent = false
+        _isDisableClickEvent = true
     }
 
     fun enableShowCorrectAnswer() {

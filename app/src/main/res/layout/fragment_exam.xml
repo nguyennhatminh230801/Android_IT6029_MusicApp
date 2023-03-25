@@ -21,7 +21,8 @@
         android:layout_marginBottom="@dimen/dp_20"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_shuffle" />
+        android:src="@drawable/ic_add_exam"
+        app:tint="@color/white"/>
 
     <include
         android:id="@+id/layout_visible_when_data_is_empty"
