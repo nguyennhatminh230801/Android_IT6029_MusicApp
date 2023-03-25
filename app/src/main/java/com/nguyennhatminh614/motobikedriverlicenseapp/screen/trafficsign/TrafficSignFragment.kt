@@ -7,10 +7,8 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.TrafficSignCategory
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.TrafficSigns
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentTrafficSignBinding
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.adapter.ViewPagerAdapter
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseFragment
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TrafficSignFragment :
@@ -40,7 +38,7 @@ class TrafficSignFragment :
         mutableListOf<MutableList<TrafficSigns>>()
     }
 
-    override val viewModel by sharedViewModel<TrafficSignViewModel>()
+    override val viewModel by viewModel<TrafficSignViewModel>()
 
     override fun initData() {
         // Not op

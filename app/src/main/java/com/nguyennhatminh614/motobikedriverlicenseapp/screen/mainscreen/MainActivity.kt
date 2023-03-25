@@ -39,7 +39,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     val examViewModel by viewModel<ExamViewModel>()
     val settingsViewModel by viewModel<SettingsViewModel>()
     val instructionViewModel by viewModel<InstructionViewModel>()
-    val trafficSignViewModel by viewModel<TrafficSignViewModel>()
 
     val internetConnectionObserver by inject<InternetConnection>()
 
@@ -207,6 +206,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         super.onPause()
     }
 
+    override fun onDestroy() {
+        LoadingDialog.shutDownDialog()
+        super.onDestroy()
+    }
     companion object {
         private const val DIALOG_TITLE = "Thông báo"
         private const val LOST_INTERNET_CONNECTION_DIALOG_MESSAGE = "Mất kết nối mạng"
