@@ -1,6 +1,7 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.splash
 
 import android.content.Intent
+import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
@@ -20,7 +21,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(ActivitySplashBinding
 
     private val viewModel by viewModel<SplashViewModel>()
 
-    override fun initData() {
+    override fun initData(savedInstanceState: Bundle?) {
         //Not-op
     }
 

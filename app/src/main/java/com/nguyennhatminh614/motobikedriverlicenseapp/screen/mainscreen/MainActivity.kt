@@ -2,8 +2,9 @@ package com.nguyennhatminh614.motobikedriverlicenseapp.screen.mainscreen
 
 
 import android.app.AlertDialog
+import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
-import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
@@ -21,10 +22,9 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.ExamViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.instruction.InstructionViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.settings.SettingsViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.study.StudyViewModel
-import com.nguyennhatminh614.motobikedriverlicenseapp.screen.trafficsign.TrafficSignViewModel
-import com.nguyennhatminh614.motobikedriverlicenseapp.screen.wronganswer.WrongAnswerViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseActivity
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.dialog.LoadingDialog
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.network.ConnectivityObserver
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.network.InternetConnection
@@ -50,6 +50,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             .create()
     }
 
+    private var _hasShowNotConnectedDialogAtStart = false
+
     private val appBarConfiguration by lazy {
         AppBarConfiguration(
             setOf(
@@ -65,9 +67,28 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         )
     }
 
-    override fun initData() {
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putBoolean(AppConstant.HAS_SHOW_NOT_CONNECTED_DIALOG_AT_START, _hasShowNotConnectedDialogAtStart)
+        super.onSaveInstanceState(outState)
+    }
+
+    private fun showNotConnnectedDialogAtStart() {
         if (internetConnectionObserver.isOnline().not()) {
             notConnectDialog.show()
+            _hasShowNotConnectedDialogAtStart = true
+        }
+    }
+
+    override fun initData(savedInstanceState: Bundle?) {
+        if (savedInstanceState == null) {
+            showNotConnnectedDialogAtStart()
+        } else {
+            val hasShowNotConnectedDialog =
+                savedInstanceState.getBoolean(AppConstant.HAS_SHOW_NOT_CONNECTED_DIALOG_AT_START, false)
+            _hasShowNotConnectedDialogAtStart = hasShowNotConnectedDialog
+            if (hasShowNotConnectedDialog.not()) {
+                showNotConnnectedDialogAtStart()
+            }
         }
     }
 

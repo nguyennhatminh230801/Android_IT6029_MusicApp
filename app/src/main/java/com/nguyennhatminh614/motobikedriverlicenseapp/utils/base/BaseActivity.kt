@@ -15,12 +15,13 @@ abstract class BaseActivity<T : ViewBinding>(
     protected val viewBinding: T
         get() = _binding!!
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = bindingInflater(layoutInflater)
         setContentView(viewBinding.root)
 
-        initData()
+        initData(savedInstanceState)
         handleEvent()
         bindData()
     }
@@ -29,7 +30,7 @@ abstract class BaseActivity<T : ViewBinding>(
 
     open fun hideLoadingDialog() {}
 
-    abstract fun initData()
+    abstract fun initData(savedInstanceState: Bundle?)
 
     abstract fun handleEvent()
 
