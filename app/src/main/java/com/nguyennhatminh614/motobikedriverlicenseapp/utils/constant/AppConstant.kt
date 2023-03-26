@@ -8,7 +8,7 @@ object AppConstant {
     const val NEW_QUESTION_COLLECTION = "question_new_ver"
     const val TRAFFIC_SIGN_COLLECTION = "trafficsign"
     const val TIPS_HIGH_SCORE_COLLECTION = "tipshighscore"
-
+    const val HAS_SHOW_NOT_CONNECTED_DIALOG_AT_START = "isShowNotConnectedDialog"
     const val NONE_POSITION = -1
 
     const val FIRST_INDEX = 0
