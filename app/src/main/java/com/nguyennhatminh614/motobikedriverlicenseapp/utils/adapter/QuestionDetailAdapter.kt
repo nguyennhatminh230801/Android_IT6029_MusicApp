@@ -88,14 +88,13 @@ class QuestionDetailAdapter :
                     textQuestionExplain.text = question.explain.processExplainQuestion()
 
                     if (question.hasImageBanner) {
+                        imageQuestions.isVisible = true
                         imageQuestions.loadGlideImageFromUrl(
                             root.context,
                             question.image
                         )
                     } else {
                         imageQuestions.isVisible = false
-                        (recyclerViewQuestionOptions.layoutManager as? ConstraintLayout.LayoutParams)?.topToBottom =
-                            textTitleQuestions.id
                     }
 
                     recyclerViewQuestionOptions.adapter = questionOptionAdapter

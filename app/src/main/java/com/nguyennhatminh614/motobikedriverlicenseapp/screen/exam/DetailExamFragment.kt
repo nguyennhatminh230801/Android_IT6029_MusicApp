@@ -1,6 +1,7 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam
 
 import android.app.AlertDialog
+import android.util.Log
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
@@ -103,6 +104,8 @@ class DetailExamFragment :
                     super.onPageSelected(position)
                     viewBinding.textCurrentQuestions.text =
                         "Câu ${viewBinding.viewPagerQuestions.currentItem + 1}/${listQuestionSize}"
+
+                    Log.e("test11", "current question: ${questionAdapter.currentList[position]}")
                 }
             }
         )
@@ -180,20 +183,15 @@ class DetailExamFragment :
                 listQuestionSize = currentExam.listQuestions.size
                 questionAdapter.submitList(currentExam.listQuestions)
 
-                //Xử lý điều kiện đã thi xong
-                val isFinishedExam =
-                    viewModel.getCurrentExamTimestampLeft() == NO_TIME_LEFT
-
-                if (isFinishedExam) {
-                    questionAdapter.updateQuestionStateList(currentExam.listQuestionOptions)
-                } else {
+                if (currentExam.listQuestionOptions.isEmpty()) {
                     questionAdapter.updateQuestionStateList(
                         generateEmptyQuestionStateList(
                             currentExam.listQuestions
                         )
                     )
+                } else {
+                    questionAdapter.updateQuestionStateList(currentExam.listQuestionOptions)
                 }
-
             }
         }
     }
