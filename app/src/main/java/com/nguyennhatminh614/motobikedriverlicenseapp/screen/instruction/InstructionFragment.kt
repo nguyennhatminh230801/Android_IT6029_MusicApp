@@ -9,7 +9,6 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-
 class InstructionFragment :
     BaseFragment<FragmentInstructionBinding>(FragmentInstructionBinding::inflate) {
 

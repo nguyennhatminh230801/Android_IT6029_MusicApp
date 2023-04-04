@@ -118,10 +118,6 @@ class QuestionDetailAdapter :
                     } else {
                         viewQuestionExplain.visibility = View.INVISIBLE
                     }
-//                    questionOptionAdapter.submitList(listQuestionOptions)
-//                    if (selectedPosition != AppConstant.NONE_POSITION){
-//                        questionOptionAdapter.setSingleSelection(selectedPosition)
-//                    }
 
                     if (_isDisableClickEvent) {
                         questionOptionAdapter.disableClickEvent()

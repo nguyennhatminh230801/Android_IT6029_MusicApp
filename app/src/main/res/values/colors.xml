@@ -15,4 +15,6 @@
     <color name="red_pastel">#FFFF6961</color>
     <color name="yellow_pastel">#FFFDFD96</color>
     <color name="yellow_pastel_low_alpha">#8CFDFD96</color>
+    <color name="blue">#FF3753F1</color>
+    <color name="black_200">#FF121212</color>
 </resources>

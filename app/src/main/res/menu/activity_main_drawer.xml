@@ -14,6 +14,11 @@
             android:title="Trang chủ" />
 
         <item
+            android:id="@+id/nav_change_license_type"
+            android:icon="@drawable/ic_change_license_type"
+            android:title="Thay đổi hạng bằng" />
+
+        <item
             android:id="@+id/nav_exam"
             android:icon="@drawable/ic_menu_exam"
             android:title="Thi sát hạch" />
