@@ -40,9 +40,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     val settingsViewModel by viewModel<SettingsViewModel>()
     val instructionViewModel by viewModel<InstructionViewModel>()
 
-    val internetConnectionObserver by inject<InternetConnection>()
+    private val internetConnectionObserver by inject<InternetConnection>()
 
-    val notConnectDialog by lazy {
+    private val notConnectDialog by lazy {
         AlertDialog.Builder(this@MainActivity)
             .setTitle(DIALOG_TITLE)
             .setMessage(LOST_INTERNET_CONNECTION_DIALOG_MESSAGE)
@@ -56,6 +56,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         AppBarConfiguration(
             setOf(
                 R.id.nav_main,
+                R.id.nav_change_license_type,
                 R.id.nav_exam,
                 R.id.nav_study,
                 R.id.nav_traffic_sign,
@@ -80,6 +81,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     override fun initData(savedInstanceState: Bundle?) {
+        // Làm như thế này để tránh việc luôn mở dialog mất mạng
+        // mỗi khi đổi theme (dark mode/ light mode)
+
         if (savedInstanceState == null) {
             showNotConnnectedDialogAtStart()
         } else {
@@ -101,6 +105,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         super.hideLoadingDialog()
         LoadingDialog.hideLoadingDialog()
     }
+
     override fun handleEvent() {
         viewBinding.apply {
             setSupportActionBar(appBarMain.toolbar)
@@ -113,6 +118,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
                 when (menuItem.itemId) {
                     R.id.nav_study -> navController.navigate(R.id.action_nav_main_to_nav_study)
+                    R.id.nav_change_license_type -> navController.navigate(R.id.action_nav_main_to_nav_change_license_type)
                     R.id.nav_settings -> navController.navigate(R.id.action_nav_main_to_nav_settings)
                     R.id.nav_exam -> navController.navigate(R.id.action_nav_main_to_nav_exam)
                     R.id.nav_tips_high_score ->

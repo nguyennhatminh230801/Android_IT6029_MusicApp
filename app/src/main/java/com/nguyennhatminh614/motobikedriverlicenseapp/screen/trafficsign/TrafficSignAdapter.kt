@@ -18,13 +18,7 @@ class TrafficSignAdapter :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = ItemTrafficSignLayoutBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
-
-        return ViewHolder(binding)
+        return ViewHolder(inflateViewBinding(ItemTrafficSignLayoutBinding::inflate, parent))
     }
 
     inner class ViewHolder(

@@ -23,6 +23,16 @@ class WrongAnswerFragment :
 
     private var listQuestionSize = AppConstant.EMPTY_SIZE
 
+    private val onPageChangeCallback by lazy {
+        object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                viewBinding.textCurrentQuestions.text =
+                    "Câu ${viewBinding.viewPagerQuestions.currentItem + 1}/${listQuestionSize}"
+            }
+        }
+    }
+
     private val bottomSheetDialog by lazy {
         BottomSheetQuestionDialog()
     }
@@ -46,15 +56,7 @@ class WrongAnswerFragment :
             }
         }
 
-        viewBinding.viewPagerQuestions.registerOnPageChangeCallback(
-            object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    super.onPageSelected(position)
-                    viewBinding.textCurrentQuestions.text =
-                        "Câu ${viewBinding.viewPagerQuestions.currentItem + 1}/${listQuestionSize}"
-                }
-            }
-        )
+        viewBinding.viewPagerQuestions.registerOnPageChangeCallback(onPageChangeCallback)
 
         viewBinding.buttonPreviousQuestion.setOnClickListener {
             if (viewBinding.viewPagerQuestions.currentItem > AppConstant.FIRST_INDEX) {
@@ -130,5 +132,10 @@ class WrongAnswerFragment :
                 }
             }
         )
+    }
+
+    override fun onDestroyView() {
+        viewBinding.viewPagerQuestions.unregisterOnPageChangeCallback(onPageChangeCallback)
+        super.onDestroyView()
     }
 }

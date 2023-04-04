@@ -48,6 +48,10 @@
             android:id="@+id/action_nav_main_to_nav_instruction2"
             app:destination="@id/nav_instruction" />
 
+        <action
+            android:id="@+id/action_nav_main_to_nav_change_license_type"
+            app:destination="@id/nav_change_license_type" />
+
     </fragment>
 
     <fragment
@@ -122,4 +126,9 @@
         tools:layout="@layout/fragment_instruction"
         >
     </fragment>
+    <fragment
+        android:id="@+id/nav_change_license_type"
+        android:name="com.nguyennhatminh614.motobikedriverlicenseapp.screen.changelicensetype.ChangeLicenseTypeFragment"
+        android:label="@string/text_change_license_type"
+        tools:layout="@layout/fragment_change_license_type_screen"/>
 </navigation>

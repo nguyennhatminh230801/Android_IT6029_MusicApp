@@ -30,7 +30,7 @@ class QuestionOptionAdapter :
     fun updateStateListWithPosition(item: MutableList<QuestionOptions>, position: Int) {
         setSingleSelection(position)
         submitList(item)
-        notifyDataSetChanged()
+        notifyItemChanged(position)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

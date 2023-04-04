@@ -53,4 +53,6 @@
     </string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="text_license_type">Hạng A1</string>
+    <string name="text_change_license_type">Thay đổi hạng bằng</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.di
 
+import com.nguyennhatminh614.motobikedriverlicenseapp.screen.changelicensetype.ChangeLicenseTypeViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.ExamViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.instruction.InstructionViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.settings.SettingsViewModel
@@ -17,9 +18,10 @@ val viewModelModule = module {
     viewModel { SplashViewModel() }
     viewModel { TipsHighScoreViewModel(get()) }
     viewModel { ExamViewModel(get(), get()) }
-    viewModel { StudyViewModel(get(), get()) }
+    viewModel { StudyViewModel(get(),get()) }
     viewModel { WrongAnswerViewModel(get()) }
     viewModel { SettingsViewModel(get()) }
     viewModel { TrafficSignViewModel(get()) }
     viewModel { InstructionViewModel() }
+    viewModel { ChangeLicenseTypeViewModel(get()) }
 }
