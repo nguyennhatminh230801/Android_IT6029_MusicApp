@@ -1,5 +1,7 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.utils.base
 
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -22,4 +24,13 @@ abstract class BaseRecyclerViewAdapter<T, VB : ViewBinding, VH : BaseViewHolder<
     }
 
     abstract fun registerOnClickItemEvent(onClickItem: OnClickItem<T>)
+
+    protected fun <VB> inflateViewBinding(
+        inflateFunction: (LayoutInflater, ViewGroup, Boolean) -> VB,
+        parent: ViewGroup,
+    ): VB = inflateFunction(
+        LayoutInflater.from(parent.context),
+        parent,
+        false
+    )
 }

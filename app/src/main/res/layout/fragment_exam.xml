@@ -14,7 +14,7 @@
         tools:listitem="@layout/item_exam_list_layout" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/button_shuffle"
+        android:id="@+id/button_add_exam"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/dp_20"
@@ -22,7 +22,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:src="@drawable/ic_add_exam"
-        app:tint="@color/white"/>
+        app:tint="@color/white"
+        android:contentDescription="TODO" />
 
     <include
         android:id="@+id/layout_visible_when_data_is_empty"

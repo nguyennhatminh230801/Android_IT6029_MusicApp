@@ -36,7 +36,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
             findNavController().navigate(R.id.action_nav_exam_to_nav_detail_exam)
         }
 
-        viewBinding.buttonShuffle.setOnClickListener {
+        viewBinding.buttonAddExam.setOnClickListener {
             val builder = AlertDialog.Builder(context)
                 .setTitle(DIALOG_TITLE)
                 .setMessage(DIALOG_MESSAGE)
