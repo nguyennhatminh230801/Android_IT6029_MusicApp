@@ -25,4 +25,7 @@ interface ExamDao {
     @Query("select * from EXAM where id=:id")
     suspend fun getDetailExamByID(id: Int): Exam
 
+    @Query("select * from EXAM where examType = :licenseType")
+    suspend fun getAllExamByLicenseType(licenseType: String): MutableList<Exam>
+
 }

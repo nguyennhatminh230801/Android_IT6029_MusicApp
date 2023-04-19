@@ -12,6 +12,8 @@ class ExamRepository(
     override suspend fun insertNewExam(exam: Exam) = local.insertNewExam(exam)
 
     override suspend fun updateExam(exam: Exam) = local.updateExam(exam)
+    override suspend fun getAllExamByLicenseType(licenseType: String)
+        = local.getAllExamByLicenseType(licenseType)
 
     override suspend fun deleteExam(exam: Exam) = local.deleteExam(exam)
 

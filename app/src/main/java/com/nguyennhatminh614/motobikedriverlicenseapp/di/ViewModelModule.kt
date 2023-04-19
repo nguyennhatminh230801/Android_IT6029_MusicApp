@@ -17,7 +17,7 @@ val viewModelModule = module {
     viewModel { BaseViewModel() }
     viewModel { SplashViewModel() }
     viewModel { TipsHighScoreViewModel(get()) }
-    viewModel { ExamViewModel(get(), get()) }
+    viewModel { ExamViewModel(get(), get(), get()) }
     viewModel { StudyViewModel(get(),get()) }
     viewModel { WrongAnswerViewModel(get()) }
     viewModel { SettingsViewModel(get()) }

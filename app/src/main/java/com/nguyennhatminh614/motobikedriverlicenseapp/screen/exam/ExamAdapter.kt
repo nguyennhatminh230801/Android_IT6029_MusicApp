@@ -1,19 +1,25 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam
 
+import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
 import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Exam
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.LicenseType
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.findCreateExamRuleByLicenseType
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.findCreateExamRuleByLicenseTypeString
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.ItemExamListLayoutBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.OnClickItem
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseRecyclerViewAdapter
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewHolder
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getCurrentLicenseType
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getResourceColor
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.toDateTimeDetail
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.toDateTimeMMSS
+import org.koin.java.KoinJavaComponent.get
 
 class ExamAdapter :
     BaseRecyclerViewAdapter<Exam, ItemExamListLayoutBinding, ExamAdapter.ViewHolder>(Exam.getDiffCallBack()) {
@@ -53,6 +59,12 @@ class ExamAdapter :
         override fun onBindData(data: Exam) {
             binding.apply {
                 textExamTitle.text = "Đề số ${data.id}"
+
+                if (data.examState == ExamState.UNDEFINED.value) {
+                    val examRules = findCreateExamRuleByLicenseTypeString(data.examType)
+                    textDescription.text = "${examRules.totalNumberOfQuestion} câu/${examRules.examDurationByMinutes} phút"
+                }
+
                 if (data.examState != ExamState.UNDEFINED.value) {
                     buttonDoExam.text = WATCH_RESULT
                     textDescription.text =
@@ -62,7 +74,7 @@ class ExamAdapter :
                 if(data.examState == ExamState.UNDEFINED.value &&
                     data.currentTimeStamp != AppConstant.EXAM_TEST_FULL_TIME
                     && data.currentTimeStamp != AppConstant.DEFAULT_NOT_HAVE_TIME_STAMP) {
-                    buttonDoExam.text = "Tiếp tục"
+                    buttonDoExam.text = CONTINUE_DOING_TEST
                     textDescription.text =
                         "Còn ${data.currentTimeStamp.toDateTimeDetail()}"
 
