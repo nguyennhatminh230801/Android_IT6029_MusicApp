@@ -2,6 +2,7 @@ package com.nguyennhatminh614.motobikedriverlicenseapp.utils
 
 import android.os.CountDownTimer
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.convertMinutesToMillisecond
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.toDateTimeMMSS
 
 object CountDownInstance {
@@ -14,6 +15,10 @@ object CountDownInstance {
 
     val CurrentTime: String
         get() = currentTimeStamp.toDateTimeMMSS()
+
+    fun setInitialTimeStamp(minutes: Int) {
+        currentTimeStamp = minutes.toLong().convertMinutesToMillisecond()
+    }
 
     fun startCountDownFrom(
         timestamp: Long,

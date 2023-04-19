@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.LicenseType
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentDetailExamLayoutBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.adapter.QuestionDetailAdapter
@@ -38,6 +39,9 @@ class DetailExamFragment :
     private val questionAdapter by lazy {
         QuestionDetailAdapter()
     }
+
+    private val currentLicenseType
+        get() = arguments?.getString(AppConstant.KEY_BUNDLE_CURRENT_LICENSE_TYPE) ?: LicenseType.A1.type
 
     private val backPressedCallback by lazy {
         object : OnBackPressedCallback(true) {
@@ -74,6 +78,7 @@ class DetailExamFragment :
             questionAdapter.disableShowExplanation()
             questionAdapter.disableShowCorrectAnswer()
             viewModel.startCountDownEvent(
+                licenseTypeString = currentLicenseType,
                 onFinishExamEvent = {
                     findNavController().navigateUp()
                 }
@@ -104,8 +109,6 @@ class DetailExamFragment :
                     super.onPageSelected(position)
                     viewBinding.textCurrentQuestions.text =
                         "Câu ${viewBinding.viewPagerQuestions.currentItem + 1}/${listQuestionSize}"
-
-                    Log.e("test11", "current question: ${questionAdapter.currentList[position]}")
                 }
             }
         )

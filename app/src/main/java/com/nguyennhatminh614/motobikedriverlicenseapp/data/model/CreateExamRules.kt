@@ -163,3 +163,11 @@ enum class CreateExamRules(
         examDurationByMinutes = 26,
     ),
 }
+
+fun findCreateExamRuleByLicenseType(licenseType: LicenseType) : CreateExamRules {
+    return enumValues<CreateExamRules>().first { it.licenseType == licenseType }
+}
+
+fun findCreateExamRuleByLicenseTypeString(licenseTypeString: String) : CreateExamRules {
+    return enumValues<CreateExamRules>().first { it.licenseType.type == licenseTypeString}
+}

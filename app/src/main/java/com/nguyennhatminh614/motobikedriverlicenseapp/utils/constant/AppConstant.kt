@@ -19,4 +19,9 @@ object AppConstant {
     const val EXAM_TEST_FULL_TIME = 19 * 60 * 1000L
     const val SHARED_PREFERENCES_FILE_PATH = "com.nguyennhatminh614.motobikedriverlicenseapp"
     const val DARK_MODE = "DarkMode"
+
+    const val KEY_BUNDLE_CURRENT_LICENSE_TYPE = "CurrentLicenseType"
+
+    const val PATTERN_TIME = "%02d:%02d"
+    const val PATTERN_DETAIL_TIME = "%02dp%02ds"
 }

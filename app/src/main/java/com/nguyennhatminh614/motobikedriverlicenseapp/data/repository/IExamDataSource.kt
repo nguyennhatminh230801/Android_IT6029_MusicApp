@@ -1,6 +1,7 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.data.repository
 
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Exam
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.LicenseType
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Questions
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
@@ -12,6 +13,7 @@ interface IExamDataSource {
         suspend fun getAllExam(): MutableList<Exam>
         suspend fun getDetailExamByID(id: Int): Exam
         suspend fun updateExam(exam: Exam)
+        suspend fun getAllExamByLicenseType(licenseType: String) : MutableList<Exam>
     }
 
     interface Remote {

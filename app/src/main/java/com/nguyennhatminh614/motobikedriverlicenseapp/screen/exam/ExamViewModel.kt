@@ -1,21 +1,28 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam
 
+import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Exam
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.LicenseType
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionType
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.StateQuestionOption
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.WrongAnswerObject
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.findCreateExamRuleByLicenseType
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.findCreateExamRuleByLicenseTypeString
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.getAllLowerQuestionList
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.ExamRepository
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.WrongAnswerRepository
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.CountDownInstance
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant.FIRST_INDEX
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.convertMinutesToMillisecond
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getCurrentLicenseType
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.generateEmptyQuestionStateList
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
 import kotlinx.coroutines.delay
@@ -24,6 +31,7 @@ import kotlinx.coroutines.launch
 class ExamViewModel(
     private val examRepository: ExamRepository,
     private val wrongAnswerRepository: WrongAnswerRepository,
+    private val sharedPreferences: SharedPreferences,
 ) : BaseViewModel() {
 
     private val _listExam = MutableLiveData<MutableList<Exam>>()
@@ -48,12 +56,10 @@ class ExamViewModel(
 
     init {
         launchTask {
-            _listExam.postValue(examRepository.getAllExam())
-            hideLoading()
             examRepository.getListQuestion(
                 object : IResponseListener<MutableList<NewQuestion>> {
                     override fun onSuccess(data: MutableList<NewQuestion>) {
-                        _listQuestions.postValue(data)
+                        _listQuestions.value = data
                         hideLoading()
                     }
 
@@ -63,51 +69,71 @@ class ExamViewModel(
                     }
                 }
             )
+            hideLoading()
         }
     }
 
-    private fun addExamToDatabase(exam: Exam) {
+    fun getExamByLicenseType(licenseTypeString: String) {
+        launchTask {
+            _listExam.postValue(examRepository.getAllExamByLicenseType(licenseTypeString))
+            hideLoading()
+        }
+    }
+
+    private fun addExamToDatabase(exam: Exam, licenseTypeString: String) {
         launchTask {
             examRepository.insertNewExam(exam)
-            val data = examRepository.getAllExam()
+            val data = examRepository.getAllExamByLicenseType(licenseTypeString)
             _listExam.postValue(data)
             hideLoading()
         }
     }
 
-    fun startCountDownEvent(onFinishExamEvent: () -> Unit) {
-        var lastTimeStamp = _listExam.value?.get(_currentExamPosition.value
-            ?: AppConstant.NONE_POSITION)?.currentTimeStamp ?: AppConstant.EXAM_TEST_FULL_TIME
+    fun startCountDownEvent(licenseTypeString: String, onFinishExamEvent: () -> Unit) {
+        val currentExam = _listExam.value?.get(
+            _currentExamPosition.value
+                ?: AppConstant.NONE_POSITION
+        )
+        var lastTimeStamp = currentExam?.currentTimeStamp ?: AppConstant.EXAM_TEST_FULL_TIME
 
         if (lastTimeStamp == AppConstant.DEFAULT_NOT_HAVE_TIME_STAMP) {
-            lastTimeStamp = AppConstant.EXAM_TEST_FULL_TIME
+            currentExam?.let {
+                lastTimeStamp =
+                    findCreateExamRuleByLicenseTypeString(it.examType).examDurationByMinutes.toLong()
+                        .convertMinutesToMillisecond()
+            }
         }
 
         CountDownInstance.startCountDownFrom(
             lastTimeStamp,
             onTickEvent = {
                 _currentTimeCountDown.postValue(CountDownInstance.CurrentTime)
-                _listExam.value?.get(_currentExamPosition.value
-                    ?: AppConstant.NONE_POSITION)?.currentTimeStamp =
+                _listExam.value?.get(
+                    _currentExamPosition.value
+                        ?: AppConstant.NONE_POSITION
+                )?.currentTimeStamp =
                     CountDownInstance.CurrentTimeStamp
             },
             onFinishEvent = {
-                processFinishExamEvent(onFinishExamEvent)
+                processFinishExamEvent(licenseTypeString, onFinishExamEvent)
             }
         )
     }
 
-    fun processFinishExamEvent(onFinishExamEvent: () -> Unit) {
+    fun processFinishExamEvent(licenseTypeString: String, onFinishExamEvent: () -> Unit) {
         launchTask {
-            val currentExam = _listExam.value?.get(_currentExamPosition.value
-                ?: AppConstant.NONE_POSITION)
+            val currentExam = _listExam.value?.get(
+                _currentExamPosition.value
+                    ?: AppConstant.NONE_POSITION
+            )
 
             CountDownInstance.cancelCountDown()
 
-            //Logic này cần được update ở tính năng đổi bằng
             currentExam?.let { exam ->
                 var index = FIRST_INDEX
                 var isWrongTheQuestionThatFailedTestImmediately = false
+                val examRules =
+                    findCreateExamRuleByLicenseType(sharedPreferences.getCurrentLicenseType())
 
                 exam.currentTimeStamp = END_TIME_STAMP
 
@@ -134,7 +160,7 @@ class ExamViewModel(
                     index++
                 }
 
-                if (exam.numbersOfCorrectAnswer < MINIMUM_CORRECT_QUESTION_TO_PASS_EXAM ||
+                if (exam.numbersOfCorrectAnswer < examRules.minimumCorrectToPassExam ||
                     isWrongTheQuestionThatFailedTestImmediately
                 ) {
                     exam.examState = ExamState.FAILED.value
@@ -142,7 +168,7 @@ class ExamViewModel(
                     exam.examState = ExamState.PASSED.value
                 }
 
-                addExamToDatabase(exam)
+                addExamToDatabase(exam, licenseTypeString)
                 delay(DELAY_ON_FINISH_EXAM)
             }
             _currentExamQuestionPosition.postValue(FIRST_INDEX)
@@ -169,24 +195,30 @@ class ExamViewModel(
     }
 
     fun updateStateQuestion(questionsPosition: Int, item: QuestionOptions) {
-        _listExam.value?.get(_currentExamPosition.value
-            ?: AppConstant.NONE_POSITION)?.listQuestionOptions?.set(questionsPosition, item)
+        _listExam.value?.get(
+            _currentExamPosition.value
+                ?: AppConstant.NONE_POSITION
+        )?.listQuestionOptions?.set(questionsPosition, item)
     }
 
     fun navigateToNextQuestion(currentPosition: Int) {
-        val currentExamSize = _listExam.value?.get(_currentExamPosition.value
-            ?: AppConstant.NONE_POSITION)?.listQuestionOptions?.size ?: AppConstant.EMPTY_SIZE
+        val currentExamSize = _listExam.value?.get(
+            _currentExamPosition.value
+                ?: AppConstant.NONE_POSITION
+        )?.listQuestionOptions?.size ?: AppConstant.EMPTY_SIZE
         if (currentPosition < currentExamSize) {
             _currentExamQuestionPosition.postValue(currentPosition + 1)
         }
     }
 
     fun getCurrentExamTimestampLeft() =
-        _listExam.value?.get(_currentExamPosition.value
-            ?: AppConstant.NONE_POSITION)?.currentTimeStamp
+        _listExam.value?.get(
+            _currentExamPosition.value
+                ?: AppConstant.NONE_POSITION
+        )?.currentTimeStamp
             ?: AppConstant.DEFAULT_NOT_HAVE_TIME_STAMP
 
-    fun getCategoryList(questions: MutableList<NewQuestion>, key: String, takeAmount: Int) =
+    private fun getCategoryList(questions: MutableList<NewQuestion>, key: String, takeAmount: Int) =
         questions.filter {
             return@filter it.questionType.lowercase() == key.lowercase()
         }.shuffled().take(takeAmount)
@@ -194,9 +226,11 @@ class ExamViewModel(
     fun saveCurrentExamState() {
         viewModelScope.launch {
             CountDownInstance.cancelCountDown()
-            if(_currentExamPosition.value != AppConstant.NONE_POSITION) {
-                _listExam.value?.get(_currentExamPosition.value
-                    ?: AppConstant.NONE_POSITION)?.let {
+            if (_currentExamPosition.value != AppConstant.NONE_POSITION) {
+                _listExam.value?.get(
+                    _currentExamPosition.value
+                        ?: AppConstant.NONE_POSITION
+                )?.let {
                     examRepository.updateExam(it)
                     _currentExamQuestionPosition.postValue(FIRST_INDEX)
                     _currentExamPosition.postValue(AppConstant.NONE_POSITION)
@@ -206,27 +240,32 @@ class ExamViewModel(
         }
     }
 
-    fun createExam(onComplete: () -> Unit) {
-        val exam = Exam(id = ExamFragment.DEFAULT_ID)
+    fun createExam(licenseTypeString: String, onComplete: () -> Unit) {
+        val currentLicenseType = sharedPreferences.getCurrentLicenseType()
+        val examRules = findCreateExamRuleByLicenseType(currentLicenseType)
+        val exam = Exam(
+            id = ExamFragment.DEFAULT_ID,
+            examType = currentLicenseType.type
+        )
         val listQuestions = listQuestions.value
 
         listQuestions?.let { listQuestions ->
             exam.listQuestions.apply {
                 enumValues<QuestionType>().forEach {
-                    if(it.type != QuestionType.ALL.type) {
-                        addAll(getCategoryList(listQuestions, it.type, 5))
+                    if (it.type != QuestionType.ALL.type) {
+                        val numOfQuestion = examRules.numbersOfQuestionByType[it] ?: 0
+                        addAll(getCategoryList(listQuestions, it.type, numOfQuestion))
                     }
                 }
             }
             exam.listQuestionOptions.addAll(generateEmptyQuestionStateList(exam.listQuestions))
         }
 
-        addExamToDatabase(exam)
+        addExamToDatabase(exam, licenseTypeString)
         onComplete()
     }
 
     companion object {
-        const val MINIMUM_CORRECT_QUESTION_TO_PASS_EXAM = 21
         const val DELAY_ON_FINISH_EXAM = 500L
         const val END_TIME_STAMP = 0L
     }
