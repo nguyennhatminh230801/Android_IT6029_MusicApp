@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.LicenseType
 import com.nguyennhatminh614.motobikedriverlicenseapp.di.apiModule
 import com.nguyennhatminh614.motobikedriverlicenseapp.di.databaseModule
 import com.nguyennhatminh614.motobikedriverlicenseapp.di.examDataSourceModule
@@ -17,6 +18,8 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.di.trafficSignDataSourceMo
 import com.nguyennhatminh614.motobikedriverlicenseapp.di.viewModelModule
 import com.nguyennhatminh614.motobikedriverlicenseapp.di.wrongAnswerDataSourceModule
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.isCurrentDarkMode
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.setCurrentLicenseType
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -43,10 +46,13 @@ class MotorbikeApplication : Application() {
             )
         }
 
-        val isDarkModeOn =
-            inject<SharedPreferences>().value.getBoolean(AppConstant.DARK_MODE, false)
+        val sharedPreferences = inject<SharedPreferences>().value
 
-        if (isDarkModeOn) {
+        if (sharedPreferences.getString(AppConstant.CURRENT_LICENSE_TYPE, AppConstant.EMPTY_DATA)?.isEmpty() == true) {
+            sharedPreferences.setCurrentLicenseType(LicenseType.A1.type)
+        }
+
+        if (sharedPreferences.isCurrentDarkMode()) {
             AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
         } else {
             AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)

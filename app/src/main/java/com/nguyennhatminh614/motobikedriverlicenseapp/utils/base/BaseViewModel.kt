@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.convertSecondToMilisecond
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.convertSecondToMillisecond
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -41,7 +41,7 @@ open class BaseViewModel : ViewModel() {
 
         //Set timeout 7s
         _timeOutLoadingJob = viewModelScope.launch {
-            delay(7L.convertSecondToMilisecond())
+            delay(7L.convertSecondToMillisecond())
             loading.value = false
         }
     }

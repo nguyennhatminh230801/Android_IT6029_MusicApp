@@ -10,6 +10,8 @@ class LocalExamDataSource(
     override suspend fun insertNewExam(exam: Exam) = examDao.insertNewExam(exam)
 
     override suspend fun updateExam(exam: Exam) = examDao.updateExam(exam)
+    override suspend fun getAllExamByLicenseType(licenseType: String)
+        = examDao.getAllExamByLicenseType(licenseType)
 
     override suspend fun deleteExam(exam: Exam) = examDao.deleteExam(exam)
 

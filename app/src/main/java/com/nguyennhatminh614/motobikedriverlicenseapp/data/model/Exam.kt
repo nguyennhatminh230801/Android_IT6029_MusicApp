@@ -21,6 +21,7 @@ data class Exam(
     var currentTimeStamp: Long = AppConstant.DEFAULT_NOT_HAVE_TIME_STAMP,
     var listQuestionOptions: MutableList<QuestionOptions> = mutableListOf(),
     var examState: String = ExamState.UNDEFINED.value,
+    val examType: String
 ) : Parcelable {
 
     companion object {

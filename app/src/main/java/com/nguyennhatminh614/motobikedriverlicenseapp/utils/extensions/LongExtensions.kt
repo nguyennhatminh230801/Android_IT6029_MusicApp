@@ -1,11 +1,13 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions
 
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant.PATTERN_DETAIL_TIME
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant.PATTERN_TIME
 import java.util.concurrent.TimeUnit
 
-const val PATTERN_TIME = "%02d:%02d"
-const val PATTERN_DETAIL_TIME = "%02dp%02ds"
+fun Long.convertMinutesToMillisecond()
+    = this * 60 * 1000;
 
-fun Long.convertSecondToMilisecond(): Long {
+fun Long.convertSecondToMillisecond(): Long {
     return this * 1000;
 }
 
