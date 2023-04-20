@@ -218,7 +218,7 @@ class ExamViewModel(
         )?.currentTimeStamp
             ?: AppConstant.DEFAULT_NOT_HAVE_TIME_STAMP
 
-    private fun getCategoryList(questions: MutableList<NewQuestion>, key: String, takeAmount: Int) =
+    private fun getCategoryList(questions: List<NewQuestion>, key: String, takeAmount: Int) =
         questions.filter {
             return@filter it.questionType.lowercase() == key.lowercase()
         }.shuffled().take(takeAmount)
@@ -249,13 +249,23 @@ class ExamViewModel(
         )
         val listQuestions = listQuestions.value
 
-        listQuestions?.let { listQuestions ->
+        listQuestions?.let { listQuestion ->
+            val filteredListQuestion = listQuestion.filter { it.minimumLicenseType in currentLicenseType.getAllLowerQuestionList() }
             exam.listQuestions.apply {
                 enumValues<QuestionType>().forEach {
                     if (it.type != QuestionType.ALL.type) {
                         val numOfQuestion = examRules.numbersOfQuestionByType[it] ?: 0
-                        addAll(getCategoryList(listQuestions, it.type, numOfQuestion))
+                        addAll(getCategoryList(filteredListQuestion, it.type, numOfQuestion))
                     }
+                }
+
+                if(examRules.isMixQuestionInMotorbikeExam) {
+                    val mixedList = filteredListQuestion.filter {
+                        it.questionType == QuestionType.FIXING_CAR_QUESTION.type ||
+                        it.questionType == QuestionType.DRIVING_TECHNIQUE.type
+                    }
+
+                    exam.listQuestions.add(mixedList.take(1)[0])
                 }
             }
             exam.listQuestionOptions.addAll(generateEmptyQuestionStateList(exam.listQuestions))
