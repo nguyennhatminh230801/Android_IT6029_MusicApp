@@ -14,7 +14,7 @@ class SettingsFragment : BaseFragment<FragmentSettingsBinding>(FragmentSettingsB
     }
 
     override fun handleEvent() {
-        viewBinding.switchDarkMode.setOnCheckedChangeListener { compoundButton, bool ->
+        viewBinding.switchDarkMode.setOnCheckedChangeListener { _, _ ->
             if (viewBinding.switchDarkMode.isChecked.not()) {
                 viewModel.turnOffDarkMode()
             } else {
