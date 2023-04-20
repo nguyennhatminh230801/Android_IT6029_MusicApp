@@ -14,7 +14,7 @@ enum class CreateExamRules(
             QuestionType.TRAFFIC_CONCEPT_AND_RULES to 9,
             QuestionType.DRIVING_BUSINESS to 0,
             QuestionType.ETHICS_IN_DRIVING to 1,
-            QuestionType.DRIVING_TECHNIQUE to 1,
+            QuestionType.DRIVING_TECHNIQUE to 0,
             QuestionType.FIXING_CAR_QUESTION to 0,
             QuestionType.TRAFFIC_SIGNAL to 7,
             QuestionType.TRAFFIC_SITUATION to 7
@@ -30,7 +30,7 @@ enum class CreateExamRules(
             QuestionType.TRAFFIC_CONCEPT_AND_RULES to 9,
             QuestionType.DRIVING_BUSINESS to 0,
             QuestionType.ETHICS_IN_DRIVING to 1,
-            QuestionType.DRIVING_TECHNIQUE to 1,
+            QuestionType.DRIVING_TECHNIQUE to 0,
             QuestionType.FIXING_CAR_QUESTION to 0,
             QuestionType.TRAFFIC_SIGNAL to 7,
             QuestionType.TRAFFIC_SITUATION to 7
@@ -46,7 +46,7 @@ enum class CreateExamRules(
             QuestionType.TRAFFIC_CONCEPT_AND_RULES to 9,
             QuestionType.DRIVING_BUSINESS to 0,
             QuestionType.ETHICS_IN_DRIVING to 1,
-            QuestionType.DRIVING_TECHNIQUE to 1,
+            QuestionType.DRIVING_TECHNIQUE to 0,
             QuestionType.FIXING_CAR_QUESTION to 0,
             QuestionType.TRAFFIC_SIGNAL to 7,
             QuestionType.TRAFFIC_SITUATION to 7
@@ -62,7 +62,7 @@ enum class CreateExamRules(
             QuestionType.TRAFFIC_CONCEPT_AND_RULES to 9,
             QuestionType.DRIVING_BUSINESS to 0,
             QuestionType.ETHICS_IN_DRIVING to 1,
-            QuestionType.DRIVING_TECHNIQUE to 1,
+            QuestionType.DRIVING_TECHNIQUE to 0,
             QuestionType.FIXING_CAR_QUESTION to 0,
             QuestionType.TRAFFIC_SIGNAL to 7,
             QuestionType.TRAFFIC_SITUATION to 7
