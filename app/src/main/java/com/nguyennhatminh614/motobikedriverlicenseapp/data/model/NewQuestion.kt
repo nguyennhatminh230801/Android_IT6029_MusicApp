@@ -3,15 +3,18 @@ package com.nguyennhatminh614.motobikedriverlicenseapp.data.model
 import android.os.Parcelable
 import androidx.recyclerview.widget.DiffUtil
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.firebase.firestore.PropertyName
 import com.google.gson.annotations.SerializedName
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion.Companion.TABLE_QUESTION
 import kotlinx.android.parcel.Parcelize
 import java.text.FieldPosition
 
 @Parcelize
-@Entity(tableName = Questions.TABLE_QUESTION)
+@Entity(tableName = TABLE_QUESTION)
 class NewQuestion : Parcelable {
-    var id = Questions.DEFAULT_ID
+    @PrimaryKey
+    var id = DEFAULT_ID
     var question = ""
     var listOption = mutableListOf<String>()
     var correctAnswerPosition: Int = 1

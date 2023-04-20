@@ -1,7 +1,6 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.data.repository
 
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Questions
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.WrongAnswerObject
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
 

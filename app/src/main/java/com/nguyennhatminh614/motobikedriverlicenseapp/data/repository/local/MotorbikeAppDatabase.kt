@@ -4,7 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Exam
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Questions
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.StudyCategory
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.WrongAnswerObject
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.roomtypeconverter.ExamTypeConverter
@@ -21,7 +21,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.local.wron
 @Database(
     entities = [
         Exam::class,
-        Questions::class,
+        NewQuestion::class,
         StudyCategory::class,
         WrongAnswerObject::class,
     ],

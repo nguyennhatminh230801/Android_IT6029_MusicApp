@@ -2,7 +2,6 @@ package com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.remote.wr
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Questions
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.IWrongAnswerDataSource
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
