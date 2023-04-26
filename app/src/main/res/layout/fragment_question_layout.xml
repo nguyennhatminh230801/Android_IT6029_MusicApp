@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_detail_question"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -73,7 +74,7 @@
                     android:layout_marginTop="@dimen/dp_20"
                     android:fontFamily="@font/comfortaa_bold"
                     android:text="@string/text_title_explain"
-                    android:textColor="@color/white"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -86,7 +87,6 @@
                     android:layout_marginBottom="@dimen/dp_10"
                     android:fontFamily="@font/comfortaa_regular"
                     android:text="@string/text_temp_long_text"
-                    android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/text_title_explain"

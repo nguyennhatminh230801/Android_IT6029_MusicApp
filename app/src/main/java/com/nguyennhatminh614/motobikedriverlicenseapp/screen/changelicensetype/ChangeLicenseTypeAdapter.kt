@@ -11,7 +11,10 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.OnClickItem
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseRecyclerViewAdapter
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewHolder
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getCurrentThemeCardColor
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getCurrentThemeTextColor
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getResourceColor
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getSelectedColor
 
 
 class ChangeLicenseTypeAdapter
@@ -58,33 +61,18 @@ class ChangeLicenseTypeAdapter
         }
     }
 
-    private fun ItemLicenseTypeScreenBinding.getColor(colorID: Int) =
-        this.root.context.getResourceColor(colorID)
-
     inner class ViewHolder(
         override val binding: ItemLicenseTypeScreenBinding,
     ) : BaseViewHolder<LicenseTypeData, ItemLicenseTypeScreenBinding>(binding) {
-
-        private fun getCurrentThemeTextColor() : Int {
-            val typedValue = TypedValue()
-            binding.root.context.theme.resolveAttribute(android.R.attr.textColor, typedValue, true)
-            return typedValue.data
-        }
-
-        private fun getCurrentThemeCardColor() : Int {
-            val typedValue = TypedValue()
-            binding.root.context.theme.resolveAttribute(android.R.attr.colorBackgroundFloating, typedValue, true)
-            return typedValue.data
-        }
 
         override fun onBindData(data: LicenseTypeData) = with(binding) {
             textLicenseType.text = "Hạng ${data.licenseType.type}"
             textDescriptionLicenseType.text = data.licenseType.description
 
             if (data.isSelected) {
-                textLicenseType.setTextColor(getColor(R.color.white))
-                textDescriptionLicenseType.setTextColor(getColor(R.color.white))
-                root.setCardBackgroundColor(getColor(R.color.primary_color))
+                textLicenseType.setTextColor(getSelectedColor(R.color.white))
+                textDescriptionLicenseType.setTextColor(getSelectedColor(R.color.white))
+                root.setCardBackgroundColor(getSelectedColor(R.color.primary_color))
             } else {
                 val currentTextColor = getCurrentThemeTextColor()
                 val currentBackgroundColor = getCurrentThemeCardColor()
