@@ -51,6 +51,9 @@
         <action
             android:id="@+id/action_nav_main_to_nav_change_license_type"
             app:destination="@id/nav_change_license_type" />
+        <action
+            android:id="@+id/action_nav_main_to_nav_exam_result"
+            app:destination="@id/nav_exam_result" />
 
     </fragment>
 
@@ -62,6 +65,9 @@
         <action
             android:id="@+id/action_nav_exam_to_nav_detail_exam"
             app:destination="@id/nav_detail_exam" />
+        <action
+            android:id="@+id/action_nav_exam_to_nav_exam_result"
+            app:destination="@id/nav_exam_result" />
     </fragment>
 
     <fragment
@@ -110,7 +116,7 @@
 
     <fragment
         android:id="@+id/nav_detail_exam"
-        android:name="com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.DetailExamFragment"
+        android:name="com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.detail.DetailExamFragment"
         android:label="@string/text_default_detail_exam"
         tools:layout="@layout/fragment_detail_exam_layout" />
 
@@ -131,4 +137,10 @@
         android:name="com.nguyennhatminh614.motobikedriverlicenseapp.screen.changelicensetype.ChangeLicenseTypeFragment"
         android:label="@string/text_change_license_type"
         tools:layout="@layout/fragment_change_license_type_screen"/>
+
+    <fragment
+        android:id="@+id/nav_exam_result"
+        android:label="@string/text_exam_result"
+        android:name="com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.result.ExamResultFragment"
+        tools:layout="@layout/fragment_exam_result"/>
 </navigation>
