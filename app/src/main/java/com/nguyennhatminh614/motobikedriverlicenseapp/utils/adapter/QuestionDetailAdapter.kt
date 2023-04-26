@@ -3,7 +3,6 @@ package com.nguyennhatminh614.motobikedriverlicenseapp.utils.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
@@ -14,6 +13,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.OnClickItem
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseRecyclerViewAdapter
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewHolder
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getCurrentThemeBackgroundColor
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.loadGlideImageFromUrl
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.processExplainQuestion
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.processQuestionOptionsList
@@ -82,6 +82,11 @@ class QuestionDetailAdapter :
     ) : BaseViewHolder<NewQuestion, FragmentQuestionLayoutBinding>(binding) {
         override fun onBindData(data: NewQuestion) {
             val questionOptionAdapter by lazy { QuestionOptionAdapter() }
+
+            binding.layoutDetailQuestion.setBackgroundColor(
+                binding.getCurrentThemeBackgroundColor()
+            )
+
             data.let { question ->
                 binding.apply {
                     textTitleQuestions.text = question.question

@@ -10,11 +10,14 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.OnClickItem
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseRecyclerViewAdapter
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewHolder
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getResourceColor
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getCurrentThemeCardColor
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getSelectedColor
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.isCurrentDarkModeByDefault
 
 class QuestionOptionAdapter :
     BaseRecyclerViewAdapter<QuestionOptions, ItemOptionsQuestionLayoutBinding, QuestionOptionAdapter.ViewHolder>(
-        QuestionOptions.getDiffUtilCallBack()) {
+        QuestionOptions.getDiffUtilCallBack()
+    ) {
 
     private var selectedPosition = AppConstant.NONE_POSITION
     private var isClickable = true
@@ -43,17 +46,14 @@ class QuestionOptionAdapter :
         return ViewHolder(binding)
     }
 
-    private fun getSelectedColor(binding: ItemOptionsQuestionLayoutBinding, color: Int) =
-        binding.root.context.getResourceColor(color)
-
     private fun setSingleSelection(adapterPosition: Int) {
         selectedPosition = adapterPosition
     }
 
     companion object {
-        const val SELECTED_COLOR = R.color.highlight_color
         const val UNSELECTED_COLOR = R.color.primary_color
-        const val STATE_UNKNOWN_COLOR = R.color.white
+        const val SELECTED_COLOR = R.color.highlight_color
+        const val TEXT_COLOR = R.color.white
         const val STATE_INCORRECT_COLOR = R.color.red_pastel
         const val STATE_CORRECT_COLOR = R.color.green_pastel
     }
@@ -68,44 +68,39 @@ class QuestionOptionAdapter :
                 textItemPosition.text = currentDisplayPosition.toString()
 
                 if (selectedPosition == adapterPosition) {
-                    binding.layoutQuestionItem.setCardBackgroundColor(getSelectedColor(binding,
-                        SELECTED_COLOR))
+                    val currentColor = when (item.stateNumber) {
+                        StateQuestionOption.UNKNOWN.type -> getSelectedColor(SELECTED_COLOR)
+                        StateQuestionOption.INCORRECT.type -> getSelectedColor(STATE_INCORRECT_COLOR)
+                        StateQuestionOption.CORRECT.type -> getSelectedColor(STATE_CORRECT_COLOR)
+                        else -> getSelectedColor(UNSELECTED_COLOR)
+                    }
+                    viewPositionLayout.setCardBackgroundColor(currentColor)
+                    layoutQuestionItem.setCardBackgroundColor(currentColor)
                 } else {
-                    binding.layoutQuestionItem.setCardBackgroundColor(getSelectedColor(binding,
-                        UNSELECTED_COLOR))
+                    if(isCurrentDarkModeByDefault) {
+                        viewPositionLayout.setCardBackgroundColor(getCurrentThemeCardColor())
+                        layoutQuestionItem.setCardBackgroundColor(getCurrentThemeCardColor())
+                    } else {
+                        viewPositionLayout.setCardBackgroundColor(getSelectedColor(UNSELECTED_COLOR))
+                        layoutQuestionItem.setCardBackgroundColor(getSelectedColor(UNSELECTED_COLOR))
+                    }
                 }
 
-                when (item.stateNumber) {
-                    StateQuestionOption.UNKNOWN.type -> {
-                        viewPositionLayout.setCardBackgroundColor(getSelectedColor(binding,
-                            STATE_UNKNOWN_COLOR))
-                        textQuestionOptions.setTextColor(getSelectedColor(binding,
-                            STATE_UNKNOWN_COLOR))
-                    }
-                    StateQuestionOption.INCORRECT.type -> {
-                        viewPositionLayout.setCardBackgroundColor(getSelectedColor(binding,
-                            STATE_INCORRECT_COLOR))
-                        textQuestionOptions.setTextColor(getSelectedColor(binding,
-                            STATE_INCORRECT_COLOR))
-                    }
-                    StateQuestionOption.CORRECT.type -> {
-                        viewPositionLayout.setCardBackgroundColor(getSelectedColor(binding,
-                            STATE_CORRECT_COLOR))
-                        textQuestionOptions.setTextColor(getSelectedColor(binding,
-                            STATE_CORRECT_COLOR))
-                    }
-                }
+                textQuestionOptions.setTextColor(getSelectedColor(TEXT_COLOR))
+                textItemPosition.setTextColor(getSelectedColor(TEXT_COLOR))
 
                 if (isClickable) {
                     root.setOnClickListener {
                         setSingleSelection(adapterPosition)
                         clickItemInterface?.let { function ->
-                            function(QuestionOptions(
-                                questionsID = item.questionsID,
-                                position = adapterPosition,
-                                title = item.title,
-                                isSelected = true,
-                            ))
+                            function(
+                                QuestionOptions(
+                                    questionsID = item.questionsID,
+                                    position = adapterPosition,
+                                    title = item.title,
+                                    isSelected = true,
+                                )
+                            )
                         }
                     }
                 }
