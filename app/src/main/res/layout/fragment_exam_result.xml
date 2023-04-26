@@ -1,197 +1,208 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:overScrollMode="never"
     android:background="@color/background_color">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/text_exam_state_result"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/view_exam_result"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_20"
-            android:background="@drawable/bg_corner_20dp_green_pastel"
-            android:padding="@dimen/dp_20"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp_25"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Đạt" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/image_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_clock" />
+            <TextView
+                android:id="@+id/text_exam_state_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_20"
+                android:background="@drawable/bg_corner_20dp_green_pastel"
+                android:padding="@dimen/dp_20"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_25"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Đạt" />
 
-        <TextView
-            android:id="@+id/text_time_done"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/comfortaa_light"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="@id/flow_result_info"
-            app:layout_constraintStart_toEndOf="@id/image_time"
-            app:layout_constraintTop_toTopOf="@id/flow_result_info"
-            tools:text="20:40" />
+            <ImageView
+                android:id="@+id/image_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_clock" />
 
-        <ImageView
-            android:id="@+id/image_exam"
-            android:layout_width="@dimen/dp_30"
-            android:layout_height="@dimen/dp_30"
-            android:src="@drawable/ic_exam"
-            app:layout_constraintBottom_toBottomOf="@id/flow_result_info"
-            app:layout_constraintStart_toEndOf="@+id/text_time_done"
-            app:layout_constraintTop_toTopOf="@id/flow_result_info" />
+            <TextView
+                android:id="@+id/text_time_done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/comfortaa_light"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="@id/flow_result_info"
+                app:layout_constraintStart_toEndOf="@id/image_time"
+                app:layout_constraintTop_toTopOf="@id/flow_result_info"
+                tools:text="20:40" />
 
-        <TextView
-            android:id="@+id/text_exam_done"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/comfortaa_light"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="@id/flow_result_info"
-            app:layout_constraintStart_toEndOf="@id/image_time"
-            app:layout_constraintTop_toTopOf="@id/flow_result_info"
-            tools:text="25/25" />
+            <ImageView
+                android:id="@+id/image_exam"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                android:src="@drawable/ic_exam"
+                app:layout_constraintBottom_toBottomOf="@id/flow_result_info"
+                app:layout_constraintStart_toEndOf="@+id/text_time_done"
+                app:layout_constraintTop_toTopOf="@id/flow_result_info" />
 
-        <androidx.constraintlayout.helper.widget.Flow
-            android:id="@+id/flow_result_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_15"
-            app:constraint_referenced_ids="image_time, text_time_done, image_exam, text_exam_done"
-            app:flow_horizontalGap="@dimen/dp_15"
-            app:flow_verticalAlign="center"
-            app:layout_constraintEnd_toEndOf="@+id/text_exam_state_result"
-            app:layout_constraintStart_toStartOf="@+id/text_exam_state_result"
-            app:layout_constraintTop_toBottomOf="@+id/text_exam_state_result" />
+            <TextView
+                android:id="@+id/text_exam_done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/comfortaa_light"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="@id/flow_result_info"
+                app:layout_constraintStart_toEndOf="@id/image_time"
+                app:layout_constraintTop_toTopOf="@id/flow_result_info"
+                tools:text="25/25" />
 
-        <TextView
-            android:id="@+id/text_exam_result_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_15"
-            android:fontFamily="@font/comfortaa_bold"
-            android:textAllCaps="true"
-            android:textSize="@dimen/sp_18"
-            app:layout_constraintEnd_toEndOf="@+id/text_exam_done"
-            app:layout_constraintStart_toStartOf="@+id/image_time"
-            app:layout_constraintTop_toBottomOf="@+id/flow_result_info"
-            tools:text="Đã vượt qua tất cả" />
+            <androidx.constraintlayout.helper.widget.Flow
+                android:id="@+id/flow_result_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_15"
+                app:constraint_referenced_ids="image_time, text_time_done, image_exam, text_exam_done"
+                app:flow_horizontalGap="@dimen/dp_15"
+                app:flow_verticalAlign="center"
+                app:layout_constraintEnd_toEndOf="@+id/text_exam_state_result"
+                app:layout_constraintStart_toStartOf="@+id/text_exam_state_result"
+                app:layout_constraintTop_toBottomOf="@+id/text_exam_state_result" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/temp_card_exam_details"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_15"
-            app:cardCornerRadius="@dimen/dp_10"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_exam_result_description">
+            <TextView
+                android:id="@+id/text_exam_result_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_15"
+                android:fontFamily="@font/comfortaa_bold"
+                android:textAllCaps="true"
+                android:textSize="@dimen/sp_18"
+                app:layout_constraintEnd_toEndOf="@+id/text_exam_done"
+                app:layout_constraintStart_toStartOf="@+id/image_time"
+                app:layout_constraintTop_toBottomOf="@+id/flow_result_info"
+                tools:text="Đã vượt qua tất cả" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingHorizontal="@dimen/dp_15"
-                android:paddingVertical="@dimen/dp_10">
+            <androidx.cardview.widget.CardView
+                android:id="@+id/temp_card_exam_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_15"
+                app:cardCornerRadius="@dimen/dp_10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_exam_result_description">
 
-                <ImageView
-                    android:id="@+id/image_verified"
-                    android:layout_width="@dimen/dp_30"
-                    android:layout_height="@dimen/dp_30"
-                    android:layout_marginVertical="@dimen/dp_15"
-                    android:src="@drawable/ic_verified" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingHorizontal="@dimen/dp_15"
+                    android:paddingVertical="@dimen/dp_10">
 
-                <TextView
-                    android:id="@+id/text_correct_answer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:fontFamily="@font/comfortaa_light"
-                    android:textSize="15sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/image_verified"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="25" />
+                    <ImageView
+                        android:id="@+id/image_verified"
+                        android:layout_width="@dimen/dp_30"
+                        android:layout_height="@dimen/dp_30"
+                        android:layout_marginVertical="@dimen/dp_15"
+                        android:src="@drawable/ic_verified" />
 
-                <ImageView
-                    android:id="@+id/image_denied"
-                    android:layout_width="@dimen/dp_30"
-                    android:layout_height="@dimen/dp_30"
-                    android:layout_marginVertical="@dimen/dp_15"
-                    android:src="@drawable/ic_denied"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/text_correct_answer"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/text_correct_answer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:fontFamily="@font/comfortaa_light"
+                        android:textSize="15sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/image_verified"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="25" />
 
-                <TextView
-                    android:id="@+id/text_wrong_answer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:fontFamily="@font/comfortaa_light"
-                    android:textSize="15sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/image_denied"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="25" />
+                    <ImageView
+                        android:id="@+id/image_denied"
+                        android:layout_width="@dimen/dp_30"
+                        android:layout_height="@dimen/dp_30"
+                        android:layout_marginVertical="@dimen/dp_15"
+                        android:src="@drawable/ic_denied"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/text_correct_answer"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:id="@+id/image_not_answered"
-                    android:layout_width="@dimen/dp_30"
-                    android:layout_height="@dimen/dp_30"
-                    android:layout_marginVertical="@dimen/dp_15"
-                    android:src="@drawable/ic_not_answered"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/text_wrong_answer"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/text_wrong_answer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:fontFamily="@font/comfortaa_light"
+                        android:textSize="15sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/image_denied"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="25" />
 
-                <TextView
-                    android:id="@+id/text_not_answered"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:fontFamily="@font/comfortaa_light"
-                    android:textSize="15sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/image_not_answered"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="25" />
+                    <ImageView
+                        android:id="@+id/image_not_answered"
+                        android:layout_width="@dimen/dp_30"
+                        android:layout_height="@dimen/dp_30"
+                        android:layout_marginVertical="@dimen/dp_15"
+                        android:src="@drawable/ic_not_answered"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/text_wrong_answer"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.constraintlayout.helper.widget.Flow
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:constraint_referenced_ids="image_verified, text_correct_answer,
+                    <TextView
+                        android:id="@+id/text_not_answered"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:fontFamily="@font/comfortaa_light"
+                        android:textSize="15sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/image_not_answered"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="25" />
+
+                    <androidx.constraintlayout.helper.widget.Flow
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:constraint_referenced_ids="image_verified, text_correct_answer,
                     image_denied, text_wrong_answer, image_not_answered, text_not_answered"
-                    app:flow_horizontalGap="@dimen/dp_15"
-                    app:flow_verticalAlign="center"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.cardview.widget.CardView>
+                        app:flow_horizontalGap="@dimen/dp_15"
+                        app:flow_verticalAlign="center"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_exam_question"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/fill_constraint"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_15"
+            android:overScrollMode="never"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/temp_card_exam_details"
+            app:layout_constraintTop_toBottomOf="@id/view_exam_result"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="10"
             tools:listitem="@layout/item_exam_question_result_screen"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
