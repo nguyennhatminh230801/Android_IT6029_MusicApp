@@ -39,15 +39,18 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
             viewModel.setCurrentExam(it)
             if (viewModel.listExam.value?.get(it)?.examState == ExamState.UNDEFINED.value) {
                 viewModel.setVisibleFinishExamButton(true)
+
+                findNavController().navigate(
+                    R.id.action_nav_exam_to_nav_detail_exam,
+                    bundleOf(
+                        AppConstant.KEY_BUNDLE_CURRENT_LICENSE_TYPE to currentLicenseType
+                    )
+                )
             } else {
                 viewModel.setVisibleFinishExamButton(false)
+
+                findNavController().navigate(R.id.action_nav_exam_to_nav_exam_result)
             }
-            findNavController().navigate(
-                R.id.action_nav_exam_to_nav_detail_exam,
-                bundleOf(
-                    AppConstant.KEY_BUNDLE_CURRENT_LICENSE_TYPE to currentLicenseType
-                )
-            )
         }
 
         viewBinding.buttonAddExam.setOnClickListener {
