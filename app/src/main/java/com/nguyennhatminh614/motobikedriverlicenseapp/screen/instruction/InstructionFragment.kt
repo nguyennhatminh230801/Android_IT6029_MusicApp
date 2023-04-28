@@ -1,12 +1,17 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.instruction
 
-import androidx.core.view.isVisible
+import android.net.Uri
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import androidx.activity.OnBackPressedCallback
+import androidx.annotation.RequiresApi
+import androidx.webkit.WebViewAssetLoader
+import androidx.webkit.WebViewClientCompat
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentInstructionBinding
-import com.nguyennhatminh614.motobikedriverlicenseapp.screen.tiphighscores.TipsHighScoreAdapter
-import com.nguyennhatminh614.motobikedriverlicenseapp.screen.tiphighscores.TipsHighScoreAdapter.Companion.DEGREE_180
+import com.nguyennhatminh614.motobikedriverlicenseapp.screen.mainscreen.MainActivity
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseFragment
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class InstructionFragment :
@@ -16,51 +21,42 @@ class InstructionFragment :
 
     override fun initData() {
         viewModel.setVisibleInstructionIcon(false)
+
+        context?.let { context ->
+            val assetPathHandler = WebViewAssetLoader.AssetsPathHandler(context)
+            val assetLoader = WebViewAssetLoader.Builder()
+                .addPathHandler(ASSET_PATH_HANDLER_KEY, assetPathHandler)
+                .build()
+
+            viewBinding.webViewInstruction.settings.apply {
+                allowContentAccess = true
+                allowFileAccess = true
+                javaScriptEnabled = true
+            }
+
+            viewBinding.webViewInstruction.apply {
+                webViewClient = LocalContentWebViewClient(assetLoader)
+                loadUrl(INSTRUCTION_WEB_URL)
+            }
+
+        }
     }
 
     override fun handleEvent() {
-        viewBinding.cvInstructionTheory.setOnClickListener {
-            setToggleTheoryInstruction()
-        }
-
-        viewBinding.buttonSpanDetailTheoryContent.setOnClickListener {
-            setToggleTheoryInstruction()
-        }
-
-        viewBinding.cvInstructionPractice.setOnClickListener {
-            setTogglePracticeInstruction()
-        }
-
-        viewBinding.buttonSpanDetailPracticeContent.setOnClickListener {
-            setTogglePracticeInstruction()
-        }
+        //Not implement
     }
 
     override fun bindData() {
-        //Not-op
+        //Not implement
     }
 
-    private fun setToggleTheoryInstruction() {
-        if(!viewBinding.expandableViewTheory.isVisible) {
-            viewBinding.buttonSpanDetailTheoryContent.animate().rotation(360F).start()
-            viewBinding.expandableViewTheory.isVisible = true
-        }else{
-            viewBinding.buttonSpanDetailTheoryContent.animate().rotation(180F).start()
-            viewBinding.expandableViewTheory.isVisible = false
-        }
-    }
-
-    private fun setTogglePracticeInstruction() {
-        if(!viewBinding.expandableViewPractice.isVisible) {
-            viewBinding.buttonSpanDetailPracticeContent.animate().rotation(360F).start()
-            viewBinding.expandableViewPractice.isVisible = true
-        }else{
-            viewBinding.buttonSpanDetailPracticeContent.animate().rotation(180F).start()
-            viewBinding.expandableViewPractice.isVisible = false
-        }
-    }
     override fun onDestroyView() {
         viewModel.setVisibleInstructionIcon(true)
         super.onDestroyView()
+    }
+
+    companion object {
+        const val INSTRUCTION_WEB_URL = "https://appassets.androidplatform.net/assets/index.html"
+        const val ASSET_PATH_HANDLER_KEY =  "/assets/"
     }
 }
