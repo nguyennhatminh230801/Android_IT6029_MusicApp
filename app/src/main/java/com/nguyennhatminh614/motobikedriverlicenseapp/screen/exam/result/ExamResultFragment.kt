@@ -1,5 +1,6 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.result
 
+import android.content.SharedPreferences
 import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Exam
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState
@@ -8,7 +9,12 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.StateQuestionOp
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentExamResultBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.ExamViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseFragment
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getCurrentThemeBackgroundColor
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getSelectedColor
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.isCurrentDarkMode
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.toDateTimeMMSS
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class ExamResultFragment
@@ -20,6 +26,14 @@ class ExamResultFragment
 
     override fun initData() {
         viewBinding.apply {
+            val isDarkModeOn = inject<SharedPreferences>().value.isCurrentDarkMode()
+
+            if (isDarkModeOn) {
+                layoutExamResult.setBackgroundColor(getCurrentThemeBackgroundColor())
+            } else {
+                layoutExamResult.setBackgroundColor(getSelectedColor(R.color.background_color))
+            }
+
             recyclerViewExamQuestion.apply {
                 setHasFixedSize(true)
                 itemAnimator = null
@@ -54,17 +68,20 @@ class ExamResultFragment
 
         textExamResultDescription.text = textExamStateResult.text.toString()
 
-        textTimeDone.text = "10:00"
+        textTimeDone.text = exam.timeExamDone.toDateTimeMMSS()
+
         textExamDone.text = "${exam.numbersOfCorrectAnswer}/${exam.listQuestionOptions.size}"
 
         textCorrectAnswer.text =
             exam.listQuestionOptions.count { selection -> selection.stateNumber == StateQuestionOption.CORRECT.type }
                 .toString()
         textWrongAnswer.text =
-            exam.listQuestionOptions.count { selection -> selection.stateNumber == StateQuestionOption.INCORRECT.type }
+            exam.listQuestionOptions.count { selection -> selection.stateNumber == StateQuestionOption.INCORRECT.type
+                    && selection.position != AppConstant.NONE_POSITION }
                 .toString()
+        //Với các câu không trả lời được thì vị trí sẽ là -1
         textNotAnswered.text =
-            exam.listQuestionOptions.count { selection -> selection.stateNumber == StateQuestionOption.UNKNOWN.type }
+            exam.listQuestionOptions.count { selection -> selection.position == AppConstant.NONE_POSITION }
                 .toString()
 
         questionExamAdapter.submitList(exam.listQuestions)
