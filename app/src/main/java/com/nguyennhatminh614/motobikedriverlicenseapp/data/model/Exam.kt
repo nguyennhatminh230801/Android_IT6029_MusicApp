@@ -19,6 +19,7 @@ data class Exam(
     val listQuestions: MutableList<NewQuestion> = mutableListOf(),
     var numbersOfCorrectAnswer: Int = DEFAULT_NOT_START_EXAM_CORRECT_ANSWER_COUNT,
     var currentTimeStamp: Long = AppConstant.DEFAULT_NOT_HAVE_TIME_STAMP,
+    var timeExamDone: Long = 0,
     var listQuestionOptions: MutableList<QuestionOptions> = mutableListOf(),
     var examState: String = ExamState.UNDEFINED.value,
     val examType: String
