@@ -135,6 +135,8 @@ class ExamViewModel(
                 val examRules =
                     findCreateExamRuleByLicenseType(sharedPreferences.getCurrentLicenseType())
 
+                exam.timeExamDone = examRules.examDurationByMinutes.toLong().convertMinutesToMillisecond() - exam.currentTimeStamp
+
                 exam.currentTimeStamp = END_TIME_STAMP
 
                 exam.listQuestionOptions.forEach {
