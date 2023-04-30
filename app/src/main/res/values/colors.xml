@@ -18,4 +18,5 @@
     <color name="yellow_pastel_low_alpha">#8CFDFD96</color>
     <color name="blue">#FF3753F1</color>
     <color name="black_200">#FF121212</color>
+    <color name="grey_700">#FF616161</color>
 </resources>

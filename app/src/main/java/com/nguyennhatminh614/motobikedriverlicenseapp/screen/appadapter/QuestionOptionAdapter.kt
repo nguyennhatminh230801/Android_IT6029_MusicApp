@@ -1,5 +1,6 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.appadapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.nguyennhatminh614.motobikedriverlicenseapp.R
@@ -22,6 +23,7 @@ class QuestionOptionAdapter :
     private var selectedPosition = AppConstant.NONE_POSITION
     private var isClickable = true
 
+    private var correctAnswerPositionExamResult = AppConstant.NONE_POSITION
     override fun registerOnClickItemEvent(onClickItem: OnClickItem<QuestionOptions>) {
         this.clickItemInterface = onClickItem
     }
@@ -50,12 +52,19 @@ class QuestionOptionAdapter :
         selectedPosition = adapterPosition
     }
 
+    fun updateCorrectAnswerPosition(correctAnswerPosition: Int) {
+        correctAnswerPositionExamResult = correctAnswerPosition
+        notifyItemChanged(correctAnswerPosition)
+    }
+
     companion object {
-        const val UNSELECTED_COLOR = R.color.primary_color
+        const val UNSELECTED_COLOR = R.color.white
         const val SELECTED_COLOR = R.color.highlight_color
-        const val TEXT_COLOR = R.color.white
+        const val TEXT_COLOR = R.color.black
         const val STATE_INCORRECT_COLOR = R.color.red_pastel
         const val STATE_CORRECT_COLOR = R.color.green_pastel
+        const val DARK_MODE_BACKGROUND_UNSELECTED_COLOR = R.color.grey_700
+        const val VIEW_POSITION_LAYOUT_BACKGROUND_COLOR = R.color.white
     }
 
     inner class ViewHolder(
@@ -74,18 +83,23 @@ class QuestionOptionAdapter :
                         StateQuestionOption.CORRECT.type -> getSelectedColor(STATE_CORRECT_COLOR)
                         else -> getSelectedColor(UNSELECTED_COLOR)
                     }
-                    viewPositionLayout.setCardBackgroundColor(currentColor)
                     layoutQuestionItem.setCardBackgroundColor(currentColor)
                 } else {
                     if(isCurrentDarkModeByDefault) {
-                        viewPositionLayout.setCardBackgroundColor(getCurrentThemeCardColor())
-                        layoutQuestionItem.setCardBackgroundColor(getCurrentThemeCardColor())
+                        layoutQuestionItem.setCardBackgroundColor(getSelectedColor(
+                            DARK_MODE_BACKGROUND_UNSELECTED_COLOR))
                     } else {
-                        viewPositionLayout.setCardBackgroundColor(getSelectedColor(UNSELECTED_COLOR))
                         layoutQuestionItem.setCardBackgroundColor(getSelectedColor(UNSELECTED_COLOR))
                     }
                 }
 
+                if(correctAnswerPositionExamResult != AppConstant.NONE_POSITION
+                        && correctAnswerPositionExamResult == adapterPosition) {
+                    layoutQuestionItem.setCardBackgroundColor(getSelectedColor(STATE_CORRECT_COLOR))
+                }
+
+                viewPositionLayout.setCardBackgroundColor(getSelectedColor(
+                    VIEW_POSITION_LAYOUT_BACKGROUND_COLOR))
                 textQuestionOptions.setTextColor(getSelectedColor(TEXT_COLOR))
                 textItemPosition.setTextColor(getSelectedColor(TEXT_COLOR))
 
