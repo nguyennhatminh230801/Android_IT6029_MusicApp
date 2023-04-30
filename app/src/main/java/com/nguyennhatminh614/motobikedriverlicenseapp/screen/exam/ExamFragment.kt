@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Exam
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState
@@ -30,7 +31,10 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
 
     override fun initData() {
         (activity as? MainActivity)?.updateTitleToolbar("Đề hạng $currentLicenseType")
-        viewBinding.recyclerViewExam.adapter = examAdapter
+        viewBinding.recyclerViewExam.apply {
+            setRecycledViewPool(RecyclerView.RecycledViewPool())
+            adapter = examAdapter
+        }
         viewModel.getExamByLicenseType(currentLicenseType)
     }
 
@@ -74,15 +78,17 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
     }
 
     override fun bindData() {
-        viewModel.listExam.observe(viewLifecycleOwner) {
-            examAdapter.submitList(it)
-            if (it.isEmpty()) {
+        viewModel.listExam.observe(viewLifecycleOwner) { listExam ->
+            val newListExam = listExam.map { it.copy() }.toMutableList()
+            if (newListExam.isEmpty()) {
                 viewBinding.layoutVisibleWhenDataIsEmpty.root.isVisible = true
                 viewBinding.layoutVisibleWhenDataIsEmpty.textNotFounded.text =
                     MESSAGE_ADD_A_NEW_EXAM
             } else {
                 viewBinding.layoutVisibleWhenDataIsEmpty.root.isVisible = false
             }
+            viewBinding.recyclerViewExam.recycledViewPool.clear()
+            examAdapter.submitList(newListExam)
         }
     }
 
