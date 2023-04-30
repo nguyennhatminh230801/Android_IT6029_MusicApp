@@ -1,10 +1,13 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.result
 
 import android.content.SharedPreferences
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.SmoothScroller
 import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Exam
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestionWithState
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.StateQuestionOption
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentExamResultBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.ExamViewModel
@@ -17,6 +20,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.toDateTim
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
+
 class ExamResultFragment
     : BaseFragment<FragmentExamResultBinding>(FragmentExamResultBinding::inflate) {
 
@@ -24,7 +28,16 @@ class ExamResultFragment
 
     private val questionExamAdapter by lazy { ExamResultQuestionAdapter() }
 
+    private val smoothScroller by lazy {
+        object : LinearSmoothScroller(context) {
+            override fun getVerticalSnapPreference(): Int {
+                return SNAP_TO_START
+            }
+        }
+    }
+
     override fun initData() {
+
         viewBinding.apply {
             val isDarkModeOn = inject<SharedPreferences>().value.isCurrentDarkMode()
 
@@ -39,6 +52,7 @@ class ExamResultFragment
                 itemAnimator = null
                 adapter = questionExamAdapter
             }
+
         }
         viewModel.getCurrentExam()?.let { updateData(it) }
     }
@@ -76,14 +90,22 @@ class ExamResultFragment
             exam.listQuestionOptions.count { selection -> selection.stateNumber == StateQuestionOption.CORRECT.type }
                 .toString()
         textWrongAnswer.text =
-            exam.listQuestionOptions.count { selection -> selection.stateNumber == StateQuestionOption.INCORRECT.type
-                    && selection.position != AppConstant.NONE_POSITION }
+            exam.listQuestionOptions.count { selection ->
+                selection.stateNumber == StateQuestionOption.INCORRECT.type
+                        && selection.position != AppConstant.NONE_POSITION
+            }
                 .toString()
         //Với các câu không trả lời được thì vị trí sẽ là -1
         textNotAnswered.text =
             exam.listQuestionOptions.count { selection -> selection.position == AppConstant.NONE_POSITION }
                 .toString()
 
-        questionExamAdapter.submitList(exam.listQuestions)
+        questionExamAdapter.submitList(exam.listQuestions.map { NewQuestionWithState(it) })
+        questionExamAdapter.updateQuestionStateList(exam.listQuestionOptions)
+
+        questionExamAdapter.setUpdateCallBack {
+            smoothScroller.targetPosition = it
+            viewBinding.recyclerViewExamQuestion.layoutManager?.startSmoothScroll(smoothScroller)
+        }
     }
 }
