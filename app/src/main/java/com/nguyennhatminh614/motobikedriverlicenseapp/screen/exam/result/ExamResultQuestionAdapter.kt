@@ -2,43 +2,71 @@ package com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.result
 
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
+import com.nguyennhatminh614.motobikedriverlicenseapp.R
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestionWithState
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.StateQuestionOption
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.ItemExamQuestionResultScreenBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.appadapter.QuestionOptionAdapter
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.OnClickItem
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseRecyclerViewAdapter
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewHolder
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.loadGlideImageFromUrl
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.processExplainQuestion
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.processQuestionOptionsList
 
 class ExamResultQuestionAdapter :
-    BaseRecyclerViewAdapter<NewQuestion, ItemExamQuestionResultScreenBinding, ExamResultQuestionAdapter.ViewHolder>(
-        NewQuestion.getDiffCallBack()
+    BaseRecyclerViewAdapter<NewQuestionWithState, ItemExamQuestionResultScreenBinding, ExamResultQuestionAdapter.ViewHolder>(
+        NewQuestionWithState.getDiffCallBack()
     ) {
+
+    private var updateCallback : ((Int) -> Unit)? = null
 
     private val listQuestionState = mutableListOf<QuestionOptions>()
 
+    fun setUpdateCallBack(callback: (Int) -> Unit) {
+        this.updateCallback = callback
+    }
+
+    fun updateQuestionStateList(listQuestionState: List<QuestionOptions>) {
+        this.listQuestionState.clear()
+        this.listQuestionState.addAll(listQuestionState)
+        notifyDataSetChanged()
+    }
+
     inner class ViewHolder(binding: ItemExamQuestionResultScreenBinding) :
-        BaseViewHolder<NewQuestion, ItemExamQuestionResultScreenBinding>(binding) {
-        override fun onBindData(data: NewQuestion) {
+        BaseViewHolder<NewQuestionWithState, ItemExamQuestionResultScreenBinding>(binding) {
+        private fun NewQuestionWithState.visibleWithAnimation() {
+            if(this.isVisible) {
+                binding.buttonSpanContent.animate().rotation(0f).start()
+                binding.viewExpandedInformation.isVisible = true
+            } else {
+                binding.buttonSpanContent.animate().rotation(180f).start()
+                binding.viewExpandedInformation.isVisible = true
+            }
+        }
+        override fun onBindData(data: NewQuestionWithState) {
             val questionOptionAdapter by lazy { QuestionOptionAdapter() }
 
-//            binding.layoutDetailQuestion.setBackgroundColor(
-//                binding.getCurrentThemeBackgroundColor()
-//            )
-
-            data.let { question ->
+            data.let { elem ->
                 binding.apply {
-                    textTitleQuestions.text = "Câu ${adapterPosition + 1}: ${question.question}"
-                    textQuestionExplain.text = question.explain.processExplainQuestion()
+                    textTitleQuestions.text = "Câu ${adapterPosition + 1}: ${elem.newQuestion.question}"
+                    textQuestionExplain.text = elem.newQuestion.explain.processExplainQuestion()
 
-                    if (question.hasImageBanner) {
+                    if(elem.isVisible) {
+                        binding.buttonSpanContent.rotation = 0f
+                        viewExpandedInformation.isVisible = true
+                    } else {
+                        binding.buttonSpanContent.rotation = 180f
+                        viewExpandedInformation.isVisible = false
+                    }
+
+                    if (elem.newQuestion.hasImageBanner) {
                         imageQuestions.isVisible = true
                         imageQuestions.loadGlideImageFromUrl(
                             root.context,
-                            question.image
+                            elem.newQuestion.image
                         )
                     } else {
                         imageQuestions.isVisible = false
@@ -47,34 +75,62 @@ class ExamResultQuestionAdapter :
                     recyclerViewQuestionOptions.adapter = questionOptionAdapter
 
                     val listQuestionOptions = processQuestionOptionsList(
-                        questionsID = question.id,
-                        listString = question.listOption
+                        questionsID = elem.newQuestion.id,
+                        listString = elem.newQuestion.listOption
                     )
 
                     questionOptionAdapter.submitList(listQuestionOptions)
-//                    val selectedPosition = listQuestionState[adapterPosition].position
-//
-//                    if(selectedPosition != AppConstant.NONE_POSITION){
-//                        listQuestionOptions[selectedPosition] =
-//                            listQuestionState[adapterPosition].copy()
-//                        questionOptionAdapter.updateStateListWithPosition(listQuestionOptions, selectedPosition)
-//                    } else {
-//                        questionOptionAdapter.submitList(listQuestionOptions)
-//                    }
+                    questionOptionAdapter.updateCorrectAnswerPosition(elem.newQuestion.correctAnswerPosition)
 
-//                    if(listQuestionState[adapterPosition].stateNumber == StateQuestionOption.CORRECT.type) {
-//                        viewQuestionExplain.visibility = View.VISIBLE
-//                    } else {
-//                        viewQuestionExplain.visibility = View.INVISIBLE
-//                    }
+                    val selectedPosition = listQuestionState[adapterPosition].position
+
+                    if(selectedPosition != AppConstant.NONE_POSITION){
+                        listQuestionOptions[selectedPosition] =
+                            listQuestionState[adapterPosition].copy()
+                        questionOptionAdapter.updateStateListWithPosition(listQuestionOptions, selectedPosition)
+
+                    } else {
+                        questionOptionAdapter.submitList(listQuestionOptions)
+                    }
+
+                    val questionState = listQuestionState[adapterPosition]
+
+                    if(questionState.position == AppConstant.NONE_POSITION) {
+                        imageQuestionsState.setImageResource(R.drawable.ic_not_answered)
+                        textQuestionState.text = "Không chọn"
+                    } else {
+                        if(questionState.stateNumber == StateQuestionOption.CORRECT.type) {
+                            imageQuestionsState.setImageResource(R.drawable.ic_verified)
+                            textQuestionState.text = "Đáp án đúng"
+                        } else {
+                            imageQuestionsState.setImageResource(R.drawable.ic_wrong_answer)
+                            textQuestionState.text = "Đáp án sai"
+                        }
+                    }
+
+                    viewQuestionExplain.isVisible = true
 
                     questionOptionAdapter.disableClickEvent()
+
+                    root.setOnClickListener {
+                        notifyItemChanged(adapterPosition)
+                        elem.isVisible = elem.isVisible.not()
+                        elem.visibleWithAnimation()
+                        updateCallback?.invoke(adapterPosition)
+                    }
+
+                    buttonSpanContent.setOnClickListener {
+                        notifyItemChanged(adapterPosition)
+                        elem.isVisible = elem.isVisible.not()
+                        elem.visibleWithAnimation()
+                        updateCallback?.invoke(adapterPosition)
+                    }
                 }
             }
         }
     }
 
-    override fun registerOnClickItemEvent(onClickItem: OnClickItem<NewQuestion>) {
+    override fun registerOnClickItemEvent(onClickItem: OnClickItem<NewQuestionWithState>) {
         TODO("Not yet implemented")
     }
 
