@@ -205,6 +205,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         }
     }
 
+    fun addCallbackResetExamButton(resetCallback: () -> Unit) {
+        viewBinding.appBarMain.buttonResetExam.isVisible = true
+        viewBinding.appBarMain.buttonResetExam.setOnClickListener {
+            resetCallback()
+        }
+    }
+
+    fun removeCallbackResetExamButton() {
+        viewBinding.appBarMain.buttonResetExam.isVisible = false
+        viewBinding.appBarMain.buttonResetExam.setOnClickListener(null)
+    }
+
     override fun bindData() {
         baseViewModel.isVisibleResetButton.observe(this) {
             viewBinding.appBarMain.buttonResetStudy.isVisible = it
