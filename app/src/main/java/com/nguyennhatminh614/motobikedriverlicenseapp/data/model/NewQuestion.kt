@@ -88,6 +88,44 @@ class NewQuestion : Parcelable {
     }
 }
 
+class NewQuestionWithState(
+    val newQuestion: NewQuestion,
+    var isVisible: Boolean = false
+) {
+
+    companion object {
+        fun getDiffCallBack() = object : DiffUtil.ItemCallback<NewQuestionWithState>() {
+            override fun areItemsTheSame(
+                oldItem: NewQuestionWithState,
+                newItem: NewQuestionWithState,
+            ): Boolean = oldItem.newQuestion.id == newItem.newQuestion.id
+
+            override fun areContentsTheSame(
+                oldItem: NewQuestionWithState,
+                newItem: NewQuestionWithState,
+            ): Boolean = oldItem == newItem
+        }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as NewQuestionWithState
+
+        if (newQuestion != other.newQuestion) return false
+        if (isVisible != other.isVisible) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = newQuestion.hashCode()
+        result = 31 * result + isVisible.hashCode()
+        return result
+    }
+}
+
 enum class QuestionType(
     val type: String,
     val title: String,
