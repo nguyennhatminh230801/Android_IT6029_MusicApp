@@ -88,6 +88,34 @@ class ExamViewModel(
         }
     }
 
+    fun resetStateCurrentExam(licenseTypeString: String, onComplete: () -> Unit) {
+        launchTask {
+            val currentExam = _listExam.value?.get(
+                _currentExamPosition.value
+                    ?: AppConstant.NONE_POSITION
+            )
+            val examRules = findCreateExamRuleByLicenseTypeString(licenseTypeString)
+
+            currentExam?.let { exam ->
+                val newExam = Exam(
+                    exam.id,
+                    exam.listQuestions,
+                    0,
+                    timeExamDone = 0,
+                    currentTimeStamp = examRules.examDurationByMinutes.toLong().convertMinutesToMillisecond(),
+                    listQuestionOptions = generateEmptyQuestionStateList(exam.listQuestions),
+                    examType = exam.examType
+                )
+
+                examRepository.updateExam(newExam)
+            }
+            val data = examRepository.getAllExamByLicenseType(licenseTypeString)
+            _listExam.postValue(data)
+            hideLoading()
+            onComplete()
+        }
+    }
+
     fun startCountDownEvent(onFinishExamEvent: () -> Unit) {
         val currentExam = _listExam.value?.get(
             _currentExamPosition.value
