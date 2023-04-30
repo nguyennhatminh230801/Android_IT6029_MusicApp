@@ -4,8 +4,6 @@ package com.nguyennhatminh614.motobikedriverlicenseapp.screen.mainscreen
 import android.app.AlertDialog
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.util.Log
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
@@ -32,7 +30,6 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getCurren
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.network.ConnectivityObserver
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.network.InternetConnection
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -164,7 +161,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     .setMessage(FINISH_EXAM_DIALOG_MESSAGE)
                     .setCancelable(false)
                     .setPositiveButton(FINISH_EXAM_YES_BUTTON) { _, _ ->
-                        examViewModel.processFinishExamEvent(currentLicenseType.type) {
+                        examViewModel.processFinishExamEvent {
                             findNavController(R.id.nav_host_fragment_content_main).navigateUp()
                         }
                     }

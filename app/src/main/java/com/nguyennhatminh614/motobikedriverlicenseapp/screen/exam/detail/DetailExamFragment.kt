@@ -75,12 +75,9 @@ class DetailExamFragment :
         if (isExamNotFinished) {
             questionAdapter.disableShowExplanation()
             questionAdapter.disableShowCorrectAnswer()
-            viewModel.startCountDownEvent(
-                licenseTypeString = currentLicenseType,
-                onFinishExamEvent = {
-                    findNavController().navigateUp()
-                }
-            )
+            viewModel.startCountDownEvent {
+                findNavController().navigateUp()
+            }
         } else {
             viewBinding.textCurrentTime.isVisible = false
             questionAdapter.disableClickEvent()
