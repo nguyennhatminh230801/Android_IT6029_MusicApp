@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Exam
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.LicenseType
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionType
@@ -74,9 +73,9 @@ class ExamViewModel(
     }
 
     fun getExamByLicenseType(licenseTypeString: String) {
-        launchTask {
-            _listExam.postValue(examRepository.getAllExamByLicenseType(licenseTypeString))
-            hideLoading()
+        viewModelScope.launch {
+            val data = examRepository.getAllExamByLicenseType(licenseTypeString)
+            _listExam.postValue(data)
         }
     }
 
@@ -89,7 +88,7 @@ class ExamViewModel(
         }
     }
 
-    fun startCountDownEvent(licenseTypeString: String, onFinishExamEvent: () -> Unit) {
+    fun startCountDownEvent(onFinishExamEvent: () -> Unit) {
         val currentExam = _listExam.value?.get(
             _currentExamPosition.value
                 ?: AppConstant.NONE_POSITION
@@ -115,12 +114,12 @@ class ExamViewModel(
                     CountDownInstance.CurrentTimeStamp
             },
             onFinishEvent = {
-                processFinishExamEvent(licenseTypeString, onFinishExamEvent)
+                processFinishExamEvent(onFinishExamEvent)
             }
         )
     }
 
-    fun processFinishExamEvent(licenseTypeString: String, onFinishExamEvent: () -> Unit) {
+    fun processFinishExamEvent(onFinishExamEvent: () -> Unit) {
         launchTask {
             val currentExam = _listExam.value?.get(
                 _currentExamPosition.value
@@ -170,7 +169,7 @@ class ExamViewModel(
                     exam.examState = ExamState.PASSED.value
                 }
 
-                addExamToDatabase(exam, licenseTypeString)
+                examRepository.updateExam(exam)
                 delay(DELAY_ON_FINISH_EXAM)
             }
             _currentExamQuestionPosition.postValue(FIRST_INDEX)
