@@ -2,13 +2,16 @@ package com.nguyennhatminh614.motobikedriverlicenseapp.screen.wronganswer
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.WrongAnswer
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.WrongAnswerRepository
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.generateEmptyQuestionStateList
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
+import kotlinx.coroutines.launch
 
 class WrongAnswerViewModel(
     private val wrongAnswerRepository: WrongAnswerRepository,
@@ -42,6 +45,7 @@ class WrongAnswerViewModel(
                     object : IResponseListener<MutableList<NewQuestion>> {
                         override fun onSuccess(data: MutableList<NewQuestion>) {
                             val wrongAnswerList = mutableListOf<NewQuestion>()
+                            val listSelectedQuestionOptions = mutableListOf<QuestionOptions>()
                             _listAllQuestion.postValue(data)
                             _listWrongAnswer.value?.forEach { wrongAnswerQuestion ->
                                 data.forEach {
@@ -50,10 +54,11 @@ class WrongAnswerViewModel(
                                         return@forEach
                                     }
                                 }
+                                listSelectedQuestionOptions.add(wrongAnswerQuestion.lastSelectedState)
                             }
 
                             _listWrongAnswerQuestion.postValue(wrongAnswerList)
-                            _listQuestionState.postValue(generateEmptyQuestionStateList(wrongAnswerList))
+                            _listQuestionState.postValue(listSelectedQuestionOptions)
                             hideLoading()
                         }
 
@@ -65,7 +70,7 @@ class WrongAnswerViewModel(
                 )
             }
 
-            hideLoading()
+            //hideLoading()
         }
     }
 
@@ -98,6 +103,21 @@ class WrongAnswerViewModel(
         val list = _listQuestionState.value
         list?.set(questionsPosition, item)
         _listQuestionState.value = list ?: mutableListOf()
+    }
+
+    fun updateSelectedToDatabase(questionID: Int, item: QuestionOptions) {
+        viewModelScope.launch {
+            var wrongAnswer = wrongAnswerRepository.findWrongAnswerQuestionByID(questionID)
+            wrongAnswer = wrongAnswer?.copy(
+                lastSelectedState = item
+            ) ?: WrongAnswer(
+                questionID,
+                System.currentTimeMillis(),
+                item
+            )
+
+            wrongAnswerRepository.updateWrongAnswerQuestion(wrongAnswer)
+        }
     }
 
 //    fun getQuestionOptionSelectedByQuestionPosition(questionsPosition: Int): QuestionOptions? {

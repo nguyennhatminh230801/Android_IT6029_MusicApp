@@ -16,7 +16,10 @@ fun processQuestionOptionsList(questionsID: Int, listString: List<String>) =
 fun generateEmptyQuestionStateList(listQuestion: List<NewQuestion>): MutableList<QuestionOptions> {
     return mutableListOf<QuestionOptions>().apply {
         listQuestion.forEach {
-            add(QuestionOptions(it.id, AppConstant.NONE_POSITION, ""))
+            add(provideEmptyQuestionOption(questionID = it.id))
         }
     }
 }
+
+fun provideEmptyQuestionOption(questionID: Int)
+    = QuestionOptions(questionID, AppConstant.NONE_POSITION, "")

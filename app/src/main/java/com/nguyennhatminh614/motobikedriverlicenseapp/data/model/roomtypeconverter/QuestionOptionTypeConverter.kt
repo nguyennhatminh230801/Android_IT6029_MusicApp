@@ -27,4 +27,14 @@ class QuestionOptionTypeConverter {
     fun convertFullImmutableListOptionAnswerToJson(listQuestions: List<QuestionOptions>): String? =
         Gson().toJson(listQuestions)
 
+    @TypeConverter
+    fun convertJsonToQuestionOption(json: String): QuestionOptions? {
+        val typeToken = object : TypeToken<QuestionOptions>() {}.type
+        return Gson().fromJson(json, typeToken)
+    }
+
+    @TypeConverter
+    fun convertQuestionOptionToJson(questionsOptions: QuestionOptions): String? =
+        Gson().toJson(questionsOptions)
+
 }
