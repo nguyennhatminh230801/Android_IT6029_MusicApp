@@ -92,6 +92,7 @@ class DetailExamFragment :
             viewModel.updateStateQuestion(questionPos, questionOptions)
             viewModel.navigateToNextQuestion(viewBinding.viewPagerQuestions.currentItem)
         }
+
         viewBinding.buttonNextQuestion.setOnClickListener {
             if (viewBinding.viewPagerQuestions.currentItem < listQuestionSize) {
                 viewBinding.viewPagerQuestions.currentItem++
@@ -104,6 +105,7 @@ class DetailExamFragment :
                     super.onPageSelected(position)
                     viewBinding.textCurrentQuestions.text =
                         "Câu ${viewBinding.viewPagerQuestions.currentItem + 1}/${listQuestionSize}"
+
                 }
             }
         )
@@ -180,16 +182,7 @@ class DetailExamFragment :
                 val currentExam = it[currentExamPosition]
                 listQuestionSize = currentExam.listQuestions.size
                 questionAdapter.submitList(currentExam.listQuestions)
-
-                if (currentExam.listQuestionOptions.isEmpty()) {
-                    questionAdapter.updateQuestionStateList(
-                        generateEmptyQuestionStateList(
-                            currentExam.listQuestions
-                        )
-                    )
-                } else {
-                    questionAdapter.updateQuestionStateList(currentExam.listQuestionOptions)
-                }
+                questionAdapter.updateQuestionStateList(currentExam.listQuestionOptions)
             }
         }
     }

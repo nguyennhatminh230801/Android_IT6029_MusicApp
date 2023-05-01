@@ -243,6 +243,7 @@ class ExamViewModel(
             _currentExamPosition.value
                 ?: AppConstant.NONE_POSITION
         )?.listQuestionOptions?.set(questionsPosition, item)
+        _listExam.postValue(_listExam.value)
     }
 
     fun navigateToNextQuestion(currentPosition: Int) {
