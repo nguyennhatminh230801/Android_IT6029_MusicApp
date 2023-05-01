@@ -16,10 +16,6 @@ class WrongAnswerLocalDataSource(
     override suspend fun updateWrongAnswerQuestion(wrongAnswer: WrongAnswer) =
         wrongAnswerDao.updateWrongAnswerQuestion(wrongAnswer)
 
-    override suspend fun checkWrongAnswerQuestionExists(id: Int): Boolean =
-        wrongAnswerDao.checkWrongAnswerQuestionExists(id) > NOT_FOUNDED_RECORD
-
-    companion object {
-        private const val NOT_FOUNDED_RECORD = 0
-    }
+    override suspend fun findWrongAnswerQuestionByID(id: Int) =
+        wrongAnswerDao.findWrongAnswerQuestionByID(id)
 }

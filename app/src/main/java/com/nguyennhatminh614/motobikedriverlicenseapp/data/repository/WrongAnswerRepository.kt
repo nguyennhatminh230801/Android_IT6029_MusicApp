@@ -18,8 +18,8 @@ class WrongAnswerRepository(
     override suspend fun updateWrongAnswerQuestion(wrongAnswer: WrongAnswer) =
         local.updateWrongAnswerQuestion(wrongAnswer)
 
-    override suspend fun checkWrongAnswerQuestionExists(id: Int): Boolean =
-        local.checkWrongAnswerQuestionExists(id)
+    override suspend fun findWrongAnswerQuestionByID(id: Int)
+        = local.findWrongAnswerQuestionByID(id)
 
     override suspend fun getAllListQuestion(listener: IResponseListener<MutableList<NewQuestion>>) {
         remote.getAllListQuestion(listener)

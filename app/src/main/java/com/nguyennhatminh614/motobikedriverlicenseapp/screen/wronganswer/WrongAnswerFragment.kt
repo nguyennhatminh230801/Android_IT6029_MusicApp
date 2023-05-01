@@ -48,6 +48,7 @@ class WrongAnswerFragment :
     override fun handleEvent() {
         questionAdapter.setOnClickSelectedQuestionOption { questionID, questionPos, questionOptions ->
             viewModel.updateDataQuestionPos(questionPos, questionOptions)
+            viewModel.updateSelectedToDatabase(questionID, questionOptions)
         }
 
         viewBinding.buttonNextQuestion.setOnClickListener {
@@ -113,7 +114,7 @@ class WrongAnswerFragment :
                 "Câu ${viewBinding.viewPagerQuestions.currentItem + 1}/${listQuestionSize}"
 
             questionAdapter.submitList(it)
-            questionAdapter.updateQuestionStateList(generateEmptyQuestionStateList(it))
+            //questionAdapter.updateQuestionStateList(generateEmptyQuestionStateList(it))
         }
 
         viewModel.listQuestionOptions.observe(viewLifecycleOwner) {
