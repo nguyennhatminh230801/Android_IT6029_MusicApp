@@ -37,7 +37,7 @@ class StudyAdapter
     ) : BaseViewHolder<StudyCategory, ItemFragmentStudyLayoutBinding>(binding) {
         override fun onBindData(data: StudyCategory) {
             binding.apply {
-                imageQuestionsCategoryBanner.setImageResource(data.iconResourceID)
+                imageQuestionsCategoryBanner.setImageResource(StudyViewModel.listDefaultStudyCategory[adapterPosition].iconResourceID)
                 textQuestionCategory.text = data.title
                 textNumbersOfQuestion.text = "${data.totalNumberOfQuestions} câu"
                 textNumbersOfSelectedAnswerQuestion.text =
