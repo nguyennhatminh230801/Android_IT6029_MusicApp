@@ -6,7 +6,7 @@ import androidx.room.TypeConverters
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Exam
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.StudyCategory
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.WrongAnswerObject
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.WrongAnswer
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.roomtypeconverter.ExamTypeConverter
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.roomtypeconverter.QuestionOptionTypeConverter
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.roomtypeconverter.QuestionTypeConverter
@@ -23,7 +23,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.local.wron
         Exam::class,
         NewQuestion::class,
         StudyCategory::class,
-        WrongAnswerObject::class,
+        WrongAnswer::class,
     ],
     version = DATABASE_VERSION,
     exportSchema = ALLOW_EXPORT_SCHEMA,
