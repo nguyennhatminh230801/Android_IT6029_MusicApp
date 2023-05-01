@@ -1,7 +1,7 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.data.repository
 
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.WrongAnswerObject
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.WrongAnswer
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
 
 class WrongAnswerRepository(
@@ -9,14 +9,14 @@ class WrongAnswerRepository(
     private val remote: IWrongAnswerDataSource.Remote,
 ) : IWrongAnswerDataSource.Local, IWrongAnswerDataSource.Remote {
 
-    override suspend fun getAllWrongAnswerQuestion(): MutableList<WrongAnswerObject> =
+    override suspend fun getAllWrongAnswerQuestion(): MutableList<WrongAnswer> =
         local.getAllWrongAnswerQuestion()
 
-    override suspend fun insertNewWrongAnswerQuestion(wrongAnswerObject: WrongAnswerObject) =
-        local.insertNewWrongAnswerQuestion(wrongAnswerObject)
+    override suspend fun insertNewWrongAnswerQuestion(wrongAnswer: WrongAnswer) =
+        local.insertNewWrongAnswerQuestion(wrongAnswer)
 
-    override suspend fun updateWrongAnswerQuestion(wrongAnswerObject: WrongAnswerObject) =
-        local.updateWrongAnswerQuestion(wrongAnswerObject)
+    override suspend fun updateWrongAnswerQuestion(wrongAnswer: WrongAnswer) =
+        local.updateWrongAnswerQuestion(wrongAnswer)
 
     override suspend fun checkWrongAnswerQuestionExists(id: Int): Boolean =
         local.checkWrongAnswerQuestionExists(id)

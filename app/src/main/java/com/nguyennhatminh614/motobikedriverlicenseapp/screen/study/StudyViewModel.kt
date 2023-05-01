@@ -8,7 +8,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionType
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.StudyCategory
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.WrongAnswerObject
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.WrongAnswer
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.StudyRepository
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.WrongAnswerRepository
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
@@ -48,12 +48,12 @@ class StudyViewModel(
         }
     }
 
-    fun saveWrongAnswerObjectToDatabase(wrongAnswerObject: WrongAnswerObject) {
+    fun saveWrongAnswerObjectToDatabase(wrongAnswer: WrongAnswer) {
         viewModelScope.launch {
-            if (wrongAnswerRepository.checkWrongAnswerQuestionExists(wrongAnswerObject.questionsID)) {
-                wrongAnswerRepository.updateWrongAnswerQuestion(wrongAnswerObject)
+            if (wrongAnswerRepository.checkWrongAnswerQuestionExists(wrongAnswer.questionsID)) {
+                wrongAnswerRepository.updateWrongAnswerQuestion(wrongAnswer)
             } else {
-                wrongAnswerRepository.insertNewWrongAnswerQuestion(wrongAnswerObject)
+                wrongAnswerRepository.insertNewWrongAnswerQuestion(wrongAnswer)
             }
         }
     }
