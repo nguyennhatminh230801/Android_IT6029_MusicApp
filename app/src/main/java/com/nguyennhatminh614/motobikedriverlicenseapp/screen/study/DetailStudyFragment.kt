@@ -1,6 +1,7 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.study
 
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.StateQuestionOption
@@ -12,6 +13,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.dialog.BottomSheetQuestionDialog
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IBottomSheetListener
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class DetailStudyFragment :
@@ -100,12 +102,15 @@ class DetailStudyFragment :
             viewModel.saveProgressToDatabase()
 
             if (questionOptions.stateNumber == StateQuestionOption.INCORRECT.type) {
-                viewModel.saveWrongAnswerObjectToDatabase(
-                    WrongAnswer(
-                        questionOptions.questionsID,
-                        System.currentTimeMillis()
+                lifecycleScope.launch {
+                    viewModel.saveWrongAnswerObjectToDatabase(
+                        WrongAnswer(
+                            questionOptions.questionsID,
+                            System.currentTimeMillis(),
+                            viewModel.getSelectedStateWrongAnswerByID(questionOptions.questionsID)
+                        )
                     )
-                )
+                }
             }
         }
     }

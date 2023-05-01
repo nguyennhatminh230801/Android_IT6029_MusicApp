@@ -24,6 +24,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.convertMi
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getCurrentLicenseType
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.generateEmptyQuestionStateList
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.provideEmptyQuestionOption
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -149,12 +150,26 @@ class ExamViewModel(
                             isWrongTheQuestionThatFailedTestImmediately = true
                         }
 
-                        wrongAnswerRepository.insertNewWrongAnswerQuestion(
-                            WrongAnswer(
-                                exam.listQuestions[index].id,
-                                System.currentTimeMillis(),
+                        val questionID = exam.listQuestions[index].id
+                        val wrongAnswer =
+                            wrongAnswerRepository.findWrongAnswerQuestionByID(questionID)
+
+                        if (wrongAnswer != null) {
+                            val newWrongAnswerQuestion = wrongAnswer.copy(
+                                lastWrongTime = System.currentTimeMillis()
                             )
-                        )
+                            wrongAnswerRepository.updateWrongAnswerQuestion(newWrongAnswerQuestion)
+                        } else {
+                            wrongAnswerRepository.insertNewWrongAnswerQuestion(
+                                WrongAnswer(
+                                    questionID,
+                                    System.currentTimeMillis(),
+                                    provideEmptyQuestionOption(questionID)
+                                )
+                            )
+                        }
+
+
                     }
                     index++
                 }
@@ -249,7 +264,8 @@ class ExamViewModel(
         val listQuestions = listQuestions.value
 
         listQuestions?.let { listQuestion ->
-            val filteredListQuestion = listQuestion.filter { it.minimumLicenseType in currentLicenseType.getAllLowerQuestionList() }
+            val filteredListQuestion =
+                listQuestion.filter { it.minimumLicenseType in currentLicenseType.getAllLowerQuestionList() }
             exam.listQuestions.apply {
                 enumValues<QuestionType>().forEach {
                     if (it.type != QuestionType.ALL.type) {
@@ -258,10 +274,10 @@ class ExamViewModel(
                     }
                 }
 
-                if(examRules.isMixQuestionInMotorbikeExam) {
+                if (examRules.isMixQuestionInMotorbikeExam) {
                     val mixedList = filteredListQuestion.filter {
                         it.questionType == QuestionType.FIXING_CAR_QUESTION.type ||
-                        it.questionType == QuestionType.DRIVING_TECHNIQUE.type
+                                it.questionType == QuestionType.DRIVING_TECHNIQUE.type
                     }
 
                     exam.listQuestions.add(mixedList.take(1)[0])
