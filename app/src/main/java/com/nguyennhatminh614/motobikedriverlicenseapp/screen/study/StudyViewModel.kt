@@ -22,65 +22,6 @@ class StudyViewModel(
     private val wrongAnswerRepository: WrongAnswerRepository,
 ) : BaseViewModel() {
 
-    private val listDefaultStudyCategory = listOf(
-        StudyCategory(
-            id = QuestionType.ALL.position,
-            iconResourceID = R.drawable.ic_study,
-            title = QuestionType.ALL.title,
-            startIDQuestion = QuestionType.ALL.startIDQuestion,
-            endIDQuestion = QuestionType.ALL.endIDQuestion,
-        ),
-        StudyCategory(
-            id = QuestionType.TRAFFIC_CONCEPT_AND_RULES.position,
-            iconResourceID = R.drawable.ic_traffic_concept_and_rules,
-            title = QuestionType.TRAFFIC_CONCEPT_AND_RULES.title,
-            startIDQuestion = QuestionType.TRAFFIC_CONCEPT_AND_RULES.startIDQuestion,
-            endIDQuestion = QuestionType.TRAFFIC_CONCEPT_AND_RULES.endIDQuestion,
-        ),
-        StudyCategory(
-            id = QuestionType.DRIVING_BUSINESS.position,
-            iconResourceID = R.drawable.ic_driving_business,
-            title = QuestionType.DRIVING_BUSINESS.title,
-            startIDQuestion = QuestionType.DRIVING_BUSINESS.startIDQuestion,
-            endIDQuestion = QuestionType.DRIVING_BUSINESS.endIDQuestion,
-        ),
-        StudyCategory(
-            id = QuestionType.ETHICS_IN_DRIVING.position,
-            iconResourceID = R.drawable.ic_ethics_in_driving,
-            title = QuestionType.ETHICS_IN_DRIVING.title,
-            startIDQuestion = QuestionType.ETHICS_IN_DRIVING.startIDQuestion,
-            endIDQuestion = QuestionType.ETHICS_IN_DRIVING.endIDQuestion
-        ),
-        StudyCategory(
-            id = QuestionType.DRIVING_TECHNIQUE.position,
-            iconResourceID = R.drawable.ic_driving_technique,
-            title = QuestionType.DRIVING_TECHNIQUE.title,
-            startIDQuestion = QuestionType.DRIVING_TECHNIQUE.startIDQuestion,
-            endIDQuestion = QuestionType.DRIVING_TECHNIQUE.endIDQuestion
-        ),
-        StudyCategory(
-            id = QuestionType.FIXING_CAR_QUESTION.position,
-            iconResourceID = R.drawable.ic_fixing_car,
-            title = QuestionType.FIXING_CAR_QUESTION.title,
-            startIDQuestion = QuestionType.FIXING_CAR_QUESTION.startIDQuestion,
-            endIDQuestion = QuestionType.FIXING_CAR_QUESTION.endIDQuestion
-        ),
-        StudyCategory(
-            id = QuestionType.TRAFFIC_SIGNAL.position,
-            iconResourceID = R.drawable.ic_traffic_sign_question,
-            title = QuestionType.TRAFFIC_SIGNAL.title,
-            startIDQuestion = QuestionType.TRAFFIC_SIGNAL.startIDQuestion,
-            endIDQuestion = QuestionType.TRAFFIC_SIGNAL.endIDQuestion
-        ),
-        StudyCategory(
-            id = QuestionType.TRAFFIC_SITUATION.position,
-            iconResourceID = R.drawable.ic_traffic_situation,
-            title = QuestionType.TRAFFIC_SITUATION.type,
-            startIDQuestion = QuestionType.TRAFFIC_SITUATION.startIDQuestion,
-            endIDQuestion = QuestionType.TRAFFIC_SITUATION.endIDQuestion
-        ),
-    )
-
     init {
         onUpdateListStudyCategory()
     }
@@ -123,41 +64,41 @@ class StudyViewModel(
 
             if (data.isEmpty()) {
                 studyRepository.saveProgress(listDefaultStudyCategory)
-            } else {
-                _listStudyCategory.postValue(data)
-            }
+                studyRepository.getListQuestion(
+                    object : IResponseListener<MutableList<NewQuestion>> {
+                        override fun onSuccess(data: MutableList<NewQuestion>) {
+                            viewModelScope.launch {
+                                val newList = mutableListOf<StudyCategory>()
+                                val oldList = _listStudyCategory.value ?: listDefaultStudyCategory
 
-            studyRepository.getListQuestion(
-                object : IResponseListener<MutableList<NewQuestion>> {
-                    override fun onSuccess(data: MutableList<NewQuestion>) {
-                        viewModelScope.launch {
-                            val newList = mutableListOf<StudyCategory>()
-                            val oldList = _listStudyCategory.value ?: listDefaultStudyCategory
-
-                            newList.apply {
-                                enumValues<QuestionType>().forEach {
-                                    add(
-                                        data.processPullListData(
-                                            it.type,
-                                            oldList[it.position],
-                                            it.title
+                                newList.apply {
+                                    enumValues<QuestionType>().forEach {
+                                        add(
+                                            data.processPullListData(
+                                                it.type,
+                                                oldList[it.position],
+                                                it.title
+                                            )
                                         )
-                                    )
+                                    }
                                 }
-                            }
 
-                            studyRepository.saveProgress(newList)
-                            _listStudyCategory.postValue(newList)
+                                studyRepository.saveProgress(newList)
+                                _listStudyCategory.postValue(newList)
+                                hideLoading()
+                            }
+                        }
+
+                        override fun onError(exception: Exception?) {
+                            this@StudyViewModel.exception.postValue(exception)
                             hideLoading()
                         }
                     }
-
-                    override fun onError(exception: Exception?) {
-                        this@StudyViewModel.exception.postValue(exception)
-                        hideLoading()
-                    }
-                }
-            )
+                )
+            } else {
+                _listStudyCategory.postValue(data)
+                hideLoading()
+            }
         }
     }
 
@@ -176,7 +117,8 @@ class StudyViewModel(
             lastData.endIDQuestion,
             listQuestion,
             if (lastData.listQuestionsState.isEmpty() ||
-                lastData.listQuestionsState.size != listQuestion.size)
+                lastData.listQuestionsState.size != listQuestion.size
+            )
                 generateEmptyQuestionStateList(listQuestion)
             else lastData.listQuestionsState,
             listQuestion.size,
@@ -216,9 +158,10 @@ class StudyViewModel(
                 }
             }
 
-            val questionIndex = list[QuestionType.ALL.position].listQuestionsState.indexOfFirst {
-                elem -> elem.questionsID == questionID
-            }
+            val questionIndex =
+                list[QuestionType.ALL.position].listQuestionsState.indexOfFirst { elem ->
+                    elem.questionsID == questionID
+                }
 
             list[QuestionType.ALL.position].listQuestionsState[questionIndex] = item
             list[QuestionType.ALL.position].numbersOfSelectedQuestions =
@@ -268,5 +211,63 @@ class StudyViewModel(
 
     companion object {
         const val DEFAULT_NOT_SELECTED_STATE = 0
+        val listDefaultStudyCategory = listOf(
+            StudyCategory(
+                id = QuestionType.ALL.position,
+                iconResourceID = R.drawable.ic_study,
+                title = QuestionType.ALL.title,
+                startIDQuestion = QuestionType.ALL.startIDQuestion,
+                endIDQuestion = QuestionType.ALL.endIDQuestion,
+            ),
+            StudyCategory(
+                id = QuestionType.TRAFFIC_CONCEPT_AND_RULES.position,
+                iconResourceID = R.drawable.ic_traffic_concept_and_rules,
+                title = QuestionType.TRAFFIC_CONCEPT_AND_RULES.title,
+                startIDQuestion = QuestionType.TRAFFIC_CONCEPT_AND_RULES.startIDQuestion,
+                endIDQuestion = QuestionType.TRAFFIC_CONCEPT_AND_RULES.endIDQuestion,
+            ),
+            StudyCategory(
+                id = QuestionType.DRIVING_BUSINESS.position,
+                iconResourceID = R.drawable.ic_driving_business,
+                title = QuestionType.DRIVING_BUSINESS.title,
+                startIDQuestion = QuestionType.DRIVING_BUSINESS.startIDQuestion,
+                endIDQuestion = QuestionType.DRIVING_BUSINESS.endIDQuestion,
+            ),
+            StudyCategory(
+                id = QuestionType.ETHICS_IN_DRIVING.position,
+                iconResourceID = R.drawable.ic_ethics_in_driving,
+                title = QuestionType.ETHICS_IN_DRIVING.title,
+                startIDQuestion = QuestionType.ETHICS_IN_DRIVING.startIDQuestion,
+                endIDQuestion = QuestionType.ETHICS_IN_DRIVING.endIDQuestion
+            ),
+            StudyCategory(
+                id = QuestionType.DRIVING_TECHNIQUE.position,
+                iconResourceID = R.drawable.ic_driving_technique,
+                title = QuestionType.DRIVING_TECHNIQUE.title,
+                startIDQuestion = QuestionType.DRIVING_TECHNIQUE.startIDQuestion,
+                endIDQuestion = QuestionType.DRIVING_TECHNIQUE.endIDQuestion
+            ),
+            StudyCategory(
+                id = QuestionType.FIXING_CAR_QUESTION.position,
+                iconResourceID = R.drawable.ic_fixing_car,
+                title = QuestionType.FIXING_CAR_QUESTION.title,
+                startIDQuestion = QuestionType.FIXING_CAR_QUESTION.startIDQuestion,
+                endIDQuestion = QuestionType.FIXING_CAR_QUESTION.endIDQuestion
+            ),
+            StudyCategory(
+                id = QuestionType.TRAFFIC_SIGNAL.position,
+                iconResourceID = R.drawable.ic_traffic_sign_question,
+                title = QuestionType.TRAFFIC_SIGNAL.title,
+                startIDQuestion = QuestionType.TRAFFIC_SIGNAL.startIDQuestion,
+                endIDQuestion = QuestionType.TRAFFIC_SIGNAL.endIDQuestion
+            ),
+            StudyCategory(
+                id = QuestionType.TRAFFIC_SITUATION.position,
+                iconResourceID = R.drawable.ic_traffic_situation,
+                title = QuestionType.TRAFFIC_SITUATION.type,
+                startIDQuestion = QuestionType.TRAFFIC_SITUATION.startIDQuestion,
+                endIDQuestion = QuestionType.TRAFFIC_SITUATION.endIDQuestion
+            ),
+        )
     }
 }
