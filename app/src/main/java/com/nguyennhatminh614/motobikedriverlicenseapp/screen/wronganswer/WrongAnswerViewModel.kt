@@ -4,10 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.WrongAnswerObject
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.WrongAnswer
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.WrongAnswerRepository
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.generateEmptyQuestionStateList
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
 
@@ -21,8 +20,8 @@ class WrongAnswerViewModel(
     val listWrongAnswerQuestion: LiveData<MutableList<NewQuestion>>
         get() = _listWrongAnswerQuestion
 
-    private val _listWrongAnswer = MutableLiveData<MutableList<WrongAnswerObject>>()
-    val listWrongAnswer: LiveData<MutableList<WrongAnswerObject>>
+    private val _listWrongAnswer = MutableLiveData<MutableList<WrongAnswer>>()
+    val listWrongAnswer: LiveData<MutableList<WrongAnswer>>
         get() = _listWrongAnswer
 
     private val _listQuestionState = MutableLiveData<MutableList<QuestionOptions>>()
