@@ -9,7 +9,7 @@ interface IWrongAnswerDataSource {
         suspend fun getAllWrongAnswerQuestion(): MutableList<WrongAnswer>
         suspend fun insertNewWrongAnswerQuestion(wrongAnswer: WrongAnswer)
         suspend fun updateWrongAnswerQuestion(wrongAnswer: WrongAnswer)
-        suspend fun checkWrongAnswerQuestionExists(id: Int): Boolean
+        suspend fun findWrongAnswerQuestionByID(id: Int): WrongAnswer?
     }
 
     interface Remote {

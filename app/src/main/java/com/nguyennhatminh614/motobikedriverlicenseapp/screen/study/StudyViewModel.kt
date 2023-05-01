@@ -15,6 +15,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.generateEmptyQuestionStateList
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.provideEmptyQuestionOption
 import kotlinx.coroutines.launch
 
 class StudyViewModel(
@@ -50,7 +51,7 @@ class StudyViewModel(
 
     fun saveWrongAnswerObjectToDatabase(wrongAnswer: WrongAnswer) {
         viewModelScope.launch {
-            if (wrongAnswerRepository.checkWrongAnswerQuestionExists(wrongAnswer.questionsID)) {
+            if (wrongAnswerRepository.findWrongAnswerQuestionByID(wrongAnswer.questionsID) != null) {
                 wrongAnswerRepository.updateWrongAnswerQuestion(wrongAnswer)
             } else {
                 wrongAnswerRepository.insertNewWrongAnswerQuestion(wrongAnswer)
@@ -207,6 +208,10 @@ class StudyViewModel(
                 hideLoading()
             }
         }
+    }
+
+    suspend fun getSelectedStateWrongAnswerByID(questionsID: Int): QuestionOptions {
+        return wrongAnswerRepository.findWrongAnswerQuestionByID(questionsID)?.lastSelectedState ?: provideEmptyQuestionOption(questionsID)
     }
 
     companion object {
