@@ -10,7 +10,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionType
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.StateQuestionOption
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.WrongAnswerObject
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.WrongAnswer
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.findCreateExamRuleByLicenseType
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.findCreateExamRuleByLicenseTypeString
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.getAllLowerQuestionList
@@ -180,7 +180,7 @@ class ExamViewModel(
                         }
 
                         wrongAnswerRepository.insertNewWrongAnswerQuestion(
-                            WrongAnswerObject(
+                            WrongAnswer(
                                 exam.listQuestions[index].id,
                                 System.currentTimeMillis(),
                             )
