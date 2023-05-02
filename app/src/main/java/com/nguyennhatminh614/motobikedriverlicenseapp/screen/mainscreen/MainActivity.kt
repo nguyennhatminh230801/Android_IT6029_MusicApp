@@ -66,6 +66,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 R.id.nav_traffic_sign,
                 R.id.nav_tips_high_score,
                 R.id.nav_wrong_answer,
+                R.id.nav_instruction,
                 R.id.nav_settings,
             ),
             viewBinding.drawerLayout
@@ -153,7 +154,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                             )
                         )
                     }
-
+                    R.id.nav_instruction ->
+                        navController.navigate(R.id.action_nav_main_to_nav_instruction)
                     R.id.nav_tips_high_score ->
                         navController.navigate(R.id.action_nav_main_to_nav_tips_high_score)
 
@@ -207,12 +209,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 }
                 dialog.show()
             }
-
-            appBarMain.buttonInstruction.setOnClickListener {
-                // gỡ các fragment trước để đến nav_main
-                navController.popBackStack(R.id.nav_main, false)
-                navController.navigate(R.id.action_nav_main_to_nav_instruction)
-            }
         }
     }
 
@@ -259,10 +255,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     }
                 }
             }
-        }
-
-        instructionViewModel.isVisibleInstructionIcon.observe(this) {
-            viewBinding.appBarMain.buttonInstruction.isVisible = it
         }
     }
 

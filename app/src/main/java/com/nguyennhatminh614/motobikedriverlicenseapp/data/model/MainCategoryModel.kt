@@ -29,5 +29,7 @@ enum class CategoryType {
     SIGNAL,
     TIPS_HIGH_SCORE,
     WRONG_ANSWER,
+    EXAM_GUIDE,
+    CHANGE_LICENSE_TYPE,
     SETTINGS,
 }
