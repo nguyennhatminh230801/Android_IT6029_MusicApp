@@ -20,8 +20,6 @@ class InstructionFragment :
     override val viewModel by viewModel<InstructionViewModel>()
 
     override fun initData() {
-        viewModel.setVisibleInstructionIcon(false)
-
         context?.let { context ->
             val assetPathHandler = WebViewAssetLoader.AssetsPathHandler(context)
             val assetLoader = WebViewAssetLoader.Builder()
@@ -48,11 +46,6 @@ class InstructionFragment :
 
     override fun bindData() {
         //Not implement
-    }
-
-    override fun onDestroyView() {
-        viewModel.setVisibleInstructionIcon(true)
-        super.onDestroyView()
     }
 
     companion object {
