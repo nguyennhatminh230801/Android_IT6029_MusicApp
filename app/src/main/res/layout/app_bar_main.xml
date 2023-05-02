@@ -74,16 +74,6 @@
                 android:textColor="@color/white"
                 android:visibility="gone" />
 
-            <Button
-                android:id="@+id/button_reset_exam"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:layout_marginEnd="@dimen/dp_5"
-                android:background="@color/transparent"
-                android:text="@string/reset_exam"
-                android:textColor="@color/white"
-                android:visibility="gone" />
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
