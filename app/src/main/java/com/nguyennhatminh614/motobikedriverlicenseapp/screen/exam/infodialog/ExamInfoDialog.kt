@@ -33,7 +33,7 @@ object ExamInfoDialog {
                     textTitleExamInfo.text = context.resources.getString(R.string.text_title_exam_info, createExamRules.licenseType.type)
                 }
 
-                dialog = AlertDialog.Builder(context, R.style.DialogBackgroundTransparentTheme)
+                dialog = AlertDialog.Builder(context)
                     .setView(dialogBinding.root)
                     .setCancelable(false)
                     .create()
