@@ -25,7 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
-                android:layout_marginEnd="@dimen/dp_5"
+                android:layout_marginEnd="@dimen/dp_10"
                 android:background="@color/transparent"
                 android:text="@string/button_finish_exam_text"
                 android:textColor="@color/white"
@@ -36,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
-                android:layout_marginEnd="@dimen/dp_5"
+                android:layout_marginEnd="@dimen/dp_10"
                 android:background="@color/transparent"
                 android:text="@string/button_reset"
                 android:textColor="@color/white"
@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
-                android:layout_marginEnd="@dimen/dp_5"
+                android:layout_marginEnd="@dimen/dp_10"
                 android:background="@color/transparent"
                 android:text="@string/reset_exam"
                 android:textColor="@color/white"
@@ -58,12 +58,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|center_vertical"
-                android:layout_marginEnd="@dimen/dp_5"
+                android:layout_marginEnd="@dimen/dp_10"
                 android:background="@color/transparent"
                 android:text="@string/button_reset"
                 android:textColor="@color/white"
                 android:visibility="gone" />
 
+            <ImageButton
+                android:id="@+id/button_info_exam_guide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="@dimen/dp_10"
+                android:background="@color/transparent"
+                android:src="@drawable/ic_baseline_info_24"
+                android:visibility="gone" />
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 

@@ -57,4 +57,9 @@
     <string name="text_change_license_type">Thay đổi hạng bằng</string>
     <string name="text_exam_result">Kết quả thi</string>
     <string name="reset_exam">Thi lại</string>
+    <string name="text_exam_info_guide"><b>Lưu ý:</b> Nếu trả lời sai một câu điểm liệt bạn sẽ thi trượt bài thi đó</string>
+    <string name="text_exam_info_duration"><b>Thời gian làm bài:</b> %1$d phút</string>
+    <string name="text_minimum_question_to_pass_exam_info"><b>Số câu đúng tối thiểu:</b> %1$d câu</string>
+    <string name="text_title_exam_info">Hướng dẫn làm bài thi hạng %1$s</string>
+    <string name="text_numbers_of_question_exam_info"><b>Tổng số:</b> %1$d câu</string>
 </resources>
