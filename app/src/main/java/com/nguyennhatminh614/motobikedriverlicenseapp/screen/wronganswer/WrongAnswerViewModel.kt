@@ -11,6 +11,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.generateEmptyQuestionStateList
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.provideEmptyQuestionOption
 import kotlinx.coroutines.launch
 
 class WrongAnswerViewModel(
@@ -117,6 +118,19 @@ class WrongAnswerViewModel(
             )
 
             wrongAnswerRepository.updateWrongAnswerQuestion(wrongAnswer)
+        }
+    }
+
+    fun removeAllSelectedState() {
+        viewModelScope.launch {
+            val listWrongAnswer = wrongAnswerRepository.getAllWrongAnswerQuestion()
+            listWrongAnswer.forEach {
+                wrongAnswerRepository.updateWrongAnswerQuestion(
+                    it.copy(
+                        lastSelectedState = provideEmptyQuestionOption(it.questionsID)
+                    )
+                )
+            }
         }
     }
 
