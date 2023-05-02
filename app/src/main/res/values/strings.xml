@@ -61,5 +61,5 @@
     <string name="text_exam_info_duration"><b>Thời gian làm bài:</b> %1$d phút</string>
     <string name="text_minimum_question_to_pass_exam_info"><b>Số câu đúng tối thiểu:</b> %1$d câu</string>
     <string name="text_title_exam_info">Hướng dẫn làm bài thi hạng %1$s</string>
-    <string name="text_numbers_of_question_exam_info"><b>Tổng số:</b> %1$d câu</string>
+    <string name="text_numbers_of_question_exam_info"><b>Tổng số câu:</b> %1$d câu</string>
 </resources>

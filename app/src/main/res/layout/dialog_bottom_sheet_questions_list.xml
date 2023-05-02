@@ -70,8 +70,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_420"
         android:background="?attr/backgroundColor"
-        app:layout_constraintTop_toBottomOf="@id/bottom_bar"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/bottom_bar"
         app:spanCount="5"
         tools:itemCount="25"
         tools:listitem="@layout/item_exam_question_bottom_sheet_dialog" />

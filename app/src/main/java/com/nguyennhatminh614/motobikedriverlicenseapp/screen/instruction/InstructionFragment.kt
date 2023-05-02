@@ -1,5 +1,6 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.instruction
 
+import android.content.SharedPreferences
 import android.net.Uri
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -12,6 +13,8 @@ import androidx.webkit.WebViewClientCompat
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentInstructionBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.mainscreen.MainActivity
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseFragment
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.isCurrentDarkMode
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class InstructionFragment :
@@ -34,7 +37,12 @@ class InstructionFragment :
 
             viewBinding.webViewInstruction.apply {
                 webViewClient = LocalContentWebViewClient(assetLoader)
-                loadUrl(INSTRUCTION_WEB_URL)
+
+                if(inject<SharedPreferences>().value.isCurrentDarkMode()) {
+                    loadUrl(INSTRUCTION_WEB_URL_DARK_MODE)
+                } else {
+                    loadUrl(INSTRUCTION_WEB_URL_LIGHT_MODE)
+                }
             }
 
         }
@@ -49,7 +57,8 @@ class InstructionFragment :
     }
 
     companion object {
-        const val INSTRUCTION_WEB_URL = "https://appassets.androidplatform.net/assets/index.html"
+        const val INSTRUCTION_WEB_URL_DARK_MODE = "https://appassets.androidplatform.net/assets/thuchanh_dark_mode.html"
+        const val INSTRUCTION_WEB_URL_LIGHT_MODE = "https://appassets.androidplatform.net/assets/thuchanh_light_mode.html"
         const val ASSET_PATH_HANDLER_KEY =  "/assets/"
     }
 }
