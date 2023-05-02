@@ -18,7 +18,6 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant.EMPTY_SIZE
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant.FIRST_INDEX
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.dialog.BottomSheetQuestionDialog
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.generateEmptyQuestionStateList
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IBottomSheetListener
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
 import kotlinx.coroutines.delay
