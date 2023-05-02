@@ -1,5 +1,6 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.instruction
 
+import android.graphics.Bitmap
 import android.net.Uri
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -8,8 +9,11 @@ import androidx.annotation.RequiresApi
 import androidx.webkit.WebViewAssetLoader
 import androidx.webkit.WebViewClientCompat
 
-class LocalContentWebViewClient(private val assetLoader: WebViewAssetLoader) :
-    WebViewClientCompat() {
+class LocalContentWebViewClient(
+    private val assetLoader: WebViewAssetLoader,
+    private val loadStartCallback: () -> Unit,
+    private val loadFinishCallback: () -> Unit,
+) : WebViewClientCompat() {
     @RequiresApi(21)
     override fun shouldInterceptRequest(
         view: WebView,
@@ -24,5 +28,15 @@ class LocalContentWebViewClient(private val assetLoader: WebViewAssetLoader) :
         url: String,
     ): WebResourceResponse? {
         return assetLoader.shouldInterceptRequest(Uri.parse(url))
+    }
+
+    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+        super.onPageStarted(view, url, favicon)
+        loadStartCallback()
+    }
+
+    override fun onPageFinished(view: WebView?, url: String?) {
+        super.onPageFinished(view, url)
+        loadFinishCallback()
     }
 }

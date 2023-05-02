@@ -6,19 +6,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color"
+    android:background="?attr/backgroundColor"
     android:overScrollMode="never">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/layout_exam_result"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:background="@color/background_color"
+        android:layout_height="wrap_content"
+        android:background="?attr/backgroundColor"
         >
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="?attr/backgroundColor"
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
             android:fitsSystemWindows="true">
 
@@ -210,6 +211,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_15"
         android:overScrollMode="never"
+        android:background="?attr/backgroundColor"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/view_exam_result"
