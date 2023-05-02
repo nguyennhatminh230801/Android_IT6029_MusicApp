@@ -120,6 +120,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         viewBinding.appBarMain.toolbar.title = title
     }
 
+    fun addCallbackResetWrongAnswerButton(resetCallback: () -> Unit) {
+        viewBinding.appBarMain.buttonResetWrongAnswer.isVisible = true
+        viewBinding.appBarMain.buttonResetWrongAnswer.setOnClickListener {
+            resetCallback()
+        }
+    }
+
+    fun removeCallbackResetWrongAnswerButton() {
+        viewBinding.appBarMain.buttonResetWrongAnswer.isVisible = false
+        viewBinding.appBarMain.buttonResetWrongAnswer.setOnClickListener(null)
+    }
     override fun handleEvent() {
         viewBinding.apply {
             setSupportActionBar(appBarMain.toolbar)
