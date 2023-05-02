@@ -121,17 +121,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         viewBinding.appBarMain.toolbar.title = title
     }
 
-    fun addCallbackResetWrongAnswerButton(resetCallback: () -> Unit) {
-        viewBinding.appBarMain.buttonResetWrongAnswer.isVisible = true
-        viewBinding.appBarMain.buttonResetWrongAnswer.setOnClickListener {
-            resetCallback()
-        }
-    }
-
-    fun removeCallbackResetWrongAnswerButton() {
-        viewBinding.appBarMain.buttonResetWrongAnswer.isVisible = false
-        viewBinding.appBarMain.buttonResetWrongAnswer.setOnClickListener(null)
-    }
     override fun handleEvent() {
         viewBinding.apply {
             setSupportActionBar(appBarMain.toolbar)
@@ -212,6 +201,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         }
     }
 
+    fun addCallbackExamInfoButton(resetCallback: () -> Unit) {
+        viewBinding.appBarMain.buttonInfoExamGuide.isVisible = true
+        viewBinding.appBarMain.buttonInfoExamGuide.setOnClickListener {
+            resetCallback()
+        }
+    }
+
+    fun removeCallbackExamInfoButton() {
+        viewBinding.appBarMain.buttonInfoExamGuide.isVisible = false
+        viewBinding.appBarMain.buttonInfoExamGuide.setOnClickListener(null)
+    }
+
     fun addCallbackResetExamButton(resetCallback: () -> Unit) {
         viewBinding.appBarMain.buttonResetExam.isVisible = true
         viewBinding.appBarMain.buttonResetExam.setOnClickListener {
@@ -222,6 +223,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     fun removeCallbackResetExamButton() {
         viewBinding.appBarMain.buttonResetExam.isVisible = false
         viewBinding.appBarMain.buttonResetExam.setOnClickListener(null)
+    }
+
+    fun addCallbackResetWrongAnswerButton(resetCallback: () -> Unit) {
+        viewBinding.appBarMain.buttonResetWrongAnswer.isVisible = true
+        viewBinding.appBarMain.buttonResetWrongAnswer.setOnClickListener {
+            resetCallback()
+        }
+    }
+
+    fun removeCallbackResetWrongAnswerButton() {
+        viewBinding.appBarMain.buttonResetWrongAnswer.isVisible = false
+        viewBinding.appBarMain.buttonResetWrongAnswer.setOnClickListener(null)
     }
 
     override fun bindData() {

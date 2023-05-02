@@ -10,7 +10,10 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Exam
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.LicenseType
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.findCreateExamRuleByLicenseType
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.findCreateExamRuleByLicenseTypeString
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentExamBinding
+import com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.infodialog.ExamInfoDialog
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.mainscreen.MainActivity
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseFragment
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
@@ -30,7 +33,12 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
         get() = arguments?.getString(AppConstant.KEY_BUNDLE_CURRENT_LICENSE_TYPE) ?: LicenseType.A1.type
 
     override fun initData() {
-        (activity as? MainActivity)?.updateTitleToolbar("Đề hạng $currentLicenseType")
+        (activity as? MainActivity)?.apply {
+            updateTitleToolbar("Đề hạng $currentLicenseType")
+            addCallbackExamInfoButton {
+                ExamInfoDialog.showExamInfoDialog(this, findCreateExamRuleByLicenseTypeString(this@ExamFragment.currentLicenseType))
+            }
+        }
         viewBinding.recyclerViewExam.apply {
             setRecycledViewPool(RecyclerView.RecycledViewPool())
             adapter = examAdapter
@@ -92,6 +100,11 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
         }
     }
 
+    override fun onDestroyView() {
+        (activity as? MainActivity)?.removeCallbackExamInfoButton()
+        ExamInfoDialog.shutDownDialog()
+        super.onDestroyView()
+    }
     companion object {
         const val DEFAULT_ID = 0
         const val MESSAGE_SUCCESS_ADD_EXAM = "Thêm đề thi mới thành công"
