@@ -8,7 +8,6 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.WrongAnswer
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.WrongAnswerRepository
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.generateEmptyQuestionStateList
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.provideEmptyQuestionOption

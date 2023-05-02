@@ -295,8 +295,7 @@ class ExamViewModel(
         val listQuestions = listQuestions.value
 
         listQuestions?.let { listQuestion ->
-            val filteredListQuestion =
-                listQuestion.filter { it.minimumLicenseType in currentLicenseType.getAllLowerQuestionList() }
+            val filteredListQuestion = listQuestion.filter { it.minimumLicenseType in currentLicenseType.getAllLowerQuestionList() }
             exam.listQuestions.apply {
                 enumValues<QuestionType>().forEach {
                     if (it.type != QuestionType.ALL.type) {
@@ -305,10 +304,10 @@ class ExamViewModel(
                     }
                 }
 
-                if (examRules.isMixQuestionInMotorbikeExam) {
+                if(examRules.isMixQuestionInMotorbikeExam) {
                     val mixedList = filteredListQuestion.filter {
                         it.questionType == QuestionType.FIXING_CAR_QUESTION.type ||
-                                it.questionType == QuestionType.DRIVING_TECHNIQUE.type
+                        it.questionType == QuestionType.DRIVING_TECHNIQUE.type
                     }
 
                     exam.listQuestions.add(mixedList.take(1)[0])
