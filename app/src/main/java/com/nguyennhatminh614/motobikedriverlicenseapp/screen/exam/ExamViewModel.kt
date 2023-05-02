@@ -25,7 +25,6 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getCurren
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.generateEmptyQuestionStateList
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.provideEmptyQuestionOption
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.provideEmptyQuestionOption
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
