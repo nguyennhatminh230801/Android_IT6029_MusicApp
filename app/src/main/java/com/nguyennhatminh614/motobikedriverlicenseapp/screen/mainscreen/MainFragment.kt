@@ -32,7 +32,21 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
             WRONG_ANSWER_CATEGORY,
             CategoryType.WRONG_ANSWER
         ),
-        MainCategoryModel(R.drawable.ic_settings, SETTINGS_CATEGORY, CategoryType.SETTINGS),
+        MainCategoryModel(
+            R.drawable.ic_driving_business,
+            EXAM_GUIDE_CATEGORY,
+            CategoryType.EXAM_GUIDE
+        ),
+        MainCategoryModel(
+            R.drawable.ic_change_license_type_main_screen,
+            CHANGE_LICENSE_TYPE_CATEGORY,
+            CategoryType.CHANGE_LICENSE_TYPE
+        ),
+        MainCategoryModel(
+            R.drawable.ic_settings,
+            SETTINGS_CATEGORY,
+            CategoryType.SETTINGS
+        )
     )
 
     private val mainAdapter by lazy { MainCategoryListAdapter() }
@@ -61,6 +75,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
                 CategoryType.TIPS_HIGH_SCORE -> findNavController().navigate(R.id.action_nav_main_to_nav_tips_high_score)
                 CategoryType.WRONG_ANSWER -> findNavController().navigate(R.id.action_nav_main_to_nav_wrong_answer)
                 CategoryType.SETTINGS -> findNavController().navigate(R.id.action_nav_main_to_nav_settings)
+                CategoryType.CHANGE_LICENSE_TYPE -> findNavController().navigate(R.id.action_nav_main_to_nav_change_license_type)
+                CategoryType.EXAM_GUIDE -> findNavController().navigate(R.id.action_nav_main_to_nav_instruction)
             }
         }
     }
@@ -77,5 +93,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
         private const val TIPS_HIGH_SCORE_CATEGORY = "Mẹo điểm cao"
         private const val WRONG_ANSWER_CATEGORY = "Các câu làm sai"
         private const val SETTINGS_CATEGORY = "Cài đặt"
+        private const val EXAM_GUIDE_CATEGORY = "Bài thi thực hành"
+        private const val CHANGE_LICENSE_TYPE_CATEGORY = "Đổi hạng bằng"
     }
 }
