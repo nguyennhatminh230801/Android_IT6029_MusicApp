@@ -1,15 +1,19 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.wronganswer
 
+import android.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.viewpager2.widget.ViewPager2
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentWrongAnswerBinding
+import com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.ExamFragment
+import com.nguyennhatminh614.motobikedriverlicenseapp.screen.mainscreen.MainActivity
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.adapter.QuestionDetailAdapter
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.adapter.ViewPagerAdapter
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseFragment
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.dialog.BottomSheetQuestionDialog
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.dialog.LoadingDialog
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.showToast
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.generateEmptyQuestionStateList
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IBottomSheetListener
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
@@ -42,6 +46,25 @@ class WrongAnswerFragment :
     }
 
     override fun initData() {
+        (activity as? MainActivity)?.addCallbackResetWrongAnswerButton {
+            val builder = AlertDialog.Builder(context)
+                .setTitle(ExamFragment.DIALOG_TITLE)
+                .setMessage("Bạn có muốn hủy bỏ toàn bộ trạng thái đã lựa chọn không?")
+                .setPositiveButton(
+                    ExamFragment.DIALOG_POSITIVE_BUTTON_TEXT
+                ) { _, _ ->
+                    questionAdapter.updateQuestionStateList(generateEmptyQuestionStateList(questionAdapter.currentList))
+                    viewModel.removeAllSelectedState()
+                    showToast("Xóa trạng thái lựa chọn thành công")
+                }
+                .setNegativeButton(ExamFragment.DIALOG_NEGATIVE_BUTTON_TEXT) { _, _ ->
+                    //Not-op
+                }
+                .setCancelable(false)
+            val dialog = builder.create()
+            dialog.show()
+        }
+
         viewBinding.viewPagerQuestions.adapter = questionAdapter
     }
 
@@ -136,6 +159,7 @@ class WrongAnswerFragment :
     }
 
     override fun onDestroyView() {
+        (activity as? MainActivity)?.removeCallbackResetWrongAnswerButton()
         viewBinding.viewPagerQuestions.unregisterOnPageChangeCallback(onPageChangeCallback)
         super.onDestroyView()
     }
