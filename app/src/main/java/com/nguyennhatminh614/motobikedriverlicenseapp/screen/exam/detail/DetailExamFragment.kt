@@ -34,7 +34,7 @@ class DetailExamFragment :
     }
 
     private val questionAdapter by lazy {
-        QuestionDetailAdapter()
+        QuestionDetailAdapter(isExamScreen = true)
     }
 
     private val currentLicenseType
