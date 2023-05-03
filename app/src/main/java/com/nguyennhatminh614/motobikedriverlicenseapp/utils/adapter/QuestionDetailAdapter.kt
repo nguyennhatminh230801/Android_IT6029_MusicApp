@@ -1,8 +1,10 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.utils.adapter
 
+import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.text.bold
 import androidx.core.view.isVisible
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
@@ -18,7 +20,9 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.loadGlide
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.processExplainQuestion
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.processQuestionOptionsList
 
-class QuestionDetailAdapter :
+class QuestionDetailAdapter(
+    private val isExamScreen: Boolean = false
+) :
     BaseRecyclerViewAdapter<NewQuestion, FragmentQuestionLayoutBinding,
             QuestionDetailAdapter.ViewHolder>(NewQuestion.getDiffCallBack()) {
 
@@ -89,7 +93,20 @@ class QuestionDetailAdapter :
 
             data.let { question ->
                 binding.apply {
-                    textTitleQuestions.text = question.question
+                    if (isExamScreen){
+                        textTitleQuestions.text = SpannableStringBuilder().apply {
+                                bold { append("Câu ${adapterPosition + 1}: ") }
+                                append(question.question)
+                            }
+                    } else {
+
+                        textTitleQuestions.text = SpannableStringBuilder().apply {
+                            bold { append("Câu ${question.id}" +
+                                    "${if(question.isImmediateFailedTestWhenWrong) " [ĐIỂM LIỆT]" else ""}: ")}
+                            append(question.question)
+                        }
+                    }
+
                     textQuestionExplain.text = question.explain.processExplainQuestion()
 
                     if (question.hasImageBanner) {
