@@ -25,6 +25,7 @@ class StudyRemoteDataSource(
                     }
                 }
 
+                listQuestions.sortBy { it.id }
                 listener.onSuccess(listQuestions)
             } else {
                 listener.onError(tasks.exception)
