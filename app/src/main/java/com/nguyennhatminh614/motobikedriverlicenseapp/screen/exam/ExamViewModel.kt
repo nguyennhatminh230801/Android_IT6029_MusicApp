@@ -268,6 +268,19 @@ class ExamViewModel(
             return@filter it.questionType.lowercase() == key.lowercase()
         }.shuffled().take(takeAmount)
 
+    fun saveTemporarilyExamStateWhenStop() {
+        viewModelScope.launch {
+            if (_currentExamPosition.value != AppConstant.NONE_POSITION) {
+                _listExam.value?.get(
+                    _currentExamPosition.value
+                        ?: AppConstant.NONE_POSITION
+                )?.let {
+                    examRepository.updateExam(it)
+                }
+            }
+        }
+    }
+
     fun saveCurrentExamState() {
         viewModelScope.launch {
             CountDownInstance.cancelCountDown()

@@ -190,6 +190,11 @@ class DetailExamFragment :
         }
     }
 
+    override fun onStop() {
+        viewModel.saveTemporarilyExamStateWhenStop()
+        super.onStop()
+    }
+
     override fun onDestroyView() {
         viewModel.setVisibleFinishExamButton(false)
         viewModel.saveCurrentExamState()
