@@ -32,7 +32,9 @@
                 android:maxWidth="@dimen/dp_270"
                 android:text="@string/text_tips_high_score_title"
                 android:textSize="@dimen/sp_18"
+                app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/button_span_detail_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
