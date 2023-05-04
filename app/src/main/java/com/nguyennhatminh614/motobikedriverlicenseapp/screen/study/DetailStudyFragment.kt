@@ -130,7 +130,8 @@ class DetailStudyFragment :
             questionAdapter.updateQuestionStateList(it[currentPosition].listQuestionsState)
 
             viewBinding.textCurrentQuestions.text =
-                "Câu ${viewBinding.viewPagerQuestions.currentItem + 1}/${listQuestionSize}"
+                "Câu ${it[currentPosition].listQuestions.firstOrNull()?.id ?: 1}/600"
+
             viewBinding.layoutVisibleWhenDataIsEmpty.root.isVisible =
                 it[currentPosition].listQuestions.isEmpty()
             viewBinding.layoutVisibleWhenHaveData.isVisible =

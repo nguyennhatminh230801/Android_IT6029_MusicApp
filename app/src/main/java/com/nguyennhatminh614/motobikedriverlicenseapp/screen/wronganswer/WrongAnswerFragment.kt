@@ -3,6 +3,7 @@ package com.nguyennhatminh614.motobikedriverlicenseapp.screen.wronganswer
 import android.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.viewpager2.widget.ViewPager2
+import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentWrongAnswerBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.ExamFragment
@@ -133,17 +134,14 @@ class WrongAnswerFragment :
 
     override fun bindData() {
         viewModel.listWrongAnswer.observe(viewLifecycleOwner) {
-            viewBinding.layoutVisibleWhenHaveData.isVisible = !it.isEmpty()
+            viewBinding.layoutVisibleWhenHaveData.isVisible = it.isNotEmpty()
             viewBinding.layoutVisibleWhenDataIsEmpty.root.isVisible = it.isEmpty()
         }
 
         viewModel.listWrongAnswerQuestion.observe(viewLifecycleOwner) {
             listQuestionSize = it.size
-            viewBinding.textCurrentQuestions.text =
-                "Câu ${viewBinding.viewPagerQuestions.currentItem + 1}/${listQuestionSize}"
-
             questionAdapter.submitList(it)
-            //questionAdapter.updateQuestionStateList(generateEmptyQuestionStateList(it))
+            viewBinding.textCurrentQuestions.text = "Đang tải..."
         }
 
         viewModel.listQuestionOptions.observe(viewLifecycleOwner) {
