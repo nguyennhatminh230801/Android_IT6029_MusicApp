@@ -20,15 +20,25 @@ import kotlinx.coroutines.launch
 class BottomSheetQuestionDialog {
     private var bottomSheetDialog: BottomSheetDialog? = null
     private var countDownExamCurrentJob: Job? = null
-    private lateinit var dialogBinding: DialogBottomSheetQuestionsListBinding
+    private var _dialogBinding: DialogBottomSheetQuestionsListBinding? = null
+    private val dialogBinding get() = _dialogBinding!!
     val bottomSheetAdapter by lazy { BottomSheetQuestionListAdapter() }
 
+    private var isExamScreen = false
+
+    fun updateCurrentQuestionText(currentText: String) {
+        if(_dialogBinding != null) {
+            dialogBinding.textCurrentQuestions.text = currentText
+        }
+    }
+
     fun initDialog(
+        currentQuestionDisplayText: String,
         context: Context,
         listQuestionOptions: MutableList<QuestionOptions>?,
         currentSelectedPos: Int,
     ) {
-        dialogBinding =
+        _dialogBinding =
             DialogBottomSheetQuestionsListBinding.inflate(LayoutInflater.from(context))
 
         bottomSheetDialog = BottomSheetDialog(context)
@@ -39,9 +49,7 @@ class BottomSheetQuestionDialog {
                 height = WindowManager.LayoutParams.MATCH_PARENT
             }
             dialogBinding.recyclerViewQuestionIconList.adapter = bottomSheetAdapter
-
-            dialogBinding.textCurrentQuestions.text =
-                "Câu ${currentSelectedPos + 1}/${listQuestionOptions?.size}"
+            dialogBinding.textCurrentQuestions.text = currentQuestionDisplayText
             bottomSheetAdapter.apply {
                 submitList(listQuestionOptions)
                 setSingleSelection(currentSelectedPos)
@@ -52,6 +60,8 @@ class BottomSheetQuestionDialog {
     }
 
     fun examDialogMode(isExam: Boolean, isRunning: Boolean) {
+        isExamScreen = isExam
+        bottomSheetAdapter.examScreenMode()
         if (isExam && isRunning) {
             setLayoutForTextInDetailExamScreen(dialogBinding)
 
@@ -77,8 +87,6 @@ class BottomSheetQuestionDialog {
     fun setDialogEvent(bottomSheetListener: IBottomSheetListener) {
         val positionListener = object : IResponseListener<Int> {
             override fun onSuccess(data: Int) {
-                dialogBinding.textCurrentQuestions.text =
-                    "Câu ${data + 1}/${bottomSheetAdapter.currentList.size}"
                 bottomSheetAdapter.setSingleSelection(data)
                 dialogBinding.recyclerViewQuestionIconList.layoutManager?.scrollToPosition(data)
             }
@@ -99,8 +107,6 @@ class BottomSheetQuestionDialog {
         bottomSheetAdapter.registerOnClickItemPositionEvent { position, data ->
             bottomSheetAdapter.setSingleSelection(position)
             dialogBinding.recyclerViewQuestionIconList.layoutManager?.scrollToPosition(position)
-            dialogBinding.textCurrentQuestions.text =
-                "Câu ${position + 1}/${bottomSheetAdapter.currentList.size}"
             bottomSheetListener.onClickMoveToPosition(position, data)
         }
     }

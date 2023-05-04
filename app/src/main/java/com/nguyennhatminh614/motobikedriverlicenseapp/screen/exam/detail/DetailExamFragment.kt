@@ -37,6 +37,8 @@ class DetailExamFragment :
         QuestionDetailAdapter(isExamScreen = true)
     }
 
+    private var initBottomSheetDisplayText = ""
+
     private val currentLicenseType
         get() = arguments?.getString(AppConstant.KEY_BUNDLE_CURRENT_LICENSE_TYPE) ?: LicenseType.A1.type
 
@@ -102,9 +104,10 @@ class DetailExamFragment :
             object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
-                    viewBinding.textCurrentQuestions.text =
-                        "Câu ${viewBinding.viewPagerQuestions.currentItem + 1}/${listQuestionSize}"
-
+                    val textCurrentQuestionDisplay = "Câu ${viewBinding.viewPagerQuestions.currentItem + 1}/${listQuestionSize}"
+                    initBottomSheetDisplayText = textCurrentQuestionDisplay
+                    viewBinding.textCurrentQuestions.text = textCurrentQuestionDisplay
+                    bottomSheetDialog.updateCurrentQuestionText(textCurrentQuestionDisplay)
                 }
             }
         )
@@ -118,6 +121,7 @@ class DetailExamFragment :
         viewBinding.bottomBar.setOnClickListener {
             context?.let { notNullContext ->
                 bottomSheetDialog.initDialog(
+                    initBottomSheetDisplayText,
                     notNullContext,
                     viewModel.getCurrentExam()?.listQuestionOptions,
                     viewBinding.viewPagerQuestions.currentItem,
