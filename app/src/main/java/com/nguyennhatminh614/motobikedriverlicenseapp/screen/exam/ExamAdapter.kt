@@ -87,7 +87,8 @@ class ExamAdapter :
 
                 val idColor = when (data.examState) {
                     ExamState.PASSED.value -> R.color.green_pastel
-                    ExamState.FAILED.value -> R.color.red_pastel
+                    ExamState.FAILED_BY_N0T_ENOUGH_SCORE.value,
+                    ExamState.FAILED_BY_MUST_NOT_WRONG_QUESTION.value -> R.color.red_pastel
                     else -> null
                 }
 

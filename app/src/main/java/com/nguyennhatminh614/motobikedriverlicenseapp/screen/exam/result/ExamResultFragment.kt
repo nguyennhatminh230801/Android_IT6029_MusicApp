@@ -94,21 +94,32 @@ class ExamResultFragment
     }
 
     private fun updateData(exam: Exam) = with(viewBinding) {
-        textExamStateResult.apply {
-            when (exam.examState) {
-                ExamState.PASSED.value -> {
+        when (exam.examState) {
+            ExamState.PASSED.value -> {
+                textExamStateResult.apply {
                     text = "Đạt"
                     setBackgroundResource(R.drawable.bg_corner_20dp_green_pastel)
                 }
+                textExamResultDescription.text = "Bạn đã vượt qua bài kiểm tra này!!" 
+            }
 
-                ExamState.FAILED.value -> {
+            ExamState.FAILED_BY_N0T_ENOUGH_SCORE.value -> {
+                textExamStateResult.apply {
                     text = "Không đạt"
                     setBackgroundResource(R.drawable.bg_corner_20dp_red_pastel)
                 }
+                textExamResultDescription.text = "Số lượng câu đúng chưa đạt"
+            }
+
+            ExamState.FAILED_BY_MUST_NOT_WRONG_QUESTION.value  -> {
+                textExamStateResult.apply {
+                    text = "Không đạt"
+                    setBackgroundResource(R.drawable.bg_corner_20dp_red_pastel)
+                }
+
+                textExamResultDescription.text = "Sai câu điểm liệt"
             }
         }
-
-        textExamResultDescription.text = textExamStateResult.text.toString()
 
         textTimeDone.text = exam.timeExamDone.toDateTimeMMSS()
 

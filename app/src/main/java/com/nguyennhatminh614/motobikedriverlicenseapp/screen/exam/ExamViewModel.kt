@@ -204,10 +204,10 @@ class ExamViewModel(
                     index++
                 }
 
-                if (exam.numbersOfCorrectAnswer < examRules.minimumCorrectToPassExam ||
-                    isWrongTheQuestionThatFailedTestImmediately
-                ) {
-                    exam.examState = ExamState.FAILED.value
+                if(isWrongTheQuestionThatFailedTestImmediately) {
+                    exam.examState = ExamState.FAILED_BY_MUST_NOT_WRONG_QUESTION.value
+                } else if (exam.numbersOfCorrectAnswer < examRules.minimumCorrectToPassExam) {
+                    exam.examState = ExamState.FAILED_BY_N0T_ENOUGH_SCORE.value
                 } else {
                     exam.examState = ExamState.PASSED.value
                 }

@@ -5,7 +5,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Exam.Companion.TABLE_EXAM
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState.Constant.FAILED_TYPE
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState.Constant.FAILED_BY_MUST_NOT_WRONG_QUESTION_TYPE
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState.Constant.FAILED_BY_N0T_ENOUGH_SCORE_TYPE
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState.Constant.PASSED_TYPE
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState.Constant.UNDEFINED_TYPE
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
@@ -46,11 +47,12 @@ data class Exam(
 enum class ExamState(val value: String) {
     UNDEFINED(UNDEFINED_TYPE),
     PASSED(PASSED_TYPE),
-    FAILED(FAILED_TYPE);
-
+    FAILED_BY_N0T_ENOUGH_SCORE(FAILED_BY_N0T_ENOUGH_SCORE_TYPE),
+    FAILED_BY_MUST_NOT_WRONG_QUESTION(FAILED_BY_MUST_NOT_WRONG_QUESTION_TYPE);
     object Constant {
         const val UNDEFINED_TYPE = "undefined"
         const val PASSED_TYPE = "passed"
-        const val FAILED_TYPE = "failed"
+        const val FAILED_BY_N0T_ENOUGH_SCORE_TYPE = "failed_not_enough_score"
+        const val FAILED_BY_MUST_NOT_WRONG_QUESTION_TYPE = "failed_by_must_not_wrong_question"
     }
 }
