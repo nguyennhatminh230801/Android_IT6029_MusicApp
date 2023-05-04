@@ -27,12 +27,17 @@ class WrongAnswerFragment :
 
     private var listQuestionSize = AppConstant.EMPTY_SIZE
 
+    private var initBottomSheetDisplayText = ""
+
     private val onPageChangeCallback by lazy {
         object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                viewBinding.textCurrentQuestions.text =
-                    "Câu ${viewBinding.viewPagerQuestions.currentItem + 1}/${listQuestionSize}"
+                val currentQuestionID = questionAdapter.currentList.getOrNull(position)?.id ?: 1
+                val textDisplay = "Câu ${currentQuestionID}/600"
+                initBottomSheetDisplayText = textDisplay
+                viewBinding.textCurrentQuestions.text = textDisplay
+                bottomSheetDialog.updateCurrentQuestionText(textDisplay)
             }
         }
     }
@@ -91,6 +96,7 @@ class WrongAnswerFragment :
         viewBinding.bottomBar.setOnClickListener {
             context?.let { notNullContext ->
                 bottomSheetDialog.initDialog(
+                    initBottomSheetDisplayText,
                     notNullContext,
                     viewModel.listQuestionOptions.value,
                     viewBinding.viewPagerQuestions.currentItem)

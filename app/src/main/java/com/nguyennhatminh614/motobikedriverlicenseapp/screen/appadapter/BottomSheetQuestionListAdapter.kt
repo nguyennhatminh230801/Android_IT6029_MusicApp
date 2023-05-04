@@ -14,13 +14,20 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewHolder
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant.NONE_POSITION
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getResourceColor
 
-class BottomSheetQuestionListAdapter :
+class BottomSheetQuestionListAdapter:
     BaseRecyclerViewAdapter<QuestionOptions, ItemExamQuestionBottomSheetDialogBinding,
             BottomSheetQuestionListAdapter.ViewHolder>(
         QuestionOptions.getDiffUtilCallBack()) {
 
     private var currentQuestionIndex = NONE_POSITION
     private var onClickItemPosition: OnClickItemPosition<QuestionOptions>? = null
+
+    private var isExamScreen = false
+
+    fun examScreenMode() {
+        isExamScreen = true
+        notifyDataSetChanged()
+    }
 
     fun registerOnClickItemPositionEvent(onClickItem: OnClickItemPosition<QuestionOptions>) {
         this.onClickItemPosition = onClickItem
@@ -64,7 +71,7 @@ class BottomSheetQuestionListAdapter :
                 val currentPosition = (adapterPosition + 1).toString()
                 val currentQuestionOptionSelectedPos = (item.position + 1).toString()
 
-                textQuestionIndex.text = currentPosition
+                textQuestionIndex.text = if(isExamScreen) currentPosition else item.questionsID.toString()
 
                 if (item.position != NONE_POSITION) {
                     itemBadgeLayout.isVisible = true

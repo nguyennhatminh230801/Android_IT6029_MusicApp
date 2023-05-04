@@ -28,6 +28,8 @@ class DetailStudyFragment :
 
     private val questionAdapter by lazy { QuestionDetailAdapter() }
 
+    private var initBottomSheetDisplayText = ""
+
     private val bottomSheetDialogCallBack by lazy {
         object : IBottomSheetListener {
             override fun onNextQuestion(listener: IResponseListener<Int>) {
@@ -59,8 +61,11 @@ class DetailStudyFragment :
             object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
-                    viewBinding.textCurrentQuestions.text =
-                        "Câu ${position + 1}/${listQuestionSize}"
+                    val currentQuestionID = questionAdapter.currentList.getOrNull(position)?.id ?: 1
+                    val textDisplay = "Câu ${currentQuestionID}/600"
+                    initBottomSheetDisplayText = textDisplay
+                    viewBinding.textCurrentQuestions.text = textDisplay
+                    bottomSheetDialog.updateCurrentQuestionText(textDisplay)
                 }
             }
         )
@@ -84,6 +89,7 @@ class DetailStudyFragment :
         viewBinding.bottomBar.setOnClickListener {
             context?.let { notNullContext ->
                 bottomSheetDialog.initDialog(
+                    initBottomSheetDisplayText,
                     notNullContext,
                     viewModel.listStudyCategory.value?.get(
                         viewModel.currentStudyCategory.value
