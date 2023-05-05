@@ -3,7 +3,7 @@ package com.nguyennhatminh614.motobikedriverlicenseapp.screen.trafficsign
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.TrafficSignCategory
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.TrafficSigns
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentTrafficSignCategoryBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.OnClickItem
@@ -15,6 +15,8 @@ class TrafficSignScreenAdapter :
         TrafficSignCategoryScreenDiffUtil
     ) {
 
+    private val stateScrollList = MutableList(5) { 0 }
+
     private var itemClickEvent: OnClickItem<TrafficSigns>? = null
 
     fun setItemClickEvent(itemClickEvent: OnClickItem<TrafficSigns>) {
@@ -22,27 +24,37 @@ class TrafficSignScreenAdapter :
     }
 
     companion object {
-        val TrafficSignCategoryScreenDiffUtil = object : DiffUtil.ItemCallback<MutableList<TrafficSigns>>() {
-            override fun areItemsTheSame(
-                oldItem: MutableList<TrafficSigns>,
-                newItem: MutableList<TrafficSigns>,
-            ) = oldItem == newItem
+        val TrafficSignCategoryScreenDiffUtil =
+            object : DiffUtil.ItemCallback<MutableList<TrafficSigns>>() {
+                override fun areItemsTheSame(
+                    oldItem: MutableList<TrafficSigns>,
+                    newItem: MutableList<TrafficSigns>,
+                ) = oldItem == newItem
 
-            override fun areContentsTheSame(
-                oldItem: MutableList<TrafficSigns>,
-                newItem: MutableList<TrafficSigns>,
-            ) = oldItem == newItem
-        }
+                override fun areContentsTheSame(
+                    oldItem: MutableList<TrafficSigns>,
+                    newItem: MutableList<TrafficSigns>,
+                ) = oldItem == newItem
+            }
     }
 
     inner class ViewHolder(
-        override val binding: FragmentTrafficSignCategoryBinding) :
+        override val binding: FragmentTrafficSignCategoryBinding,
+    ) :
         BaseViewHolder<MutableList<TrafficSigns>, FragmentTrafficSignCategoryBinding>(binding) {
         override fun onBindData(data: MutableList<TrafficSigns>) {
             val trafficSignAdapter = TrafficSignAdapter()
             binding.recyclerViewTrafficSign.adapter = trafficSignAdapter
             trafficSignAdapter.submitList(data)
+
+            binding.recyclerViewTrafficSign.scrollToPosition(stateScrollList[adapterPosition])
+
             trafficSignAdapter.registerOnClickItemEvent {
+                stateScrollList[adapterPosition] =
+                    (binding.recyclerViewTrafficSign.layoutManager as? LinearLayoutManager)
+                        ?.findFirstCompletelyVisibleItemPosition() ?: 0
+                notifyDataSetChanged()
+
                 itemClickEvent?.invoke(it)
             }
         }
@@ -61,4 +73,6 @@ class TrafficSignScreenAdapter :
             )
         )
     }
+
+
 }
