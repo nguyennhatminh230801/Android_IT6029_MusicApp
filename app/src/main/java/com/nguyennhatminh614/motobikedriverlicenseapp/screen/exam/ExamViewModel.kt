@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Exam
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamHistory
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
@@ -105,7 +106,8 @@ class ExamViewModel(
                     timeExamDone = 0,
                     currentTimeStamp = examRules.examDurationByMinutes.toLong().convertMinutesToMillisecond(),
                     listQuestionOptions = generateEmptyQuestionStateList(exam.listQuestions),
-                    examType = exam.examType
+                    examType = exam.examType,
+                    listExamHistory = exam.listExamHistory,
                 )
 
                 examRepository.updateExam(newExam)
@@ -198,8 +200,6 @@ class ExamViewModel(
                                 )
                             )
                         }
-
-
                     }
                     index++
                 }
@@ -211,6 +211,27 @@ class ExamViewModel(
                 } else {
                     exam.examState = ExamState.PASSED.value
                 }
+
+                val findTimesDoneExamIndex = exam.listExamHistory.lastOrNull()?.times ?: FIRST_TIME
+
+                val examHistory = ExamHistory(
+                    times = findTimesDoneExamIndex + 1,
+                    exam.numbersOfCorrectAnswer,
+                    exam.listQuestions.size,
+                    timeExamDone = System.currentTimeMillis(),
+                    examState = exam.examState,
+                ).apply {
+                    description = when(exam.examState){
+                        ExamState.PASSED.value -> "Chúc mừng bạn đã vượt qua bài thi!"
+                        ExamState.FAILED_BY_N0T_ENOUGH_SCORE.value ->
+                            "Bạn cần ${totalNumbersOfQuestion - numbersOfCorrectAnswer} câu nữa để vượt qua bài thi này!"
+                        ExamState.FAILED_BY_MUST_NOT_WRONG_QUESTION.value ->
+                            "Bạn đã sai ít nhất một câu điểm liệt!"
+                        else -> ""
+                    }
+                }
+
+                exam.listExamHistory.add(examHistory)
 
                 examRepository.updateExam(exam)
                 delay(DELAY_ON_FINISH_EXAM)
@@ -336,5 +357,6 @@ class ExamViewModel(
     companion object {
         const val DELAY_ON_FINISH_EXAM = 500L
         const val END_TIME_STAMP = 0L
+        const val FIRST_TIME = 0
     }
 }

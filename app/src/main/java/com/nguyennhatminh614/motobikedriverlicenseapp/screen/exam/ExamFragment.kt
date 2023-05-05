@@ -65,6 +65,16 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
             }
         }
 
+        examAdapter.registerOnClickWatchExamHistoryEvent { examPosition, exam ->
+             findNavController().navigate(
+                 R.id.action_nav_exam_to_nav_watch_history,
+                 bundleOf(
+                     AppConstant.KEY_BUNDLE_CURRENT_EXAM to exam,
+                     AppConstant.KEY_BUNDLE_CURRENT_EXAM_POSITION to examPosition,
+                 )
+             )
+        }
+
         viewBinding.buttonAddExam.setOnClickListener {
             val builder = AlertDialog.Builder(context)
                 .setTitle(DIALOG_TITLE)

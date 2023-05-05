@@ -68,6 +68,9 @@
         <action
             android:id="@+id/action_nav_exam_to_nav_exam_result"
             app:destination="@id/nav_exam_result" />
+        <action
+            android:id="@+id/action_nav_exam_to_nav_watch_history"
+            app:destination="@id/nav_watch_history" />
     </fragment>
 
     <fragment
@@ -142,5 +145,14 @@
         android:id="@+id/nav_exam_result"
         android:label="@string/text_exam_result"
         android:name="com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.result.ExamResultFragment"
-        tools:layout="@layout/fragment_exam_result"/>
+        tools:layout="@layout/fragment_exam_result">
+        <action
+            android:id="@+id/action_nav_exam_result_to_nav_watch_history"
+            app:destination="@id/nav_watch_history" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_watch_history"
+        android:name="com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.watchhistory.ExamWatchHistoryFragment"
+        android:label="@string/nav_watch_history_title"
+        tools:layout="@layout/fragment_exam_watch_history_layout"/>
 </navigation>

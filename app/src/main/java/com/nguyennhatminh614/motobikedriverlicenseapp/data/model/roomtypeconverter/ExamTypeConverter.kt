@@ -3,6 +3,7 @@ package com.nguyennhatminh614.motobikedriverlicenseapp.data.model.roomtypeconver
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamHistory
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
 
 class ExamTypeConverter {
@@ -14,5 +15,15 @@ class ExamTypeConverter {
 
     @TypeConverter
     fun convertListQuestionToJson(listQuestions: MutableList<NewQuestion>): String? =
+        Gson().toJson(listQuestions)
+
+    @TypeConverter
+    fun convertJsonToListExamHistory(json: String): MutableList<ExamHistory?> {
+        val typeToken = object : TypeToken<MutableList<ExamHistory>>() {}.type
+        return Gson().fromJson(json, typeToken)
+    }
+
+    @TypeConverter
+    fun convertListExamHistoryToJson(listQuestions: MutableList<ExamHistory>): String? =
         Gson().toJson(listQuestions)
 }

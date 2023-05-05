@@ -63,4 +63,6 @@
     <string name="text_title_exam_info">Hướng dẫn làm bài thi hạng %1$s</string>
     <string name="text_numbers_of_question_exam_info"><b>Tổng số câu:</b> %1$d câu</string>
     <string name="text_current_question_loading">Đang tải...</string>
+    <string name="text_watch_exam_history">Xem lịch sử</string>
+    <string name="nav_watch_history_title">Xem lịch sử thi</string>
 </resources>
