@@ -51,7 +51,7 @@ class ExamResultQuestionAdapter :
 
             data.let { elem ->
                 binding.apply {
-                    textTitleQuestions.text = "Câu ${adapterPosition + 1}: ${elem.newQuestion.question}"
+                    textTitleQuestions.text = "Câu ${adapterPosition + 1}${if(data.newQuestion.isImmediateFailedTestWhenWrong) " [ĐIỂM LIỆT]" else ""}: ${elem.newQuestion.question}"
                     textQuestionExplain.text = elem.newQuestion.explain.processExplainQuestion()
 
                     if(elem.isVisible) {
