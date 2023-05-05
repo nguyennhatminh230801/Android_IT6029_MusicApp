@@ -23,7 +23,8 @@ data class Exam(
     var timeExamDone: Long = 0,
     var listQuestionOptions: MutableList<QuestionOptions> = mutableListOf(),
     var examState: String = ExamState.UNDEFINED.value,
-    val examType: String
+    val examType: String,
+    val listExamHistory: MutableList<ExamHistory> = mutableListOf(),
 ) : Parcelable {
 
     companion object {
@@ -54,5 +55,29 @@ enum class ExamState(val value: String) {
         const val PASSED_TYPE = "passed"
         const val FAILED_BY_N0T_ENOUGH_SCORE_TYPE = "failed_not_enough_score"
         const val FAILED_BY_MUST_NOT_WRONG_QUESTION_TYPE = "failed_by_must_not_wrong_question"
+    }
+}
+
+@Parcelize
+data class ExamHistory(
+    val times: Int,
+    val numbersOfCorrectAnswer: Int,
+    val totalNumbersOfQuestion: Int,
+    val timeExamDone: Long,
+    val examState: String,
+    var description: String = "",
+): Parcelable {
+    companion object {
+        fun getDiffCallBack() = object : DiffUtil.ItemCallback<ExamHistory>() {
+            override fun areItemsTheSame(
+                oldItem: ExamHistory,
+                newItem: ExamHistory,
+            ): Boolean = oldItem.times == newItem.times
+
+            override fun areContentsTheSame(
+                oldItem: ExamHistory,
+                newItem: ExamHistory,
+            ): Boolean = oldItem == newItem
+        }
     }
 }

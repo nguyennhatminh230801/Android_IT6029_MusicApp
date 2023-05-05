@@ -1,6 +1,7 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant
 
 object AppConstant {
+    const val KEY_BUNDLE_CURRENT_EXAM_POSITION = "CurrentExamPosition"
     const val KEY_BUNDLE_TRAFFIC_SIGN = "TrafficSignBundle"
     const val DEFAULT_NOT_HAVE_TIME_STAMP = -1L
     const val TIME_TASK_DELAYED = 400L
@@ -21,7 +22,7 @@ object AppConstant {
     const val DARK_MODE = "DarkMode"
 
     const val KEY_BUNDLE_CURRENT_LICENSE_TYPE = "CurrentLicenseType"
-
+    const val KEY_BUNDLE_CURRENT_EXAM = "CurrentExam"
     const val PATTERN_TIME = "%02d:%02d"
     const val PATTERN_DETAIL_TIME = "%02dp%02ds"
 }

@@ -2,6 +2,7 @@ package com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.result
 
 import android.app.AlertDialog
 import android.content.SharedPreferences
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
@@ -82,7 +83,18 @@ class ExamResultFragment
             }
 
         }
-        viewModel.getCurrentExam()?.let { updateData(it) }
+        viewModel.getCurrentExam()?.let { exam ->
+            updateData(exam)
+            viewBinding.buttonWatchExamHistory.setOnClickListener {
+                findNavController().navigate(
+                    R.id.action_nav_exam_result_to_nav_watch_history,
+                    bundleOf(
+                        AppConstant.KEY_BUNDLE_CURRENT_EXAM to exam,
+                        AppConstant.KEY_BUNDLE_CURRENT_EXAM_POSITION to viewModel.currentExamPosition.value
+                    )
+                )
+            }
+        }
     }
 
     override fun handleEvent() {
