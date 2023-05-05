@@ -61,7 +61,7 @@ class WrongAnswerFragment :
                 ) { _, _ ->
                     questionAdapter.updateQuestionStateList(generateEmptyQuestionStateList(questionAdapter.currentList))
                     viewModel.removeAllSelectedState()
-                    showToast("Xóa trạng thái lựa chọn thành công")
+                    context?.showToast("Xóa trạng thái lựa chọn thành công")
                 }
                 .setNegativeButton(ExamFragment.DIALOG_NEGATIVE_BUTTON_TEXT) { _, _ ->
                     //Not-op

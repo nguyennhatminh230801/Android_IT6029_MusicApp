@@ -16,7 +16,7 @@ enum class LicenseType(
 ) {
     A1(
         type = "A1",
-        description = "Người lái xe mô tô hai bánh có dung tích xi-lanh từ 50cm3 đến dưới 175cm3;" +
+        description = "Người lái xe mô tô hai bánh có dung tích xi-lanh từ 50cm3 đến dưới 175cm3;\n" +
                 "Người khuyết tật điều khiển xe mô tô ba bánh dùng cho người khuyết tật.",
         questionPriority = 1
     ),
@@ -39,38 +39,38 @@ enum class LicenseType(
     ),
     B1(
         type = "B1",
-        description = "Người không hành nghề lái xe để điều khiển:" +
-                "Ô tô số tự động chở người đến 9 chỗ ngồi, kể cả chỗ cho người lái xe;" +
-                "Ô tô tải, kể cả ô tô tải chuyên dùng số tự động có trọng tải thiết kế dưới 3.500 kg;" +
-                "Ô tô dùng cho người khuyết tật.",
+        description = "Người không hành nghề lái xe để điều khiển:\n" +
+                "- Ô tô số tự động chở người đến 9 chỗ ngồi, kể cả chỗ cho người lái xe;\n" +
+                "- Ô tô tải, kể cả ô tô tải chuyên dùng số tự động có trọng tải thiết kế dưới 3.500 kg;\n" +
+                "- Ô tô dùng cho người khuyết tật.",
         questionPriority = 4,
     ),
     B2(
         type = "B2",
-        description = "Người hành nghề lái xe để điều khiển:" +
-                "- Ô tô chuyên dùng có trọng tải thiết kế dưới 3.500kg;" +
+        description = "Người hành nghề lái xe để điều khiển:\n" +
+                "- Ô tô chuyên dùng có trọng tải thiết kế dưới 3.500kg;\n" +
                 "- Các loại xe quy định cho giấy phép lái xe hạng B1.",
         questionPriority = 5, //Priority cao nhất
     ),
     C(
         type = "C",
-        description = "Người lái xe để điều khiển:" +
-                "- Ô tô tải, kể cả ô tô tải chuyên dùng, ô tô chuyên dùng có trọng tải thiết kế từ 3.500kg trở lên;" +
-                "- Máy kéo kéo một rơ moóc có trọng tải thiết kế từ 3.500kg trở lên;" +
+        description = "Người lái xe để điều khiển:\n" +
+                "- Ô tô tải, kể cả ô tô tải chuyên dùng, ô tô chuyên dùng có trọng tải thiết kế từ 3.500kg trở lên;\n" +
+                "- Máy kéo kéo một rơ moóc có trọng tải thiết kế từ 3.500kg trở lên;\n" +
                 "- Các loại xe quy định cho giấy phép lái xe hạng B1, B2.",
         questionPriority = 5, //Priority cao nhất
     ),
     D(
         type = "D",
-        description = "Người lái xe để điều khiển:" +
-                "- Ô tô chở người từ 10 đến 30 chỗ ngồi, kể cả chỗ ngồi cho người lái xe;" +
+        description = "Người lái xe để điều khiển:\n" +
+                "- Ô tô chở người từ 10 đến 30 chỗ ngồi, kể cả chỗ ngồi cho người lái xe;\n" +
                 "- Các loại xe quy định cho giấy phép lái xe hạng B1, B2 và C.",
         questionPriority = 5, //Priority cao nhất
     ),
     E(
         type = "E",
-        description = "Người lái xe để điều khiển:" +
-                "- Ô tô chở người trên 30 chỗ ngồi;" +
+        description = "Người lái xe để điều khiển:\n" +
+                "- Ô tô chở người trên 30 chỗ ngồi;\n" +
                 "- Các loại xe quy định cho giấy phép lái xe hạng B1, B2, C và D.",
         questionPriority = 5, //Priority cao nhất
     ),

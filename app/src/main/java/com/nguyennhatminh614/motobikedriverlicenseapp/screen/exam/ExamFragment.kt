@@ -83,7 +83,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                     DIALOG_POSITIVE_BUTTON_TEXT
                 ) { _, _ ->
                     viewModel.createExam(currentLicenseType) {
-                        showToast(MESSAGE_SUCCESS_ADD_EXAM)
+                        context?.showToast(MESSAGE_SUCCESS_ADD_EXAM)
                     }
                 }
                 .setNegativeButton(DIALOG_NEGATIVE_BUTTON_TEXT) { _, _ ->

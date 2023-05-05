@@ -27,6 +27,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.dialog.LoadingDialog
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getCurrentLicenseType
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.showToast
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.network.ConnectivityObserver
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.network.InternetConnection
 import kotlinx.coroutines.launch
@@ -182,10 +183,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             appBarMain.buttonResetStudy.setOnClickListener {
                 val builder = AlertDialog.Builder(this@MainActivity)
                     .setTitle(DIALOG_TITLE)
-                    .setMessage("Bạn có muốn reset không?")
+                    .setMessage("Bạn có muốn hủy bỏ toàn bộ trạng thái đã lựa chọn không?")
                     .setCancelable(false)
                     .setPositiveButton(FINISH_EXAM_YES_BUTTON) { _, _ ->
                         studyViewModel.resetAllStudyCategoryState()
+                        showToast("Xóa trạng thái lựa chọn thành công")
                     }
                     .setNegativeButton(FINISH_EXAM_NO_BUTTON) { _, _ ->
                         //Not-op
