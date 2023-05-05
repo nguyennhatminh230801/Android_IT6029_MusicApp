@@ -224,7 +224,7 @@ class ExamViewModel(
                     description = when(exam.examState){
                         ExamState.PASSED.value -> "Chúc mừng bạn đã vượt qua bài thi!"
                         ExamState.FAILED_BY_N0T_ENOUGH_SCORE.value ->
-                            "Bạn cần ${totalNumbersOfQuestion - numbersOfCorrectAnswer} câu nữa để vượt qua bài thi này!"
+                            "Bạn cần ${examRules.minimumCorrectToPassExam - numbersOfCorrectAnswer} câu nữa để vượt qua bài thi này!"
                         ExamState.FAILED_BY_MUST_NOT_WRONG_QUESTION.value ->
                             "Bạn đã sai ít nhất một câu điểm liệt!"
                         else -> ""
