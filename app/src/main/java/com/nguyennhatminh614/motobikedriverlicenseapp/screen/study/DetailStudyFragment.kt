@@ -28,6 +28,7 @@ class DetailStudyFragment :
 
     private val questionAdapter by lazy { QuestionDetailAdapter() }
 
+    private var isInitializeText: Boolean = false
     private var initBottomSheetDisplayText = ""
 
     private val bottomSheetDialogCallBack by lazy {
@@ -129,8 +130,11 @@ class DetailStudyFragment :
             questionAdapter.submitList(it[currentPosition].listQuestions)
             questionAdapter.updateQuestionStateList(it[currentPosition].listQuestionsState)
 
-            viewBinding.textCurrentQuestions.text =
-                "Câu ${it[currentPosition].listQuestions.firstOrNull()?.id ?: 1}/600"
+            if (isInitializeText.not()) {
+                viewBinding.textCurrentQuestions.text =
+                    "Câu ${it[currentPosition].listQuestions.firstOrNull()?.id ?: 1}/600"
+                isInitializeText = true
+            }
 
             viewBinding.layoutVisibleWhenDataIsEmpty.root.isVisible =
                 it[currentPosition].listQuestions.isEmpty()
