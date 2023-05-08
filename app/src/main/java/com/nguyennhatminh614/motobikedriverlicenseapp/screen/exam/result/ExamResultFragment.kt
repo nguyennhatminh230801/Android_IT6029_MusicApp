@@ -53,13 +53,22 @@ class ExamResultFragment
                     .setTitle(ExamFragment.DIALOG_TITLE)
                     .setMessage("Bạn có muốn thi lại bài thi này không?")
                     .setPositiveButton(
-                        ExamFragment.DIALOG_POSITIVE_BUTTON_TEXT
+                        "Thi ngay"
                     ) { _, _ ->
+                        viewModel.resetStateCurrentExam(this@ExamResultFragment.currentLicenseType){
+                            findNavController().apply {
+                                popBackStack()
+                                viewModel.setVisibleFinishExamButton(true)
+                                navigate(R.id.action_nav_exam_to_nav_detail_exam)
+                            }
+                        }
+                    }
+                    .setNegativeButton("Thi sau") { _, _ ->
                         viewModel.resetStateCurrentExam(this@ExamResultFragment.currentLicenseType){
                             findNavController().popBackStack()
                         }
                     }
-                    .setNegativeButton(ExamFragment.DIALOG_NEGATIVE_BUTTON_TEXT) { _, _ ->
+                    .setNeutralButton(ExamFragment.DIALOG_NEGATIVE_BUTTON_TEXT) { _, _ ->
                         //Not-op
                     }
                     .setCancelable(false)
