@@ -5,10 +5,12 @@ import android.content.Context
 import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.text.bold
 import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.CreateExamRules
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.DialogExamInfoBinding
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getResourceColor
 
 
 object ExamInfoDialog {
@@ -29,6 +31,12 @@ object ExamInfoDialog {
                 )
 
                 dialogBinding.apply {
+                    if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                        buttonCloseDialog.setColorFilter(context.getResourceColor(R.color.white))
+                    } else {
+                        buttonCloseDialog.setColorFilter(context.getResourceColor(R.color.black))
+                    }
+
                     textNumbersOfQuestion.text = SpannableStringBuilder().apply {
                         bold { append("Tổng số câu: ") }
                         append("${createExamRules.totalNumberOfQuestion} câu")
