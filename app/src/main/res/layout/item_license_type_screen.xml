@@ -20,6 +20,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:text="@string/text_license_type"
+            android:fontFamily="@font/comfortaa"
+            android:textStyle="bold"
             android:layout_marginStart="@dimen/dp_20"
             android:layout_marginTop="@dimen/dp_20"
             android:textSize="@dimen/sp_18" />
@@ -28,6 +30,7 @@
             android:id="@+id/text_description_license_type"
             android:layout_width="@dimen/fill_constraint"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/comfortaa"
             app:layout_constraintStart_toStartOf="@id/text_license_type"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_license_type"
