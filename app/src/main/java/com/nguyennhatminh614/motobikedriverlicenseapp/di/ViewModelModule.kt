@@ -22,6 +22,6 @@ val viewModelModule = module {
     viewModel { WrongAnswerViewModel(get()) }
     viewModel { SettingsViewModel(get()) }
     viewModel { TrafficSignViewModel(get()) }
-    viewModel { InstructionViewModel() }
+    viewModel { InstructionViewModel(get()) }
     viewModel { ChangeLicenseTypeViewModel(get()) }
 }

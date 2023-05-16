@@ -1,6 +1,8 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.instruction
 
+import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.view.isVisible
 import androidx.webkit.WebViewAssetLoader
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentInstructionBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.mainscreen.MainActivity
@@ -15,37 +17,7 @@ class InstructionFragment :
     override val viewModel by viewModel<InstructionViewModel>()
 
     override fun initData() {
-        context?.let { context ->
-            val assetPathHandler = WebViewAssetLoader.AssetsPathHandler(context)
-            val assetLoader = WebViewAssetLoader.Builder()
-                .addPathHandler(ASSET_PATH_HANDLER_KEY, assetPathHandler)
-                .build()
-
-            viewBinding.webViewInstruction.settings.apply {
-                allowContentAccess = true
-                allowFileAccess = true
-                javaScriptEnabled = true
-            }
-
-            viewBinding.webViewInstruction.apply {
-                webViewClient = LocalContentWebViewClient(
-                    assetLoader,
-                    loadStartCallback = {
-                        (activity as? MainActivity)?.showLoadingDialog()
-                    },
-                    loadFinishCallback = {
-                        (activity as? MainActivity)?.hideLoadingDialog()
-                    }
-                )
-
-                if (inject<SharedPreferences>().value.isCurrentDarkMode()) {
-                    loadUrl(INSTRUCTION_WEB_URL_DARK_MODE)
-                } else {
-                    loadUrl(INSTRUCTION_WEB_URL_LIGHT_MODE)
-                }
-            }
-
-        }
+        //Not implement
     }
 
     override fun handleEvent() {
@@ -53,7 +25,46 @@ class InstructionFragment :
     }
 
     override fun bindData() {
-        //Not implement
+        viewModel.isMotorbikeLicenseType.observe(viewLifecycleOwner) { isMotorbike ->
+            if (isMotorbike) {
+                viewBinding.layoutMotorbikeInstruction.isVisible = true
+                viewBinding.webViewInstruction.isVisible = false
+            } else {
+                viewBinding.layoutMotorbikeInstruction.isVisible = false
+                viewBinding.webViewInstruction.isVisible = true
+                context?.let { loadCarExamInstruction(it) }
+            }
+        }
+    }
+
+    private fun loadCarExamInstruction(context: Context){
+        val assetPathHandler = WebViewAssetLoader.AssetsPathHandler(context)
+        val assetLoader = WebViewAssetLoader.Builder()
+            .addPathHandler(ASSET_PATH_HANDLER_KEY, assetPathHandler)
+            .build()
+
+        viewBinding.webViewInstruction.settings.apply {
+            allowContentAccess = true
+            allowFileAccess = true
+        }
+
+        viewBinding.webViewInstruction.apply {
+            webViewClient = LocalContentWebViewClient(
+                assetLoader,
+                loadStartCallback = {
+                    (activity as? MainActivity)?.showLoadingDialog()
+                },
+                loadFinishCallback = {
+                    (activity as? MainActivity)?.hideLoadingDialog()
+                }
+            )
+
+            if (inject<SharedPreferences>().value.isCurrentDarkMode()) {
+                loadUrl(INSTRUCTION_WEB_URL_DARK_MODE)
+            } else {
+                loadUrl(INSTRUCTION_WEB_URL_LIGHT_MODE)
+            }
+        }
     }
 
     companion object {
