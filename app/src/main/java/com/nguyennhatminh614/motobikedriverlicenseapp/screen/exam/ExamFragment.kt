@@ -1,33 +1,39 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam
 
 import android.app.AlertDialog
-import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.nguyennhatminh614.motobikedriverlicenseapp.R
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Exam
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.LicenseType
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.findCreateExamRuleByLicenseType
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.findCreateExamRuleByLicenseTypeString
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentExamBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.infodialog.ExamInfoDialog
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.mainscreen.MainActivity
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseFragment
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant.FIRST_INDEX
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.showToast
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.generateEmptyQuestionStateList
-import kotlinx.android.synthetic.main.fragment_layout_not_found_data.view.text_not_founded
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+
 
 class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::inflate) {
 
     override val viewModel by sharedViewModel<ExamViewModel>()
 
     private val examAdapter by lazy { ExamAdapter() }
+
+    private var isAddExam = false
+
+    private val smoothScroller by lazy {
+        object : LinearSmoothScroller(activity) {
+            override fun getVerticalSnapPreference(): Int {
+                return SNAP_TO_START
+            }
+        }
+    }
 
     private val currentLicenseType
         get() = arguments?.getString(AppConstant.KEY_BUNDLE_CURRENT_LICENSE_TYPE) ?: LicenseType.A1.type
@@ -42,6 +48,22 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
         viewBinding.recyclerViewExam.apply {
             setRecycledViewPool(RecyclerView.RecycledViewPool())
             adapter = examAdapter
+
+            // Xử lý ẩn nút thêm khi cuộn xuống
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    val isScrollUp = dy > 0
+
+                    viewBinding.buttonAddExam.apply {
+                        if(isScrollUp) {
+                            hide()
+                        } else {
+                            show()
+                        }
+                    }
+                }
+            })
         }
         viewModel.getExamByLicenseType(currentLicenseType)
     }
@@ -82,6 +104,7 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
                 .setPositiveButton(
                     DIALOG_POSITIVE_BUTTON_TEXT
                 ) { _, _ ->
+                    isAddExam = true
                     viewModel.createExam(currentLicenseType) {
                         context?.showToast(MESSAGE_SUCCESS_ADD_EXAM)
                     }
@@ -107,6 +130,14 @@ class ExamFragment : BaseFragment<FragmentExamBinding>(FragmentExamBinding::infl
             }
             viewBinding.recyclerViewExam.recycledViewPool.clear()
             examAdapter.submitList(newListExam)
+
+            //Kiểm tra cuộn xuống dưới cùng nếu đề thi được thêm
+            if(isAddExam) {
+                val lastExamPosition = maxOf(newListExam.size - 1, 0)
+                smoothScroller.targetPosition = lastExamPosition
+                viewBinding.recyclerViewExam.layoutManager?.startSmoothScroll(smoothScroller)
+                isAddExam = false
+            }
         }
     }
 

@@ -26,6 +26,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getCurren
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.generateEmptyQuestionStateList
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.provideEmptyQuestionOption
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -320,38 +321,41 @@ class ExamViewModel(
     }
 
     fun createExam(licenseTypeString: String, onComplete: () -> Unit) {
-        val currentLicenseType = sharedPreferences.getCurrentLicenseType()
-        val examRules = findCreateExamRuleByLicenseType(currentLicenseType)
-        val exam = Exam(
-            id = ExamFragment.DEFAULT_ID,
-            examType = currentLicenseType.type
-        )
-        val listQuestions = listQuestions.value
+        viewModelScope.launch {
+            val currentLicenseType = sharedPreferences.getCurrentLicenseType()
+            val examRules = findCreateExamRuleByLicenseType(currentLicenseType)
+            val exam = Exam(
+                id = ExamFragment.DEFAULT_ID,
+                examType = currentLicenseType.type
+            )
+            val listQuestions = listQuestions.value
 
-        listQuestions?.let { listQuestion ->
-            val filteredListQuestion = listQuestion.filter { it.minimumLicenseType in currentLicenseType.getAllLowerQuestionList() }
-            exam.listQuestions.apply {
-                enumValues<QuestionType>().forEach {
-                    if (it.type != QuestionType.ALL.type) {
-                        val numOfQuestion = examRules.numbersOfQuestionByType[it] ?: 0
-                        addAll(getCategoryList(filteredListQuestion, it.type, numOfQuestion))
-                    }
-                }
-
-                if(examRules.isMixQuestionInMotorbikeExam) {
-                    val mixedList = filteredListQuestion.filter {
-                        it.questionType == QuestionType.FIXING_CAR_QUESTION.type ||
-                        it.questionType == QuestionType.DRIVING_TECHNIQUE.type
+            listQuestions?.let { listQuestion ->
+                val filteredListQuestion = listQuestion.filter { it.minimumLicenseType in currentLicenseType.getAllLowerQuestionList() }
+                exam.listQuestions.apply {
+                    enumValues<QuestionType>().forEach {
+                        if (it.type != QuestionType.ALL.type) {
+                            val numOfQuestion = examRules.numbersOfQuestionByType[it] ?: 0
+                            addAll(getCategoryList(filteredListQuestion, it.type, numOfQuestion))
+                        }
                     }
 
-                    exam.listQuestions.add(mixedList.take(1)[0])
+                    if(examRules.isMixQuestionInMotorbikeExam) {
+                        val mixedList = filteredListQuestion.filter {
+                            it.questionType == QuestionType.FIXING_CAR_QUESTION.type ||
+                                    it.questionType == QuestionType.DRIVING_TECHNIQUE.type
+                        }
+
+                        exam.listQuestions.add(mixedList.take(1)[0])
+                    }
                 }
+                exam.listQuestionOptions.addAll(generateEmptyQuestionStateList(exam.listQuestions))
             }
-            exam.listQuestionOptions.addAll(generateEmptyQuestionStateList(exam.listQuestions))
-        }
 
-        addExamToDatabase(exam, licenseTypeString)
-        onComplete()
+            val task = async { addExamToDatabase(exam, licenseTypeString) }
+            task.await()
+            onComplete()
+        }
     }
 
     companion object {
