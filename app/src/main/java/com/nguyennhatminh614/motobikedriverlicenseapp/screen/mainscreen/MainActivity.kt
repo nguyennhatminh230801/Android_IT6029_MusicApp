@@ -5,9 +5,6 @@ import android.app.AlertDialog
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -20,7 +17,6 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.ActivityMainBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.ExamViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.instruction.InstructionViewModel
-import com.nguyennhatminh614.motobikedriverlicenseapp.screen.settings.SettingsViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.study.StudyViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseActivity
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
@@ -39,8 +35,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     val baseViewModel by viewModel<BaseViewModel>()
     val studyViewModel by viewModel<StudyViewModel>()
     val examViewModel by viewModel<ExamViewModel>()
-    val settingsViewModel by viewModel<SettingsViewModel>()
-    val instructionViewModel by viewModel<InstructionViewModel>()
+    //val mainViewModel by viewModel<MainViewModel>()
 
     private val internetConnectionObserver by inject<InternetConnection>()
 
@@ -248,13 +243,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             viewBinding.appBarMain.buttonFinishExam.isVisible = it
         }
 
-        settingsViewModel.isDarkModeOn.observe(this) {
-            if (it) {
-                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
+        /*mainViewModel.currentDarkModeState
+            .flowWithLifecycle(lifecycle)
+            .filterNotNull()
+            .distinctUntilChanged()
+            .onEach { isDarkMode ->
+                AppCompatDelegate.setDefaultNightMode(
+                    if (isDarkMode) MODE_NIGHT_YES else MODE_NIGHT_NO
+                )
             }
-        }
+            .launchIn(lifecycleScope)*/
 
         lifecycleScope.launch {
             internetConnectionObserver.observe().collect { status ->
@@ -280,11 +278,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             onBackPressedDispatcher.onBackPressed()
             true
         } else navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-    }
-
-    override fun onPause() {
-        settingsViewModel.saveDarkModeState()
-        super.onPause()
     }
 
     override fun onDestroy() {

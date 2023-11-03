@@ -1,35 +1,28 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.settings
 
-import android.content.SharedPreferences
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.nguyennhatminh614.motobikedriverlicenseapp.usecase.DarkModeUseCase
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.isCurrentDarkMode
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class SettingsViewModel(
-    private val sharedPreferences: SharedPreferences,
+    private val darkModeUseCase: DarkModeUseCase,
 ) : BaseViewModel() {
 
-    private val _isDarkModeOn = MutableLiveData<Boolean>()
+    val currentDarkModeState: StateFlow<Boolean?> =
+        darkModeUseCase.currentDarkModeState
+            .stateIn(
+                viewModelScope,
+                SharingStarted.Eagerly,
+                null,
+            )
 
-    init {
-        _isDarkModeOn.postValue(sharedPreferences.isCurrentDarkMode())
+    fun invokeChangeDarkModeState() {
+        viewModelScope.launch {
+            darkModeUseCase.invokeChangeDarkModeState()
+        }
     }
-
-    val isDarkModeOn: LiveData<Boolean>
-        get() = _isDarkModeOn
-
-    fun turnOnDarkMode() {
-        _isDarkModeOn.value = true
-    }
-
-    fun turnOffDarkMode() {
-        _isDarkModeOn.value = false
-    }
-
-    fun saveDarkModeState() =
-        sharedPreferences.edit()
-            .putBoolean(AppConstant.DARK_MODE, _isDarkModeOn.value ?: false)
-            .apply()
 }
