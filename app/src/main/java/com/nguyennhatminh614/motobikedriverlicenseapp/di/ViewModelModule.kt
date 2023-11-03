@@ -4,7 +4,6 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.screen.changelicensetype.C
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.ExamViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.instruction.InstructionViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.settings.SettingsViewModel
-import com.nguyennhatminh614.motobikedriverlicenseapp.screen.splash.SplashViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.study.StudyViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.tiphighscores.TipsHighScoreViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.trafficsign.TrafficSignViewModel
@@ -15,7 +14,6 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     viewModel { BaseViewModel() }
-    viewModel { SplashViewModel() }
     viewModel { TipsHighScoreViewModel(get()) }
     viewModel { ExamViewModel(get(), get(), get()) }
     viewModel { StudyViewModel(get(),get()) }
