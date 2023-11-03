@@ -66,4 +66,5 @@
     <string name="nav_watch_history_title">Xem lịch sử thi</string>
     <string name="text_temp_title_instruction"><b>HƯỚNG DẪN THI THỰC HÀNH XE MÁY (4 PHẦN):</b>
         \n\nKhi giám khảo gọi tên nhận xe, bạn lưu ý số xe mình chuẩn bị nhận để thi. Khi hệ thống đọc đến số xe của bạn thì bạn bắt đầu xuất phát. Phải hoàn thành đúng và đủ 04 phần thi dưới đây:</string>
+    <string name="loading">Loading</string>
 </resources>
