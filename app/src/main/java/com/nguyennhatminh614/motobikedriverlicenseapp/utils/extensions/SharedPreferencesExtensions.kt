@@ -12,7 +12,3 @@ fun SharedPreferences.getCurrentLicenseType() : LicenseType {
     val licenseType = this.getString(AppConstant.CURRENT_LICENSE_TYPE, LicenseType.A1.type)
     return enumValues<LicenseType>().first { it.type == licenseType }
 }
-
-fun SharedPreferences.isCurrentDarkMode()
-    = this.getBoolean(AppConstant.DARK_MODE, false)
-
