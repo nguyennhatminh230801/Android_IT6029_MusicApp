@@ -1,19 +1,21 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.instruction
 
 import android.content.SharedPreferences
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.getAllMotorbikeLicenseType
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getCurrentLicenseType
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 class InstructionViewModel(
     private val sharedPreferences: SharedPreferences
 ): BaseViewModel(){
 
-    private val _isMotorbikeLicenseType = MutableLiveData<Boolean>()
-    val isMotorbikeLicenseType: LiveData<Boolean>
-        get() = _isMotorbikeLicenseType
+    private val _isMotorbikeLicenseType : MutableStateFlow<Boolean?> = MutableStateFlow(null)
+
+    val isMotorbikeLicenseType: StateFlow<Boolean?> = _isMotorbikeLicenseType.asStateFlow()
 
     init {
         checkCurrentLicenseType()
@@ -21,8 +23,9 @@ class InstructionViewModel(
 
     private fun checkCurrentLicenseType() {
         launchTask {
-            val isMotorbikeLicense = sharedPreferences.getCurrentLicenseType() in getAllMotorbikeLicenseType()
-            _isMotorbikeLicenseType.value = isMotorbikeLicense
+            _isMotorbikeLicenseType.update {
+                sharedPreferences.getCurrentLicenseType() in getAllMotorbikeLicenseType()
+            }
             hideLoading()
         }
     }
