@@ -1,17 +1,20 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.instruction
 
 import android.content.Context
+import android.util.Log
 import androidx.core.view.isVisible
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.webkit.WebViewAssetLoader
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.getAllMotorbikeLicenseType
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentInstructionBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.mainscreen.MainActivity
-import com.nguyennhatminh614.motobikedriverlicenseapp.usecase.DarkModeUseCase
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseFragment
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
-import org.koin.android.ext.android.inject
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class InstructionFragment :
@@ -28,23 +31,20 @@ class InstructionFragment :
     }
 
     override fun bindData() {
-        val darkModeUseCase = inject<DarkModeUseCase>().value
-
-        viewModel.isMotorbikeLicenseType
+        viewModel.currentLicenseType
             .flowWithLifecycle(lifecycle)
-            .combine(
-                darkModeUseCase.currentDarkModeState
-                    .flowWithLifecycle(lifecycle)
-            ) { isMotorbikeLicenseType, isDarkMode ->
+            .map { it in getAllMotorbikeLicenseType() }
+            .onEach { isMotorbikeLicenseType ->
+                viewBinding.layoutMotorbikeInstruction.isVisible = isMotorbikeLicenseType
+                viewBinding.webViewInstruction.isVisible = !isMotorbikeLicenseType
+            }.combine(
+                viewModel.currentDarkModeState.flowWithLifecycle(lifecycle)
+                    .map { it ?: false }) { isMotorbikeLicenseType, isDarkMode ->
 
-                viewBinding.layoutMotorbikeInstruction.isVisible = isMotorbikeLicenseType == true
-                viewBinding.webViewInstruction.isVisible = isMotorbikeLicenseType?.not() ?: false
-
-                if (isMotorbikeLicenseType == true && isDarkMode != null) {
+                if (!isMotorbikeLicenseType) {
                     context?.let { loadCarExamInstruction(it, isDarkMode) }
                 }
-            }
-            .launchIn(lifecycleScope)
+            }.launchIn(lifecycleScope)
     }
 
     private fun loadCarExamInstruction(context: Context, isDarkMode: Boolean){

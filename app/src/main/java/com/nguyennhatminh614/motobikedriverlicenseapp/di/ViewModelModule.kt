@@ -15,15 +15,14 @@ import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    viewModel { BaseViewModel() }
-    viewModel { TipsHighScoreViewModel(get()) }
-    viewModel { ExamViewModel(get(), get(), get()) }
-    viewModel { StudyViewModel(get(),get()) }
-    viewModel { WrongAnswerViewModel(get()) }
-    viewModel { SettingsViewModel(get()) }
-    viewModel { TrafficSignViewModel(get()) }
-    viewModel { InstructionViewModel(get()) }
-    viewModel { ChangeLicenseTypeViewModel(get()) }
-
+    viewModelOf(::BaseViewModel)
+    viewModelOf(::TipsHighScoreViewModel)
+    viewModelOf(::ExamViewModel)
+    viewModelOf(::StudyViewModel)
+    viewModelOf(::WrongAnswerViewModel)
+    viewModelOf(::SettingsViewModel)
+    viewModelOf(::TrafficSignViewModel)
+    viewModelOf(::InstructionViewModel)
+    viewModelOf(::ChangeLicenseTypeViewModel)
     viewModelOf(::MainViewModel)
 }

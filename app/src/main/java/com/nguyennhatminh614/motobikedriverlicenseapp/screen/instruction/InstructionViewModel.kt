@@ -1,32 +1,29 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.instruction
 
-import android.content.SharedPreferences
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.getAllMotorbikeLicenseType
+import androidx.lifecycle.viewModelScope
+import com.nguyennhatminh614.motobikedriverlicenseapp.usecase.DarkModeUseCase
+import com.nguyennhatminh614.motobikedriverlicenseapp.usecase.GetLicenseTypeUseCase
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getCurrentLicenseType
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 
 class InstructionViewModel(
-    private val sharedPreferences: SharedPreferences
+    getLicenseTypeUseCase: GetLicenseTypeUseCase,
+    darkModeUseCase: DarkModeUseCase,
 ): BaseViewModel(){
 
-    private val _isMotorbikeLicenseType : MutableStateFlow<Boolean?> = MutableStateFlow(null)
+    val currentLicenseType = getLicenseTypeUseCase.currentLicenseTypeState
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            null
+        )
 
-    val isMotorbikeLicenseType: StateFlow<Boolean?> = _isMotorbikeLicenseType.asStateFlow()
+    val currentDarkModeState = darkModeUseCase.currentDarkModeState
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            null
+        )
 
-    init {
-        checkCurrentLicenseType()
-    }
-
-    private fun checkCurrentLicenseType() {
-        launchTask {
-            _isMotorbikeLicenseType.update {
-                sharedPreferences.getCurrentLicenseType() in getAllMotorbikeLicenseType()
-            }
-            hideLoading()
-        }
-    }
 }
