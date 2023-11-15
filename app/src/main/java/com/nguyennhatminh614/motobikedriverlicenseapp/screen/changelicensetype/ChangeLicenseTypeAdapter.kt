@@ -58,7 +58,20 @@ class ChangeLicenseTypeAdapter
 
             override fun areContentsTheSame(oldItem: LicenseTypeData, newItem: LicenseTypeData) =
                 oldItem == newItem
+
+            override fun getChangePayload(
+                oldItem: LicenseTypeData,
+                newItem: LicenseTypeData
+            ): Any? {
+                if (oldItem.isSelected != newItem.isSelected) {
+                    return PAYLOAD_SELECTED
+                }
+
+                return super.getChangePayload(oldItem, newItem)
+            }
         }
+
+        private const val PAYLOAD_SELECTED = "PAYLOAD_SELECTED"
     }
 
     inner class ViewHolder(
@@ -68,7 +81,22 @@ class ChangeLicenseTypeAdapter
         override fun onBindData(data: LicenseTypeData) = with(binding) {
             textLicenseType.text = "Hạng ${data.licenseType.type}"
             textDescriptionLicenseType.text = data.licenseType.description
+            setSelectedState(data)
+        }
 
+        override fun onBindData(data: LicenseTypeData, payloads: MutableList<Any>) {
+            if (payloads.contains(PAYLOAD_SELECTED)) {
+                setSelectedState(data)
+            } else {
+                super.onBindData(data, payloads)
+            }
+
+            binding.root.setOnClickListener {
+                clickItemInterface?.invoke(data)
+            }
+        }
+
+        private fun setSelectedState(data: LicenseTypeData) = with(binding) {
             if (data.isSelected) {
                 textLicenseType.setTextColor(getSelectedColor(R.color.white))
                 textDescriptionLicenseType.setTextColor(getSelectedColor(R.color.white))
@@ -79,10 +107,6 @@ class ChangeLicenseTypeAdapter
                 textLicenseType.setTextColor(currentTextColor)
                 textDescriptionLicenseType.setTextColor(currentTextColor)
                 root.setCardBackgroundColor(currentBackgroundColor)
-            }
-
-            root.setOnClickListener {
-                clickItemInterface?.invoke(data)
             }
         }
     }

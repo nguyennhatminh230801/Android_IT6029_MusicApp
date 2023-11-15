@@ -24,13 +24,10 @@ class MainCategoryListAdapter :
         override val binding: ItemMainScreenCategoryLayoutBinding,
     ) : BaseViewHolder<MainCategoryModel, ItemMainScreenCategoryLayoutBinding>(binding) {
         override fun onBindData(data: MainCategoryModel) {
-            binding.apply {
-                imageCategory.setImageResource(data.resourceID)
-                textCategory.text = data.title
-
-                itemCategory.setOnClickListener {
-                    clickItemInterface?.let { function -> function(data) }
-                }
+            binding.imageCategory.setImageResource(data.resourceID)
+            binding.textCategory.text = data.title
+            binding.itemCategory.setOnClickListener {
+                clickItemInterface?.let { function -> function(data) }
             }
         }
     }
