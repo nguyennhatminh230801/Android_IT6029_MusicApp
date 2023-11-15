@@ -81,7 +81,7 @@ enum class LicenseType(
     ),
 }
 
-fun getAllMotorbikeLicenseType()
+fun getAllMotorbikeLicenseType() : List<LicenseType>
     = listOf(LicenseType.A1, LicenseType.A2, LicenseType.A3, LicenseType.A4)
 
 fun LicenseType.getAllLowerQuestionList(): List<String> {

@@ -2,7 +2,6 @@ package com.nguyennhatminh614.motobikedriverlicenseapp.screen.mainscreen
 
 
 import android.app.AlertDialog
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.core.os.bundleOf
@@ -16,13 +15,11 @@ import androidx.navigation.ui.setupWithNavController
 import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.ActivityMainBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.ExamViewModel
-import com.nguyennhatminh614.motobikedriverlicenseapp.screen.instruction.InstructionViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.study.StudyViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseActivity
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.dialog.LoadingDialog
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getCurrentLicenseType
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.showToast
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.network.ConnectivityObserver
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.network.InternetConnection
@@ -35,12 +32,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     val baseViewModel by viewModel<BaseViewModel>()
     val studyViewModel by viewModel<StudyViewModel>()
     val examViewModel by viewModel<ExamViewModel>()
-    //val mainViewModel by viewModel<MainViewModel>()
+    val mainViewModel by viewModel<MainViewModel>()
 
     private val internetConnectionObserver by inject<InternetConnection>()
-
-    val currentLicenseType
-        get() = inject<SharedPreferences>().value.getCurrentLicenseType()
 
     private val notConnectDialog by lazy {
         AlertDialog.Builder(this@MainActivity)
@@ -135,7 +129,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                         navController.navigate(
                             R.id.action_nav_main_to_nav_exam,
                             bundleOf(
-                                AppConstant.KEY_BUNDLE_CURRENT_LICENSE_TYPE to currentLicenseType.type
+                                AppConstant.KEY_BUNDLE_CURRENT_LICENSE_TYPE to mainViewModel.currentLicenseTypeState.value?.type
                             )
                         )
                     }
@@ -242,17 +236,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         examViewModel.isVisibleFinishExamButton.observe(this) {
             viewBinding.appBarMain.buttonFinishExam.isVisible = it
         }
-
-        /*mainViewModel.currentDarkModeState
-            .flowWithLifecycle(lifecycle)
-            .filterNotNull()
-            .distinctUntilChanged()
-            .onEach { isDarkMode ->
-                AppCompatDelegate.setDefaultNightMode(
-                    if (isDarkMode) MODE_NIGHT_YES else MODE_NIGHT_NO
-                )
-            }
-            .launchIn(lifecycleScope)*/
 
         lifecycleScope.launch {
             internetConnectionObserver.observe().collect { status ->

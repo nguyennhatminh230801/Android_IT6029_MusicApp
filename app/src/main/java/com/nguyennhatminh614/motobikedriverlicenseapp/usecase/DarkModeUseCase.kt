@@ -2,23 +2,19 @@ package com.nguyennhatminh614.motobikedriverlicenseapp.usecase
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.datastore.KeyDataStore
 import kotlinx.coroutines.flow.map
 
 class DarkModeUseCase(
-    private val settingDataStore: DataStore<Preferences>,
+    private val dataStore: DataStore<Preferences>,
 ) {
-    val currentDarkModeState = settingDataStore.data
-        .map { preference -> preference[IS_DARK_MODE] }
+    val currentDarkModeState = dataStore.data
+        .map { preference -> preference[KeyDataStore.isDarkMode] }
 
     suspend fun invokeChangeDarkModeState() {
-        settingDataStore.edit { preference ->
-            preference[IS_DARK_MODE] = preference[IS_DARK_MODE]?.not() ?: false
+        dataStore.edit { preference ->
+            preference[KeyDataStore.isDarkMode] = preference[KeyDataStore.isDarkMode]?.not() ?: false
         }
-    }
-
-    companion object {
-        private val IS_DARK_MODE = booleanPreferencesKey("is_dark_mode")
     }
 }

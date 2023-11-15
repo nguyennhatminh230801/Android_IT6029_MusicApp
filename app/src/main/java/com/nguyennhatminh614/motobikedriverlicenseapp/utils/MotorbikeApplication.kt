@@ -1,11 +1,9 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.utils
 
 import android.app.Application
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
 import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.LicenseType
 import com.nguyennhatminh614.motobikedriverlicenseapp.di.apiModule
 import com.nguyennhatminh614.motobikedriverlicenseapp.di.dataStoreModule
 import com.nguyennhatminh614.motobikedriverlicenseapp.di.databaseModule
@@ -20,8 +18,6 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.di.useCaseModule
 import com.nguyennhatminh614.motobikedriverlicenseapp.di.viewModelModule
 import com.nguyennhatminh614.motobikedriverlicenseapp.di.wrongAnswerDataSourceModule
 import com.nguyennhatminh614.motobikedriverlicenseapp.usecase.DarkModeUseCase
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.setCurrentLicenseType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -60,12 +56,6 @@ class MotorbikeApplication : Application() {
                 dataStoreModule,
                 useCaseModule,
             )
-        }
-
-        val sharedPreferences = inject<SharedPreferences>().value
-
-        if (sharedPreferences.getString(AppConstant.CURRENT_LICENSE_TYPE, AppConstant.EMPTY_DATA)?.isEmpty() == true) {
-            sharedPreferences.setCurrentLicenseType(LicenseType.A1.type)
         }
 
         applicationScope.launch {

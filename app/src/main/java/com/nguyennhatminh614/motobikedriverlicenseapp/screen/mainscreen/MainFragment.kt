@@ -1,6 +1,5 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.mainscreen
 
-import android.content.SharedPreferences
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import com.nguyennhatminh614.motobikedriverlicenseapp.R
@@ -8,15 +7,12 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.CategoryType
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.MainCategoryModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentMainBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseFragment
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getCurrentLicenseType
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::inflate) {
 
-    override val viewModel by sharedViewModel<BaseViewModel>()
+    override val viewModel by sharedViewModel<MainViewModel>()
 
     private val categories = listOf(
         MainCategoryModel(R.drawable.ic_exam, EXAM_CATEGORY, CategoryType.EXAM),
@@ -62,7 +58,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
                     findNavController().navigate(
                         R.id.action_nav_main_to_nav_exam,
                         bundleOf(
-                            AppConstant.KEY_BUNDLE_CURRENT_LICENSE_TYPE to inject<SharedPreferences>().value.getCurrentLicenseType().type
+                            AppConstant.KEY_BUNDLE_CURRENT_LICENSE_TYPE to viewModel.currentLicenseTypeState.value?.type
                         )
                     )
 
