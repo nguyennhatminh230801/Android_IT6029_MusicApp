@@ -8,4 +8,10 @@ abstract class BaseViewHolder<T, VB : ViewBinding>(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     abstract fun onBindData(data: T)
+
+    open fun onBindData(data: T, payloads: MutableList<Any>) {
+        if (payloads.isEmpty()) {
+            onBindData(data)
+        }
+    }
 }

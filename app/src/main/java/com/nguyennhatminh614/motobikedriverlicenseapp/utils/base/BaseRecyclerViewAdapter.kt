@@ -23,6 +23,12 @@ abstract class BaseRecyclerViewAdapter<T, VB : ViewBinding, VH : BaseViewHolder<
         }
     }
 
+    override fun onBindViewHolder(holder: VH, position: Int, payloads: MutableList<Any>) {
+        if (position < currentList.size) {
+            holder.onBindData(getItem(position), payloads)
+        }
+    }
+
     abstract fun registerOnClickItemEvent(onClickItem: OnClickItem<T>)
 
     protected fun <VB> inflateViewBinding(
