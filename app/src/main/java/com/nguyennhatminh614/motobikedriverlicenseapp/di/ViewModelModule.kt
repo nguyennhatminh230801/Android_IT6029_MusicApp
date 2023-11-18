@@ -4,6 +4,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.screen.changelicensetype.C
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.ExamViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.instruction.InstructionViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.mainscreen.MainViewModel
+import com.nguyennhatminh614.motobikedriverlicenseapp.screen.mainscreen.main.MainScreenViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.settings.SettingsViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.study.StudyViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.tiphighscores.TipsHighScoreViewModel
@@ -25,4 +26,5 @@ val viewModelModule = module {
     viewModelOf(::InstructionViewModel)
     viewModelOf(::ChangeLicenseTypeViewModel)
     viewModelOf(::MainViewModel)
+    viewModelOf(::MainScreenViewModel)
 }
