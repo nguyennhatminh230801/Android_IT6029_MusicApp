@@ -23,10 +23,6 @@ open class BaseViewModel : ViewModel() {
     val isVisibleFinishExamButton: LiveData<Boolean>
         get() = _isVisibleFinishExamButton
 
-    private val _isVisibleResetButton = MutableLiveData(false)
-    val isVisibleResetButton: LiveData<Boolean>
-        get() = _isVisibleResetButton
-
     private var _timeOutLoadingJob: Job? = null
 
     protected fun launchTask(
@@ -53,10 +49,6 @@ open class BaseViewModel : ViewModel() {
 
     fun setVisibleFinishExamButton(isVisible: Boolean) {
         _isVisibleFinishExamButton.value = isVisible
-    }
-
-    fun setVisibleResetButton(isVisible: Boolean) {
-        _isVisibleResetButton.value = isVisible
     }
 }
 

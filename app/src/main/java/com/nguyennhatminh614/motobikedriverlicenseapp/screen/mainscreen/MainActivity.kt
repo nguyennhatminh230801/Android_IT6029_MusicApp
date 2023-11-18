@@ -7,6 +7,8 @@ import android.view.WindowManager
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -17,19 +19,19 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.ActivityMainBi
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.ExamViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.study.StudyViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseActivity
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.dialog.LoadingDialog
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.showToast
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.screen.IActivityMainCallback
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.network.ConnectivityObserver
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.network.InternetConnection
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
+class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate),
+    IActivityMainCallback {
 
-    val baseViewModel by viewModel<BaseViewModel>()
     val studyViewModel by viewModel<StudyViewModel>()
     val examViewModel by viewModel<ExamViewModel>()
     val mainViewModel by viewModel<MainViewModel>()
@@ -95,6 +97,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 showNotConnnectedDialogAtStart()
             }
         }
+
+
     }
 
     override fun showLoadingDialog() {
@@ -117,7 +121,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             val navController = findNavController(R.id.nav_host_fragment_content_main)
             setupActionBarWithNavController(navController, appBarConfiguration)
             navView.setupWithNavController(navController)
-
             navView.setNavigationItemSelectedListener { menuItem ->
                 navController.popBackStack(R.id.nav_main, false)
 
@@ -192,6 +195,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         }
     }
 
+    override fun showResetStudyButton() {
+        viewBinding.appBarMain.buttonResetStudy.isVisible = true
+    }
+
+    override fun hideResetStudyButton() {
+        viewBinding.appBarMain.buttonResetStudy.isVisible = false
+    }
+
     fun addCallbackExamInfoButton(resetCallback: () -> Unit) {
         viewBinding.appBarMain.buttonInfoExamGuide.isVisible = true
         viewBinding.appBarMain.buttonInfoExamGuide.setOnClickListener {
@@ -229,10 +240,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     override fun bindData() {
-        baseViewModel.isVisibleResetButton.observe(this) {
-            viewBinding.appBarMain.buttonResetStudy.isVisible = it
-        }
-
         examViewModel.isVisibleFinishExamButton.observe(this) {
             viewBinding.appBarMain.buttonFinishExam.isVisible = it
         }
@@ -256,7 +263,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
-
         return if (navController.currentDestination?.id == R.id.nav_detail_exam) {
             onBackPressedDispatcher.onBackPressed()
             true
@@ -277,3 +283,4 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         private const val FINISH_EXAM_NO_BUTTON = "Không"
     }
 }
+

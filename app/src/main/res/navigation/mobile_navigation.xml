@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_main"
-        android:name="com.nguyennhatminh614.motobikedriverlicenseapp.screen.mainscreen.MainFragment"
+        android:name="com.nguyennhatminh614.motobikedriverlicenseapp.screen.mainscreen.main.MainFragment"
         android:label="@string/nav_header_title"
         tools:layout="@layout/fragment_main">
 
