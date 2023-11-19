@@ -1,11 +1,9 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.changelicensetype
 
-import android.util.TypedValue
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.LicenseType
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.LicenseTypeData
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.ItemLicenseTypeScreenBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.OnClickItem
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseRecyclerViewAdapter
@@ -13,16 +11,15 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewHolder
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getCurrentThemeCardColor
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getCurrentThemeTextColor
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getResourceColor
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getSelectedColor
 
 
 class ChangeLicenseTypeAdapter
-    : BaseRecyclerViewAdapter<LicenseTypeData, ItemLicenseTypeScreenBinding,
+    : BaseRecyclerViewAdapter<ChangeLicenseTypeViewModel.LicenseTypeItemUiState, ItemLicenseTypeScreenBinding,
         ChangeLicenseTypeAdapter.ViewHolder>(getDiffUtilCallback()) {
 
 
-    override fun registerOnClickItemEvent(onClickItem: OnClickItem<LicenseTypeData>) {
+    override fun registerOnClickItemEvent(onClickItem: OnClickItem<ChangeLicenseTypeViewModel.LicenseTypeItemUiState>) {
         this.clickItemInterface = onClickItem
     }
 
@@ -52,16 +49,16 @@ class ChangeLicenseTypeAdapter
     }
 
     companion object {
-        fun getDiffUtilCallback() = object : DiffUtil.ItemCallback<LicenseTypeData>() {
-            override fun areItemsTheSame(oldItem: LicenseTypeData, newItem: LicenseTypeData) =
+        fun getDiffUtilCallback() = object : DiffUtil.ItemCallback<ChangeLicenseTypeViewModel.LicenseTypeItemUiState>() {
+            override fun areItemsTheSame(oldItem: ChangeLicenseTypeViewModel.LicenseTypeItemUiState, newItem: ChangeLicenseTypeViewModel.LicenseTypeItemUiState) =
                 oldItem.licenseType.type == newItem.licenseType.type
 
-            override fun areContentsTheSame(oldItem: LicenseTypeData, newItem: LicenseTypeData) =
+            override fun areContentsTheSame(oldItem: ChangeLicenseTypeViewModel.LicenseTypeItemUiState, newItem: ChangeLicenseTypeViewModel.LicenseTypeItemUiState) =
                 oldItem == newItem
 
             override fun getChangePayload(
-                oldItem: LicenseTypeData,
-                newItem: LicenseTypeData
+                oldItem: ChangeLicenseTypeViewModel.LicenseTypeItemUiState,
+                newItem: ChangeLicenseTypeViewModel.LicenseTypeItemUiState
             ): Any? {
                 if (oldItem.isSelected != newItem.isSelected) {
                     return PAYLOAD_SELECTED
@@ -76,15 +73,15 @@ class ChangeLicenseTypeAdapter
 
     inner class ViewHolder(
         override val binding: ItemLicenseTypeScreenBinding,
-    ) : BaseViewHolder<LicenseTypeData, ItemLicenseTypeScreenBinding>(binding) {
+    ) : BaseViewHolder<ChangeLicenseTypeViewModel.LicenseTypeItemUiState, ItemLicenseTypeScreenBinding>(binding) {
 
-        override fun onBindData(data: LicenseTypeData) = with(binding) {
+        override fun onBindData(data: ChangeLicenseTypeViewModel.LicenseTypeItemUiState) = with(binding) {
             textLicenseType.text = "Hạng ${data.licenseType.type}"
             textDescriptionLicenseType.text = data.licenseType.description
             setSelectedState(data)
         }
 
-        override fun onBindData(data: LicenseTypeData, payloads: MutableList<Any>) {
+        override fun onBindData(data: ChangeLicenseTypeViewModel.LicenseTypeItemUiState, payloads: MutableList<Any>) {
             if (payloads.contains(PAYLOAD_SELECTED)) {
                 setSelectedState(data)
             } else {
@@ -96,7 +93,7 @@ class ChangeLicenseTypeAdapter
             }
         }
 
-        private fun setSelectedState(data: LicenseTypeData) = with(binding) {
+        private fun setSelectedState(data: ChangeLicenseTypeViewModel.LicenseTypeItemUiState) = with(binding) {
             if (data.isSelected) {
                 textLicenseType.setTextColor(getSelectedColor(R.color.white))
                 textDescriptionLicenseType.setTextColor(getSelectedColor(R.color.white))
