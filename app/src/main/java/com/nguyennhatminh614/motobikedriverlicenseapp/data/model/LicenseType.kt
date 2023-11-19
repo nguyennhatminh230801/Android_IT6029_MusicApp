@@ -1,10 +1,5 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.data.model
 
-data class LicenseTypeData(
-    val licenseType: LicenseType,
-    val isSelected: Boolean = false,
-)
-
 // question priority đẻ đánh giá độ ưu tiên lấy câu hỏi
 // Ví dụ priority = 2 cho A2 sẽ lấy tất cả các câu hỏi priority <= 2
 // (tức là lấy câu hỏi của A1, A2)
