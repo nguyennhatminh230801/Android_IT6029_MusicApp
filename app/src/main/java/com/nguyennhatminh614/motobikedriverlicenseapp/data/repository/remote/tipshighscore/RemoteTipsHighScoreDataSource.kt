@@ -1,10 +1,14 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.remote.tipshighscore
 
+import arrow.core.Either
 import com.google.firebase.firestore.FirebaseFirestore
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.TipsHighScore
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.tiphighscore.TipHighScore
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.tiphighscore.TipHighScoreEntityToTipHighScore
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.tiphighscore.TipsHighScoreEntity
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.ITipsHighScoreDataSource
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class RemoteTipsHighScoreDataSource(
     private val fireStoreDatabase: FirebaseFirestore,
@@ -14,20 +18,18 @@ class RemoteTipsHighScoreDataSource(
         fireStoreDatabase.collection(AppConstant.TIPS_HIGH_SCORE_COLLECTION)
     }
 
-    override suspend fun callTipsHighScoreData(listener: IResponseListener<MutableList<TipsHighScore>>) {
-        tipsHighScoreCollection.get().addOnCompleteListener { tasks ->
-            if (tasks.isSuccessful) {
-                val listTipsHighScore = mutableListOf<TipsHighScore>()
+    override suspend fun getTipsHighScore(): Either<Exception?, List<TipHighScore>> =
+        suspendCoroutine { continuation ->
+            tipsHighScoreCollection.get().addOnCompleteListener { tasks ->
+                if (tasks.isSuccessful) {
+                    val result: List<TipHighScore> =
+                        tasks.result.documents.mapNotNull { it.toObject(TipsHighScoreEntity::class.java) }
+                            .map { TipHighScoreEntityToTipHighScore.convert(it) }
 
-                tasks.result.documents.forEach {
-                    it.toObject(TipsHighScore::class.java)
-                        ?.let { notNullObject -> listTipsHighScore.add(notNullObject) }
+                    continuation.resume(Either.Right(result))
+                } else {
+                    continuation.resume(Either.Left(tasks.exception))
                 }
-
-                listener.onSuccess(listTipsHighScore)
-            } else {
-                listener.onError(tasks.exception)
             }
         }
-    }
 }
