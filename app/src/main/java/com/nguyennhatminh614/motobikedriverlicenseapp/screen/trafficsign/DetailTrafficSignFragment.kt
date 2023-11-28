@@ -1,6 +1,7 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.trafficsign
 
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.TrafficSigns
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.trafficsign.TrafficSigns
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.trafficsign.TrafficSignsEntity
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentDetailTrafficSignBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseFragment
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
@@ -14,12 +15,17 @@ class DetailTrafficSignFragment
 
     override val viewModel by viewModel<BaseViewModel>()
 
+    private val trafficSigns by lazy {
+        kotlin.runCatching {
+            arguments?.get(AppConstant.KEY_BUNDLE_TRAFFIC_SIGN) as TrafficSigns
+        }.getOrNull()
+    }
     override fun initData() {
-        (arguments?.get(AppConstant.KEY_BUNDLE_TRAFFIC_SIGN) as? TrafficSigns)?.let {
+        trafficSigns?.let {
             viewBinding.apply {
                 imageTrafficSign.loadGlideImageFromUrl(
                     root.context,
-                    it.imageUrl,
+                    it.thumbnail,
                 )
 
                 textIdTrafficSign.text = it.id

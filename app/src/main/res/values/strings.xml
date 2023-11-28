@@ -75,4 +75,9 @@
     <string name="settings_category">Cài đặt</string>
     <string name="exam_guide_category">Bài thi thực hành</string>
     <string name="change_license_type_category">Đổi hạng bằng</string>
+    <string name="restrict_traffic_signal">Biển báo cấm</string>
+    <string name="command_traffic_signal">Biển báo hiệu lệnh</string>
+    <string name="instruction_traffic_signal">Biển báo chỉ dẫn</string>
+    <string name="sub_traffic_signal">Biển báo phụ</string>
+    <string name="warning_traffic_signal">Biển báo cảnh báo</string>
 </resources>

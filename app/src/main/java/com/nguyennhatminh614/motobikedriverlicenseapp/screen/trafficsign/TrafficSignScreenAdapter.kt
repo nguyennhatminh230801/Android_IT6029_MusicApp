@@ -1,66 +1,85 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.trafficsign
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.TrafficSigns
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.trafficsign.TrafficSigns
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.trafficsign.TrafficSignsEntity
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentTrafficSignCategoryBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.OnClickItem
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseRecyclerViewAdapter
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewHolder
 
 class TrafficSignScreenAdapter :
-    BaseRecyclerViewAdapter<MutableList<TrafficSigns>, FragmentTrafficSignCategoryBinding, TrafficSignScreenAdapter.ViewHolder>(
+    BaseRecyclerViewAdapter<TrafficSignViewModel.TabTrafficSignUiState, FragmentTrafficSignCategoryBinding, TrafficSignScreenAdapter.ViewHolder>(
         TrafficSignCategoryScreenDiffUtil
     ) {
 
-    private val stateScrollList = MutableList(5) { 0 }
-
     private var itemClickEvent: OnClickItem<TrafficSigns>? = null
+    private var onUpdateTabUiState: (TrafficSignViewModel.TabTrafficSignUiState) -> Unit = {}
 
     fun setItemClickEvent(itemClickEvent: OnClickItem<TrafficSigns>) {
         this.itemClickEvent = itemClickEvent
     }
 
+    fun setOnUpdateTabUiState(callback: (TrafficSignViewModel.TabTrafficSignUiState) -> Unit) = apply {
+        this.onUpdateTabUiState = callback
+    }
+
     companion object {
         val TrafficSignCategoryScreenDiffUtil =
-            object : DiffUtil.ItemCallback<MutableList<TrafficSigns>>() {
+            object : DiffUtil.ItemCallback<TrafficSignViewModel.TabTrafficSignUiState>() {
                 override fun areItemsTheSame(
-                    oldItem: MutableList<TrafficSigns>,
-                    newItem: MutableList<TrafficSigns>,
-                ) = oldItem == newItem
+                    oldItem: TrafficSignViewModel.TabTrafficSignUiState,
+                    newItem: TrafficSignViewModel.TabTrafficSignUiState,
+                ) = oldItem.id == newItem.id
 
                 override fun areContentsTheSame(
-                    oldItem: MutableList<TrafficSigns>,
-                    newItem: MutableList<TrafficSigns>,
+                    oldItem: TrafficSignViewModel.TabTrafficSignUiState,
+                    newItem: TrafficSignViewModel.TabTrafficSignUiState,
                 ) = oldItem == newItem
+
+                override fun getChangePayload(
+                    oldItem: TrafficSignViewModel.TabTrafficSignUiState,
+                    newItem: TrafficSignViewModel.TabTrafficSignUiState
+                ): Any? {
+                    val bundle = bundleOf()
+                    if (oldItem.scrolledPosition != newItem.scrolledPosition) {
+                        bundle.putInt(PAYLOAD_SCROLLED, newItem.scrolledPosition)
+                    }
+                    return bundle
+                }
             }
+
+        private const val PAYLOAD_SCROLLED = "PAYLOAD_SCROLLED"
     }
 
     inner class ViewHolder(
         override val binding: FragmentTrafficSignCategoryBinding,
-    ) :
-        BaseViewHolder<MutableList<TrafficSigns>, FragmentTrafficSignCategoryBinding>(binding) {
-        override fun onBindData(data: MutableList<TrafficSigns>) {
-            val trafficSignAdapter = TrafficSignAdapter()
-            binding.recyclerViewTrafficSign.adapter = trafficSignAdapter
-            trafficSignAdapter.submitList(data)
+    ) : BaseViewHolder<TrafficSignViewModel.TabTrafficSignUiState, FragmentTrafficSignCategoryBinding>(binding) {
 
-            binding.recyclerViewTrafficSign.scrollToPosition(stateScrollList[adapterPosition])
+        private val trafficSignAdapter = TrafficSignAdapter()
+
+        override fun onBindData(data: TrafficSignViewModel.TabTrafficSignUiState) {
+            binding.recyclerViewTrafficSign.adapter = trafficSignAdapter
+            trafficSignAdapter.submitList(data.trafficSigns)
+
+            (binding.recyclerViewTrafficSign.layoutManager as? LinearLayoutManager)?.scrollToPosition(data.scrolledPosition)
 
             trafficSignAdapter.registerOnClickItemEvent {
-                stateScrollList[adapterPosition] =
+                val scrolledPosition =
                     (binding.recyclerViewTrafficSign.layoutManager as? LinearLayoutManager)
                         ?.findFirstCompletelyVisibleItemPosition() ?: 0
-                notifyDataSetChanged()
-
+                onUpdateTabUiState(data.copy(scrolledPosition = scrolledPosition))
                 itemClickEvent?.invoke(it)
             }
         }
     }
 
-    override fun registerOnClickItemEvent(onClickItem: OnClickItem<MutableList<TrafficSigns>>) {
+    override fun registerOnClickItemEvent(onClickItem: OnClickItem<TrafficSignViewModel.TabTrafficSignUiState>) {
         //Not op
     }
 
@@ -73,6 +92,4 @@ class TrafficSignScreenAdapter :
             )
         )
     }
-
-
 }

@@ -3,11 +3,13 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'io.gitlab.arturbosch.detekt' version '1.20.0'
     id 'com.google.gms.google-services'
+    id 'kotlin-parcelize'
+    id 'kotlin-kapt'
 }
 
-apply plugin: "kotlin-android-extensions"
 apply plugin: "io.gitlab.arturbosch.detekt"
 apply plugin: "com.google.gms.google-services"
+apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.firebase.crashlytics'
 
@@ -82,10 +84,10 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel:2.5.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
 
-    implementation "io.insert-koin:koin-android:3.2.0-beta-1"
-    implementation "io.insert-koin:koin-androidx-navigation:3.2.0-beta-1"
-    implementation "io.insert-koin:koin-androidx-compose:3.2.0-beta-1"
-    testImplementation "io.insert-koin:koin-test-junit4:3.2.0-beta-1"
+    implementation "io.insert-koin:koin-android:3.3.0"
+    implementation "io.insert-koin:koin-androidx-navigation:3.3.0"
+    implementation "io.insert-koin:koin-androidx-compose:3.3.0"
+    testImplementation "io.insert-koin:koin-test-junit4:3.3.0"
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
 
