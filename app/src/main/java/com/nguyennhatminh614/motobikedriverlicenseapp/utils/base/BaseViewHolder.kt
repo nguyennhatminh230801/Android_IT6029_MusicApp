@@ -9,9 +9,5 @@ abstract class BaseViewHolder<T, VB : ViewBinding>(
 
     abstract fun onBindData(data: T)
 
-    open fun onBindData(data: T, payloads: MutableList<Any>) {
-        if (payloads.isEmpty()) {
-            onBindData(data)
-        }
-    }
+    open fun onBindData(data: T, payloads: MutableList<Any>) {}
 }
