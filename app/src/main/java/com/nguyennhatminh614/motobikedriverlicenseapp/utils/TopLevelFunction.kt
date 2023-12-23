@@ -1,6 +1,6 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.utils
 
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.questions.QuestionItemResponse
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 
@@ -13,7 +13,7 @@ fun processQuestionOptionsList(questionsID: Int, listString: List<String>) =
         }
     }
 
-fun generateEmptyQuestionStateList(listQuestion: List<NewQuestion>): MutableList<QuestionOptions> {
+fun generateEmptyQuestionStateList(listQuestion: List<QuestionItemResponse>): MutableList<QuestionOptions> {
     return mutableListOf<QuestionOptions>().apply {
         listQuestion.forEach {
             add(provideEmptyQuestionOption(questionID = it.id))

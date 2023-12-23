@@ -10,7 +10,7 @@ data class QuestionOptions(
     val position: Int,
     val title: String,
     val isSelected: Boolean = false,
-    var stateNumber: Int = StateQuestionOption.UNKNOWN.type,
+    var stateNumber: Int = StateQuestionOption.UNSELECTED.type,
 ) : Parcelable {
     companion object {
         fun getDiffUtilCallBack() = object : DiffUtil.ItemCallback<QuestionOptions>() {
@@ -32,7 +32,8 @@ data class QuestionOptions(
 }
 
 enum class StateQuestionOption(val type: Int) {
-    UNKNOWN(Constant.UNKNOWN_TYPE),
+    UNSELECTED(Constant.UNKNOWN_TYPE),
+    SELECTED(Constant.SELECTED_TYPE),
     CORRECT(Constant.CORRECT_TYPE),
     INCORRECT(Constant.INCORRECT_TYPE);
 
@@ -40,5 +41,6 @@ enum class StateQuestionOption(val type: Int) {
         const val UNKNOWN_TYPE = 0
         const val CORRECT_TYPE = 1
         const val INCORRECT_TYPE = 2
+        const val SELECTED_TYPE = 3
     }
 }

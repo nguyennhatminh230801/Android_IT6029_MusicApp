@@ -1,5 +1,7 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.data.model
 
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.questions.QuestionType
+
 enum class CreateExamRules(
     val licenseType: LicenseType,
     val numbersOfQuestionByType: Map<QuestionType, Int>,

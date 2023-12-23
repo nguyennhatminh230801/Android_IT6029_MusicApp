@@ -9,7 +9,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Exam
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.LicenseType
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestionWithState
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.questions.NewQuestionWithState
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.StateQuestionOption
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentExamResultBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.ExamFragment

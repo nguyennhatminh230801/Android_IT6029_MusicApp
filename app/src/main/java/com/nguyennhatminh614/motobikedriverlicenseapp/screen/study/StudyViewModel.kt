@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.nguyennhatminh614.motobikedriverlicenseapp.R
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.questions.QuestionItemResponse
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionType
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.questions.QuestionType
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.StudyCategory
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.WrongAnswer
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.StudyRepository
@@ -66,8 +66,8 @@ class StudyViewModel(
             if (data.isEmpty()) {
                 studyRepository.saveProgress(listDefaultStudyCategory)
                 studyRepository.getListQuestion(
-                    object : IResponseListener<MutableList<NewQuestion>> {
-                        override fun onSuccess(data: MutableList<NewQuestion>) {
+                    object : IResponseListener<MutableList<QuestionItemResponse>> {
+                        override fun onSuccess(data: MutableList<QuestionItemResponse>) {
                             viewModelScope.launch {
                                 val newList = mutableListOf<StudyCategory>()
                                 val oldList = _listStudyCategory.value ?: listDefaultStudyCategory
@@ -103,7 +103,7 @@ class StudyViewModel(
         }
     }
 
-    private fun MutableList<NewQuestion>.processPullListData(
+    private fun MutableList<QuestionItemResponse>.processPullListData(
         categoryFilter: String,
         lastData: StudyCategory,
         newTitleIfFix: String,

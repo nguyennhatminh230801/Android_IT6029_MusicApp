@@ -81,7 +81,7 @@ class BottomSheetQuestionListAdapter:
                 }
 
                 when (item.stateNumber) {
-                    StateQuestionOption.UNKNOWN.type -> {
+                    StateQuestionOption.UNSELECTED.type -> {
                         itemQuestionIcon.setCardBackgroundColor(getSelectedColor(binding,
                             STATE_UNKNOWN_COLOR))
                     }

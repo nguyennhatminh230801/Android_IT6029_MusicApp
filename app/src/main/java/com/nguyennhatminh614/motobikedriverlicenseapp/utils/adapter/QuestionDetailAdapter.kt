@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.text.bold
 import androidx.core.view.isVisible
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.questions.QuestionItemResponse
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.StateQuestionOption
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentQuestionLayoutBinding
@@ -23,8 +23,8 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.processQuestionOptio
 class QuestionDetailAdapter(
     private val isExamScreen: Boolean = false
 ) :
-    BaseRecyclerViewAdapter<NewQuestion, FragmentQuestionLayoutBinding,
-            QuestionDetailAdapter.ViewHolder>(NewQuestion.getDiffCallBack()) {
+    BaseRecyclerViewAdapter<QuestionItemResponse, FragmentQuestionLayoutBinding,
+            QuestionDetailAdapter.ViewHolder>(QuestionItemResponse.getDiffCallBack()) {
 
     private var onClickSelectedQuestionOption: ((Int, Int, QuestionOptions) -> Unit)? = null
     private val listQuestionState = mutableListOf<QuestionOptions>()
@@ -66,7 +66,7 @@ class QuestionDetailAdapter(
         _isEnableExplanation = false
     }
 
-    override fun registerOnClickItemEvent(onClickItem: OnClickItem<NewQuestion>) {
+    override fun registerOnClickItemEvent(onClickItem: OnClickItem<QuestionItemResponse>) {
         this.clickItemInterface = onClickItem
     }
 
@@ -83,8 +83,8 @@ class QuestionDetailAdapter(
 
     inner class ViewHolder(
         binding: FragmentQuestionLayoutBinding,
-    ) : BaseViewHolder<NewQuestion, FragmentQuestionLayoutBinding>(binding) {
-        override fun onBindData(data: NewQuestion) {
+    ) : BaseViewHolder<QuestionItemResponse, FragmentQuestionLayoutBinding>(binding) {
+        override fun onBindData(data: QuestionItemResponse) {
             val questionOptionAdapter by lazy { QuestionOptionAdapter() }
 
             binding.layoutDetailQuestion.setBackgroundColor(
@@ -165,7 +165,7 @@ class QuestionDetailAdapter(
                         else{
                             newQuestionOption = it.copy(
                                 isSelected = true,
-                                stateNumber = StateQuestionOption.UNKNOWN.type
+                                stateNumber = StateQuestionOption.UNSELECTED.type
                             )
                         }
 

@@ -9,6 +9,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.di.dataStoreModule
 import com.nguyennhatminh614.motobikedriverlicenseapp.di.databaseModule
 import com.nguyennhatminh614.motobikedriverlicenseapp.di.examDataSourceModule
 import com.nguyennhatminh614.motobikedriverlicenseapp.di.networkModule
+import com.nguyennhatminh614.motobikedriverlicenseapp.di.questionDataSourceModule
 import com.nguyennhatminh614.motobikedriverlicenseapp.di.repositoryModule
 import com.nguyennhatminh614.motobikedriverlicenseapp.di.sharedPreferenceModule
 import com.nguyennhatminh614.motobikedriverlicenseapp.di.studyDataSourceModule
@@ -53,6 +54,7 @@ class MotorbikeApplication : Application() {
                 studyDataSourceModule,
                 wrongAnswerDataSourceModule,
                 trafficSignDataSourceModule,
+                questionDataSourceModule,
                 dataStoreModule,
                 useCaseModule,
             )

@@ -3,7 +3,7 @@ package com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.result
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.nguyennhatminh614.motobikedriverlicenseapp.R
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestionWithState
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.questions.NewQuestionWithState
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.StateQuestionOption
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.ItemExamQuestionResultScreenBinding
