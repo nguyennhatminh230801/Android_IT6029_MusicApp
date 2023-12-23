@@ -1,7 +1,7 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.remote.exam
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.questions.QuestionItemResponse
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.IExamDataSource
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
@@ -14,13 +14,13 @@ class RemoteExamDataSource(
         fireStoreDB.collection(AppConstant.NEW_QUESTION_COLLECTION)
     }
 
-    override suspend fun getListQuestion(listener: IResponseListener<MutableList<NewQuestion>>) {
+    override suspend fun getListQuestion(listener: IResponseListener<MutableList<QuestionItemResponse>>) {
         questionCollections.get().addOnCompleteListener { tasks ->
             if (tasks.isSuccessful) {
-                val listQuestions = mutableListOf<NewQuestion>()
+                val listQuestions = mutableListOf<QuestionItemResponse>()
 
                 tasks.result.documents.forEach {
-                    it.toObject(NewQuestion::class.java)?.let { notNullObject ->
+                    it.toObject(QuestionItemResponse::class.java)?.let { notNullObject ->
                         listQuestions.add(notNullObject)
                     }
                 }

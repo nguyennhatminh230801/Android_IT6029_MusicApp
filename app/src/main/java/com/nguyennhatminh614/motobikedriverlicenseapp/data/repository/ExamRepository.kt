@@ -1,7 +1,7 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.data.repository
 
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Exam
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.questions.QuestionItemResponse
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
 
 class ExamRepository(
@@ -19,7 +19,7 @@ class ExamRepository(
     override suspend fun getAllExam(): MutableList<Exam> = local.getAllExam()
 
     override suspend fun getDetailExamByID(id: Int): Exam = local.getDetailExamByID(id)
-    override suspend fun getListQuestion(listener: IResponseListener<MutableList<NewQuestion>>) {
+    override suspend fun getListQuestion(listener: IResponseListener<MutableList<QuestionItemResponse>>) {
         remote.getListQuestion(listener)
     }
 

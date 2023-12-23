@@ -9,6 +9,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState.Const
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState.Constant.FAILED_BY_N0T_ENOUGH_SCORE_TYPE
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState.Constant.PASSED_TYPE
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState.Constant.UNDEFINED_TYPE
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.questions.QuestionItemResponse
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import kotlinx.android.parcel.Parcelize
 
@@ -17,7 +18,7 @@ import kotlinx.android.parcel.Parcelize
 data class Exam(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val listQuestions: MutableList<NewQuestion> = mutableListOf(),
+    val listQuestions: MutableList<QuestionItemResponse> = mutableListOf(),
     var numbersOfCorrectAnswer: Int = DEFAULT_NOT_START_EXAM_CORRECT_ANSWER_COUNT,
     var currentTimeStamp: Long = AppConstant.DEFAULT_NOT_HAVE_TIME_STAMP,
     var timeExamDone: Long = 0,

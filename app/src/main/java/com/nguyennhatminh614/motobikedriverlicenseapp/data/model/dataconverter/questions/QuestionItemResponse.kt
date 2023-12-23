@@ -1,4 +1,4 @@
-package com.nguyennhatminh614.motobikedriverlicenseapp.data.model
+package com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.questions
 
 import android.os.Parcelable
 import androidx.recyclerview.widget.DiffUtil
@@ -6,13 +6,12 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.firebase.firestore.PropertyName
 import com.google.gson.annotations.SerializedName
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion.Companion.TABLE_QUESTION
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.questions.QuestionItemResponse.Companion.TABLE_QUESTION
 import kotlinx.android.parcel.Parcelize
-import java.text.FieldPosition
 
 @Parcelize
 @Entity(tableName = TABLE_QUESTION)
-class NewQuestion : Parcelable {
+class QuestionItemResponse : Parcelable {
     @PrimaryKey
     var id = DEFAULT_ID
     var question = ""
@@ -39,7 +38,7 @@ class NewQuestion : Parcelable {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as NewQuestion
+        other as QuestionItemResponse
 
         if (id != other.id) return false
         if (question != other.question) return false
@@ -74,22 +73,22 @@ class NewQuestion : Parcelable {
     companion object {
         const val TABLE_QUESTION = "QUESTIONS"
         const val DEFAULT_ID = 1
-        fun getDiffCallBack() = object : DiffUtil.ItemCallback<NewQuestion>() {
+        fun getDiffCallBack() = object : DiffUtil.ItemCallback<QuestionItemResponse>() {
             override fun areItemsTheSame(
-                oldItem: NewQuestion,
-                newItem: NewQuestion,
+                oldItem: QuestionItemResponse,
+                newItem: QuestionItemResponse,
             ): Boolean = oldItem.id == newItem.id
 
             override fun areContentsTheSame(
-                oldItem: NewQuestion,
-                newItem: NewQuestion,
+                oldItem: QuestionItemResponse,
+                newItem: QuestionItemResponse,
             ): Boolean = oldItem == newItem
         }
     }
 }
 
 class NewQuestionWithState(
-    val newQuestion: NewQuestion,
+    val newQuestion: QuestionItemResponse,
     var isVisible: Boolean = false
 ) {
 

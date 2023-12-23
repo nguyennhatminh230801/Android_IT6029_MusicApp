@@ -111,7 +111,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         LoadingDialog.hideLoadingDialog()
     }
 
-    fun updateTitleToolbar(title: String) {
+    override fun updateTitleToolbar(title: String) {
         viewBinding.appBarMain.toolbar.title = title
     }
 

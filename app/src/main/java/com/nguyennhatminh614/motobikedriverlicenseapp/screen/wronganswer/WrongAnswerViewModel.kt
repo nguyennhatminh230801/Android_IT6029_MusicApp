@@ -3,7 +3,7 @@ package com.nguyennhatminh614.motobikedriverlicenseapp.screen.wronganswer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.questions.QuestionItemResponse
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.WrongAnswer
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.WrongAnswerRepository
@@ -17,10 +17,10 @@ class WrongAnswerViewModel(
     private val wrongAnswerRepository: WrongAnswerRepository,
 ) : BaseViewModel() {
 
-    private val _listAllQuestion = MutableLiveData<MutableList<NewQuestion>>()
+    private val _listAllQuestion = MutableLiveData<MutableList<QuestionItemResponse>>()
 
-    private val _listWrongAnswerQuestion = MutableLiveData<MutableList<NewQuestion>>()
-    val listWrongAnswerQuestion: LiveData<MutableList<NewQuestion>>
+    private val _listWrongAnswerQuestion = MutableLiveData<MutableList<QuestionItemResponse>>()
+    val listWrongAnswerQuestion: LiveData<MutableList<QuestionItemResponse>>
         get() = _listWrongAnswerQuestion
 
     private val _listWrongAnswer = MutableLiveData<MutableList<WrongAnswer>>()
@@ -42,9 +42,9 @@ class WrongAnswerViewModel(
             if (data.isNotEmpty()) {
                 _listWrongAnswer.postValue(data)
                 wrongAnswerRepository.getAllListQuestion(
-                    object : IResponseListener<MutableList<NewQuestion>> {
-                        override fun onSuccess(data: MutableList<NewQuestion>) {
-                            val wrongAnswerList = mutableListOf<NewQuestion>()
+                    object : IResponseListener<MutableList<QuestionItemResponse>> {
+                        override fun onSuccess(data: MutableList<QuestionItemResponse>) {
+                            val wrongAnswerList = mutableListOf<QuestionItemResponse>()
                             val listSelectedQuestionOptions = mutableListOf<QuestionOptions>()
                             _listAllQuestion.postValue(data)
                             _listWrongAnswer.value?.forEach { wrongAnswerQuestion ->
@@ -80,7 +80,7 @@ class WrongAnswerViewModel(
             _listWrongAnswer.postValue(data)
 
             val currentListQuestion = _listAllQuestion.value ?: mutableListOf()
-            val newList = mutableListOf<NewQuestion>()
+            val newList = mutableListOf<QuestionItemResponse>()
 
             currentListQuestion.forEach { question ->
                 data.forEach {

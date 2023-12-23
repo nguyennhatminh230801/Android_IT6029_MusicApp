@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.StudyCategory.Companion.STUDY_CATEGORY_TABLE
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.questions.QuestionItemResponse
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -18,7 +19,7 @@ data class StudyCategory(
     val title: String,
     val startIDQuestion: Int,
     val endIDQuestion: Int,
-    val listQuestions: MutableList<NewQuestion> = mutableListOf(),
+    val listQuestions: MutableList<QuestionItemResponse> = mutableListOf(),
     val listQuestionsState: MutableList<QuestionOptions> = mutableListOf(),
     val totalNumberOfQuestions: Int = DEFAULT_VALUE_TOTAL_QUESTION,
     var numbersOfSelectedQuestions: Int = DEFAULT_VALUE_SELECTED_QUESTION,

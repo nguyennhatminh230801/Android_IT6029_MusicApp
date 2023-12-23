@@ -6,9 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Exam
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamHistory
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.questions.QuestionItemResponse
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionType
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.questions.QuestionType
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.StateQuestionOption
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.WrongAnswer
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.findCreateExamRuleByLicenseType
@@ -40,8 +40,8 @@ class ExamViewModel(
     val listExam: LiveData<MutableList<Exam>>
         get() = _listExam
 
-    private val _listQuestions = MutableLiveData<MutableList<NewQuestion>>()
-    val listQuestions: LiveData<MutableList<NewQuestion>>
+    private val _listQuestions = MutableLiveData<MutableList<QuestionItemResponse>>()
+    val listQuestions: LiveData<MutableList<QuestionItemResponse>>
         get() = _listQuestions
 
     private val _currentExamPosition = MutableLiveData<Int>()
@@ -59,8 +59,8 @@ class ExamViewModel(
     init {
         launchTask {
             examRepository.getListQuestion(
-                object : IResponseListener<MutableList<NewQuestion>> {
-                    override fun onSuccess(data: MutableList<NewQuestion>) {
+                object : IResponseListener<MutableList<QuestionItemResponse>> {
+                    override fun onSuccess(data: MutableList<QuestionItemResponse>) {
                         _listQuestions.value = data
                         hideLoading()
                     }
@@ -285,7 +285,7 @@ class ExamViewModel(
         )?.currentTimeStamp
             ?: AppConstant.DEFAULT_NOT_HAVE_TIME_STAMP
 
-    private fun getCategoryList(questions: List<NewQuestion>, key: String, takeAmount: Int) =
+    private fun getCategoryList(questions: List<QuestionItemResponse>, key: String, takeAmount: Int) =
         questions.filter {
             return@filter it.questionType.lowercase() == key.lowercase()
         }.shuffled().take(takeAmount)
