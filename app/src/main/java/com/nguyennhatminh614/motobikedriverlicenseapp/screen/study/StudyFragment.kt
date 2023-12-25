@@ -1,22 +1,28 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.study
 
+import android.content.Context
 import androidx.navigation.fragment.findNavController
 import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentStudyBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseFragment
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.screen.IActivityMainCallback
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class StudyFragment : BaseFragment<FragmentStudyBinding>(FragmentStudyBinding::inflate) {
 
     override val viewModel by sharedViewModel<StudyViewModel>()
 
-    private val baseViewModel by sharedViewModel<BaseViewModel>()
+    private lateinit var iActivityMainCallback: IActivityMainCallback
 
     private val studyAdapter by lazy { StudyAdapter() }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        iActivityMainCallback = context as IActivityMainCallback
+    }
+
     override fun initData() {
-        baseViewModel.setVisibleResetButton(true)
+        iActivityMainCallback.showResetStudyButton()
         viewBinding.recyclerViewQuestionCategory.adapter = studyAdapter
     }
 
@@ -34,7 +40,7 @@ class StudyFragment : BaseFragment<FragmentStudyBinding>(FragmentStudyBinding::i
     }
 
     override fun onDestroyView() {
-        baseViewModel.setVisibleResetButton(false)
         super.onDestroyView()
+        iActivityMainCallback.hideResetStudyButton()
     }
 }

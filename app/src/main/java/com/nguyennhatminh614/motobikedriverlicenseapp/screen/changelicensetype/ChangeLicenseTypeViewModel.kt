@@ -1,39 +1,67 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.changelicensetype
 
-import android.content.SharedPreferences
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.LicenseType
+import com.nguyennhatminh614.motobikedriverlicenseapp.screen.mainscreen.main.MainScreenViewModel
+import com.nguyennhatminh614.motobikedriverlicenseapp.usecase.GetLicenseTypeUseCase
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class ChangeLicenseTypeViewModel(
-    private val sharedPreferences: SharedPreferences,
+    private val getLicenseTypeUseCase: GetLicenseTypeUseCase,
 ) : BaseViewModel() {
 
-    private val _currentLicenseType = MutableLiveData<LicenseType>()
-
-    val currentLicenseType: LiveData<LicenseType>
-        get() = _currentLicenseType
+    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState())
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     init {
-        if (sharedPreferences.getString(AppConstant.CURRENT_LICENSE_TYPE, AppConstant.EMPTY_DATA)?.isEmpty() == true) {
-            sharedPreferences.edit().putString(AppConstant.CURRENT_LICENSE_TYPE, LicenseType.A1.type).apply()
-        }
-        getCurrentLicenseType()
+        initLicenseTypeState()
+    }
+
+    private fun initLicenseTypeState() {
+        getLicenseTypeUseCase.currentLicenseTypeState
+            .map { currentLicenseType ->
+                LicenseType.values().map { licenseType ->
+                    LicenseTypeItemUiState(
+                        licenseType = licenseType,
+                        isSelected = licenseType == currentLicenseType,
+                    )
+                }
+            }
+            .onEach { listLicenseTypeUiState ->
+                _uiState.update {
+                    it.copy(
+                        licenseTypes = listLicenseTypeUiState
+                    )
+                }
+            }
+            .stateIn(
+                viewModelScope,
+                SharingStarted.Eagerly,
+                null
+            )
     }
 
     fun onChangingToNewLicenseType(currentLicenseType: LicenseType) {
-        sharedPreferences.edit().putString(AppConstant.CURRENT_LICENSE_TYPE, currentLicenseType.type).apply()
-        getCurrentLicenseType()
+        viewModelScope.launch {
+            getLicenseTypeUseCase.invokeChangeLicenseTypeState(currentLicenseType)
+        }
     }
 
-    private fun getCurrentLicenseType() {
-        val currentLicenseType =
-            sharedPreferences.getString(AppConstant.CURRENT_LICENSE_TYPE, LicenseType.A1.type)
-                ?: LicenseType.A1.type
+    data class UiState(
+        val licenseTypes: List<LicenseTypeItemUiState> = emptyList()
+    )
 
-        val licenseType = enumValues<LicenseType>().first{ it.type == currentLicenseType}
-        _currentLicenseType.postValue(licenseType)
-    }
+    data class LicenseTypeItemUiState(
+        val licenseType: LicenseType,
+        val isSelected: Boolean = false,
+    )
 }

@@ -66,4 +66,19 @@
     <string name="nav_watch_history_title">Xem lịch sử thi</string>
     <string name="text_temp_title_instruction"><b>HƯỚNG DẪN THI THỰC HÀNH XE MÁY (4 PHẦN):</b>
         \n\nKhi giám khảo gọi tên nhận xe, bạn lưu ý số xe mình chuẩn bị nhận để thi. Khi hệ thống đọc đến số xe của bạn thì bạn bắt đầu xuất phát. Phải hoàn thành đúng và đủ 04 phần thi dưới đây:</string>
+    <string name="loading">Loading</string>
+    <string name="exam_category">Thi sát hạch</string>
+    <string name="study_category">Học lý thuyết</string>
+    <string name="signal_category">Biển báo đường bộ</string>
+    <string name="tips_high_score_category">Mẹo điểm cao</string>
+    <string name="wrong_answer_category">Các câu làm sai</string>
+    <string name="settings_category">Cài đặt</string>
+    <string name="exam_guide_category">Bài thi thực hành</string>
+    <string name="change_license_type_category">Đổi hạng bằng</string>
+    <string name="restrict_traffic_signal">Biển báo cấm</string>
+    <string name="command_traffic_signal">Biển báo hiệu lệnh</string>
+    <string name="instruction_traffic_signal">Biển báo chỉ dẫn</string>
+    <string name="sub_traffic_signal">Biển báo phụ</string>
+    <string name="warning_traffic_signal">Biển báo cảnh báo</string>
+    <string name="text_question_current">Câu %1$d/%2$d</string>
 </resources>

@@ -17,9 +17,20 @@ abstract class BaseRecyclerViewAdapter<T, VB : ViewBinding, VH : BaseViewHolder<
         .build()
 ) {
     protected var clickItemInterface: OnClickItem<T>? = null
+    
     override fun onBindViewHolder(holder: VH, position: Int) {
         if (position < currentList.size) {
             holder.onBindData(getItem(position))
+        }
+    }
+
+    override fun onBindViewHolder(holder: VH, position: Int, payloads: MutableList<Any>) {
+        if (position < currentList.size) {
+            if (payloads.isNotEmpty()) {
+                holder.onBindData(getItem(position), payloads)
+            } else {
+                holder.onBindData(getItem(position))
+            }
         }
     }
 

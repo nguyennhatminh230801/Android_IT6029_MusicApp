@@ -1,10 +1,10 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.data.repository
 
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.TrafficSigns
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
+import arrow.core.Either
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.trafficsign.TrafficSigns
 
 interface ITrafficSignalDataSource {
     interface Remote {
-        fun getAllTrafficSignal(listener: IResponseListener<MutableList<TrafficSigns>>)
+        suspend fun getAllTrafficSignal(): Either<Exception, List<TrafficSigns>>
     }
 }

@@ -1,6 +1,5 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.appadapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.nguyennhatminh614.motobikedriverlicenseapp.R
@@ -11,7 +10,6 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.OnClickItem
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseRecyclerViewAdapter
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewHolder
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getCurrentThemeCardColor
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getSelectedColor
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.isCurrentDarkModeByDefault
 
@@ -78,7 +76,7 @@ class QuestionOptionAdapter :
 
                 if (selectedPosition == adapterPosition) {
                     val currentColor = when (item.stateNumber) {
-                        StateQuestionOption.UNKNOWN.type -> getSelectedColor(SELECTED_COLOR)
+                        StateQuestionOption.UNSELECTED.type -> getSelectedColor(SELECTED_COLOR)
                         StateQuestionOption.INCORRECT.type -> getSelectedColor(STATE_INCORRECT_COLOR)
                         StateQuestionOption.CORRECT.type -> getSelectedColor(STATE_CORRECT_COLOR)
                         else -> getSelectedColor(UNSELECTED_COLOR)

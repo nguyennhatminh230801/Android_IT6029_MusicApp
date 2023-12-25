@@ -1,29 +1,29 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.result
 
 import android.app.AlertDialog
-import android.content.SharedPreferences
 import androidx.core.os.bundleOf
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearSmoothScroller
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.SmoothScroller
 import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Exam
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.LicenseType
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestionWithState
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.questions.NewQuestionWithState
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.StateQuestionOption
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentExamResultBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.ExamFragment
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.ExamViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.mainscreen.MainActivity
+import com.nguyennhatminh614.motobikedriverlicenseapp.usecase.DarkModeUseCase
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseFragment
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getCurrentThemeBackgroundColor
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getSelectedColor
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.isCurrentDarkMode
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.showToast
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.toDateTimeMMSS
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -77,13 +77,7 @@ class ExamResultFragment
             }
         }
         viewBinding.apply {
-            val isDarkModeOn = inject<SharedPreferences>().value.isCurrentDarkMode()
 
-            if (isDarkModeOn) {
-                layoutExamResult.setBackgroundColor(getCurrentThemeBackgroundColor())
-            } else {
-                layoutExamResult.setBackgroundColor(getSelectedColor(R.color.background_color))
-            }
 
             recyclerViewExamQuestion.apply {
                 setHasFixedSize(true)
@@ -111,7 +105,19 @@ class ExamResultFragment
     }
 
     override fun bindData() {
-        //Not implement
+        inject<DarkModeUseCase>().value.currentDarkModeState
+            .filterNotNull()
+            .onEach { isDarkMode ->
+                if (isDarkMode) {
+                    viewBinding.layoutExamResult.setBackgroundColor(
+                        viewBinding.getCurrentThemeBackgroundColor()
+                    )
+                } else {
+                    viewBinding.layoutExamResult.setBackgroundColor(
+                        viewBinding.getSelectedColor(R.color.background_color)
+                    )
+                }
+            }.launchIn(lifecycleScope)
     }
 
     private fun updateData(exam: Exam) = with(viewBinding) {

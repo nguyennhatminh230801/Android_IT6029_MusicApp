@@ -1,10 +1,13 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.changelicensetype
 
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.LicenseType
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.LicenseTypeData
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentChangeLicenseTypeScreenBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseFragment
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ChangeLicenseTypeFragment :
@@ -20,9 +23,6 @@ class ChangeLicenseTypeFragment :
             itemAnimator = null
             adapter = changeLicenseTypeAdapter
         }
-
-        changeLicenseTypeAdapter.submitList(
-            enumValues<LicenseType>().map { LicenseTypeData(it) }.toList())
     }
 
     override fun handleEvent() {
@@ -32,10 +32,17 @@ class ChangeLicenseTypeFragment :
     }
 
     override fun bindData() {
-        viewModel.currentLicenseType.observe(viewLifecycleOwner) {
-            changeLicenseTypeAdapter.setCurrentLicenseType(it) { selectedPosition ->
-                viewBinding.recyclerViewLicenseType.scrollToPosition(selectedPosition)
+        viewModel.uiState
+            .flowWithLifecycle(lifecycle)
+            .filterNotNull()
+            .map { it.licenseTypes }
+            .onEach { licenseTypes ->
+                changeLicenseTypeAdapter.submitList(licenseTypes)
             }
-        }
+            .map { elem -> elem.indexOfFirst { it.isSelected } }
+            .onEach {
+                viewBinding.recyclerViewLicenseType.scrollToPosition(it)
+            }
+            .launchIn(lifecycleScope)
     }
 }

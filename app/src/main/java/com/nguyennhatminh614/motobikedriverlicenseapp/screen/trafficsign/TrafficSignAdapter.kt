@@ -1,8 +1,7 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.trafficsign
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.TrafficSigns
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.trafficsign.TrafficSigns
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.ItemTrafficSignLayoutBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.OnClickItem
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseRecyclerViewAdapter
@@ -28,7 +27,7 @@ class TrafficSignAdapter :
             binding.apply {
                 imageTrafficSign.loadGlideImageFromUrl(
                     root.context,
-                    data.imageUrl,
+                    data.thumbnail,
                 )
                 textTrafficSignTitle.text = data.title
                 textTrafficSignDescription.text = data.description.ifBlank { "Không có giải thích!!" }

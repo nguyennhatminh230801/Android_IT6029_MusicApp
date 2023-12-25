@@ -1,15 +1,14 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam
 
-import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.Exam
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamHistory
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.ExamState
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.NewQuestion
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.questions.QuestionItemResponse
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionOptions
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.QuestionType
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.questions.QuestionType
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.StateQuestionOption
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.WrongAnswer
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.findCreateExamRuleByLicenseType
@@ -17,31 +16,32 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.findCreateExamR
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.getAllLowerQuestionList
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.ExamRepository
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.WrongAnswerRepository
+import com.nguyennhatminh614.motobikedriverlicenseapp.usecase.GetLicenseTypeUseCase
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.CountDownInstance
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant.FIRST_INDEX
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.convertMinutesToMillisecond
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getCurrentLicenseType
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.generateEmptyQuestionStateList
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.provideEmptyQuestionOption
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class ExamViewModel(
     private val examRepository: ExamRepository,
     private val wrongAnswerRepository: WrongAnswerRepository,
-    private val sharedPreferences: SharedPreferences,
+    private val getLicenseTypeUseCase: GetLicenseTypeUseCase,
 ) : BaseViewModel() {
 
     private val _listExam = MutableLiveData<MutableList<Exam>>()
     val listExam: LiveData<MutableList<Exam>>
         get() = _listExam
 
-    private val _listQuestions = MutableLiveData<MutableList<NewQuestion>>()
-    val listQuestions: LiveData<MutableList<NewQuestion>>
+    private val _listQuestions = MutableLiveData<MutableList<QuestionItemResponse>>()
+    val listQuestions: LiveData<MutableList<QuestionItemResponse>>
         get() = _listQuestions
 
     private val _currentExamPosition = MutableLiveData<Int>()
@@ -59,8 +59,8 @@ class ExamViewModel(
     init {
         launchTask {
             examRepository.getListQuestion(
-                object : IResponseListener<MutableList<NewQuestion>> {
-                    override fun onSuccess(data: MutableList<NewQuestion>) {
+                object : IResponseListener<MutableList<QuestionItemResponse>> {
+                    override fun onSuccess(data: MutableList<QuestionItemResponse>) {
                         _listQuestions.value = data
                         hideLoading()
                     }
@@ -164,7 +164,7 @@ class ExamViewModel(
                 var index = FIRST_INDEX
                 var isWrongTheQuestionThatFailedTestImmediately = false
                 val examRules =
-                    findCreateExamRuleByLicenseType(sharedPreferences.getCurrentLicenseType())
+                    findCreateExamRuleByLicenseType(getLicenseTypeUseCase.currentLicenseTypeState.first())
 
                 exam.timeExamDone = examRules.examDurationByMinutes.toLong().convertMinutesToMillisecond() - exam.currentTimeStamp
 
@@ -285,7 +285,7 @@ class ExamViewModel(
         )?.currentTimeStamp
             ?: AppConstant.DEFAULT_NOT_HAVE_TIME_STAMP
 
-    private fun getCategoryList(questions: List<NewQuestion>, key: String, takeAmount: Int) =
+    private fun getCategoryList(questions: List<QuestionItemResponse>, key: String, takeAmount: Int) =
         questions.filter {
             return@filter it.questionType.lowercase() == key.lowercase()
         }.shuffled().take(takeAmount)
@@ -322,7 +322,7 @@ class ExamViewModel(
 
     fun createExam(licenseTypeString: String, onComplete: () -> Unit) {
         viewModelScope.launch {
-            val currentLicenseType = sharedPreferences.getCurrentLicenseType()
+            val currentLicenseType = getLicenseTypeUseCase.currentLicenseTypeState.first()
             val examRules = findCreateExamRuleByLicenseType(currentLicenseType)
             val exam = Exam(
                 id = ExamFragment.DEFAULT_ID,

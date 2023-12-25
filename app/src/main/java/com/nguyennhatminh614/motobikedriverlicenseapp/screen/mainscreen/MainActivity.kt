@@ -2,15 +2,13 @@ package com.nguyennhatminh614.motobikedriverlicenseapp.screen.mainscreen
 
 
 import android.app.AlertDialog
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO
-import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -19,33 +17,26 @@ import androidx.navigation.ui.setupWithNavController
 import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.ActivityMainBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.exam.ExamViewModel
-import com.nguyennhatminh614.motobikedriverlicenseapp.screen.instruction.InstructionViewModel
-import com.nguyennhatminh614.motobikedriverlicenseapp.screen.settings.SettingsViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.study.StudyViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseActivity
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.dialog.LoadingDialog
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.getCurrentLicenseType
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.showToast
+import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.screen.IActivityMainCallback
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.network.ConnectivityObserver
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.network.InternetConnection
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
+class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate),
+    IActivityMainCallback {
 
-    val baseViewModel by viewModel<BaseViewModel>()
     val studyViewModel by viewModel<StudyViewModel>()
     val examViewModel by viewModel<ExamViewModel>()
-    val settingsViewModel by viewModel<SettingsViewModel>()
-    val instructionViewModel by viewModel<InstructionViewModel>()
+    val mainViewModel by viewModel<MainViewModel>()
 
     private val internetConnectionObserver by inject<InternetConnection>()
-
-    val currentLicenseType
-        get() = inject<SharedPreferences>().value.getCurrentLicenseType()
 
     private val notConnectDialog by lazy {
         AlertDialog.Builder(this@MainActivity)
@@ -106,6 +97,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 showNotConnnectedDialogAtStart()
             }
         }
+
+
     }
 
     override fun showLoadingDialog() {
@@ -118,7 +111,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         LoadingDialog.hideLoadingDialog()
     }
 
-    fun updateTitleToolbar(title: String) {
+    override fun updateTitleToolbar(title: String) {
         viewBinding.appBarMain.toolbar.title = title
     }
 
@@ -128,7 +121,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             val navController = findNavController(R.id.nav_host_fragment_content_main)
             setupActionBarWithNavController(navController, appBarConfiguration)
             navView.setupWithNavController(navController)
-
             navView.setNavigationItemSelectedListener { menuItem ->
                 navController.popBackStack(R.id.nav_main, false)
 
@@ -140,7 +132,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                         navController.navigate(
                             R.id.action_nav_main_to_nav_exam,
                             bundleOf(
-                                AppConstant.KEY_BUNDLE_CURRENT_LICENSE_TYPE to currentLicenseType.type
+                                AppConstant.KEY_BUNDLE_CURRENT_LICENSE_TYPE to mainViewModel.currentLicenseTypeState.value?.type
                             )
                         )
                     }
@@ -203,6 +195,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         }
     }
 
+    override fun showResetStudyButton() {
+        viewBinding.appBarMain.buttonResetStudy.isVisible = true
+    }
+
+    override fun hideResetStudyButton() {
+        viewBinding.appBarMain.buttonResetStudy.isVisible = false
+    }
+
     fun addCallbackExamInfoButton(resetCallback: () -> Unit) {
         viewBinding.appBarMain.buttonInfoExamGuide.isVisible = true
         viewBinding.appBarMain.buttonInfoExamGuide.setOnClickListener {
@@ -227,33 +227,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         viewBinding.appBarMain.buttonResetExam.setOnClickListener(null)
     }
 
-    fun addCallbackResetWrongAnswerButton(resetCallback: () -> Unit) {
-        viewBinding.appBarMain.buttonResetWrongAnswer.isVisible = true
-        viewBinding.appBarMain.buttonResetWrongAnswer.setOnClickListener {
-            resetCallback()
-        }
-    }
-
-    fun removeCallbackResetWrongAnswerButton() {
-        viewBinding.appBarMain.buttonResetWrongAnswer.isVisible = false
-        viewBinding.appBarMain.buttonResetWrongAnswer.setOnClickListener(null)
-    }
-
     override fun bindData() {
-        baseViewModel.isVisibleResetButton.observe(this) {
-            viewBinding.appBarMain.buttonResetStudy.isVisible = it
-        }
-
         examViewModel.isVisibleFinishExamButton.observe(this) {
             viewBinding.appBarMain.buttonFinishExam.isVisible = it
-        }
-
-        settingsViewModel.isDarkModeOn.observe(this) {
-            if (it) {
-                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO)
-            }
         }
 
         lifecycleScope.launch {
@@ -275,16 +251,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
-
         return if (navController.currentDestination?.id == R.id.nav_detail_exam) {
             onBackPressedDispatcher.onBackPressed()
             true
         } else navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-    }
-
-    override fun onPause() {
-        settingsViewModel.saveDarkModeState()
-        super.onPause()
     }
 
     override fun onDestroy() {
@@ -301,3 +271,4 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         private const val FINISH_EXAM_NO_BUTTON = "Không"
     }
 }
+
