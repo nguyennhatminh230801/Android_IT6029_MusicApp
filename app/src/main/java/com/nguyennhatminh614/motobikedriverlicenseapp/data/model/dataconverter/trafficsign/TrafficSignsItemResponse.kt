@@ -1,13 +1,12 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.trafficsign
 
 import android.os.Parcelable
-import androidx.recyclerview.widget.DiffUtil
 import com.google.firebase.firestore.PropertyName
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class TrafficSignsEntity : Parcelable {
+class TrafficSignsItemResponse : Parcelable {
     var id = ""
     var title = ""
     var description = ""
@@ -23,7 +22,7 @@ class TrafficSignsEntity : Parcelable {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as TrafficSignsEntity
+        other as TrafficSignsItemResponse
 
         if (id != other.id) return false
         if (title != other.title) return false

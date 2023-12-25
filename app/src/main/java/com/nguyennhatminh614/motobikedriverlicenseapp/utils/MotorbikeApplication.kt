@@ -11,7 +11,6 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.di.examDataSourceModule
 import com.nguyennhatminh614.motobikedriverlicenseapp.di.networkModule
 import com.nguyennhatminh614.motobikedriverlicenseapp.di.questionDataSourceModule
 import com.nguyennhatminh614.motobikedriverlicenseapp.di.repositoryModule
-import com.nguyennhatminh614.motobikedriverlicenseapp.di.sharedPreferenceModule
 import com.nguyennhatminh614.motobikedriverlicenseapp.di.studyDataSourceModule
 import com.nguyennhatminh614.motobikedriverlicenseapp.di.tipsHighScoreDataSourceModule
 import com.nguyennhatminh614.motobikedriverlicenseapp.di.trafficSignDataSourceModule
@@ -43,7 +42,6 @@ class MotorbikeApplication : Application() {
             androidContext(this@MotorbikeApplication)
 
             modules(
-                sharedPreferenceModule,
                 databaseModule,
                 apiModule,
                 networkModule,

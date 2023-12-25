@@ -11,8 +11,4 @@ interface IWrongAnswerDataSource {
         suspend fun updateWrongAnswerQuestion(wrongAnswer: WrongAnswer)
         suspend fun findWrongAnswerQuestionByID(id: Int): WrongAnswer?
     }
-
-    interface Remote {
-        suspend fun getAllListQuestion(listener: IResponseListener<MutableList<QuestionItemResponse>>)
-    }
 }

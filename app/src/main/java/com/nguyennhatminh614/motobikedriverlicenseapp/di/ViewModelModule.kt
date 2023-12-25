@@ -11,9 +11,7 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.screen.settings.SettingsVi
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.study.StudyViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.tiphighscores.TipsHighScoreViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.trafficsign.TrafficSignViewModel
-import com.nguyennhatminh614.motobikedriverlicenseapp.screen.wronganswer.WrongAnswerViewModel
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
-import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 
@@ -22,7 +20,6 @@ val viewModelModule = module {
     viewModelOf(::TipsHighScoreViewModel)
     viewModelOf(::ExamViewModel)
     viewModelOf(::StudyViewModel)
-    viewModelOf(::WrongAnswerViewModel)
     viewModelOf(::SettingsViewModel)
     viewModelOf(::TrafficSignViewModel)
     viewModelOf(::InstructionViewModel)

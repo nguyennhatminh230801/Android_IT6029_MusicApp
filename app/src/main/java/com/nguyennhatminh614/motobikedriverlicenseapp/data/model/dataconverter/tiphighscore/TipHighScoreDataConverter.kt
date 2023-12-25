@@ -2,8 +2,8 @@ package com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.
 
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.IDataConverter
 
-object TipHighScoreEntityToTipHighScore : IDataConverter<TipsHighScoreEntity, TipHighScore>{
-    override fun convert(source: TipsHighScoreEntity): TipHighScore {
+object TipHighScoreEntityToTipHighScore : IDataConverter<TipsHighScoreItemResponse, TipHighScore>{
+    override fun convert(source: TipsHighScoreItemResponse): TipHighScore {
         return TipHighScore(
             id = source.id ?: 0,
             title = source.title ?: "",

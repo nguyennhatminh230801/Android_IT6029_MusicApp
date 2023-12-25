@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionBinding::inflate) {
+abstract class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionBinding::inflate) {
 
     private lateinit var iActivityMainCallback: IActivityMainCallback
 
@@ -34,14 +34,12 @@ class QuestionFragment : BaseFragment<FragmentQuestionBinding>(FragmentQuestionB
     }
 
     private val screenType: QuestionScreenType by lazy {
-        kotlin.runCatching {
-            arguments?.getString(ARG_QUESTION_SCREEN_TYPE)?.let { QuestionScreenType.valueOf(it) }
-        }.getOrNull() ?: QuestionScreenType.WrongAnswer
+        provideScreenType()
     }
 
-    /*private val bottomSheetDialog by lazy {
-        BottomSheetQuestionDialog()
-    }*/
+    open fun provideScreenType(): QuestionScreenType {
+        return QuestionScreenType.WrongAnswer
+    }
 
     private val questionAdapter by lazy { QuestionAdapter() }
 

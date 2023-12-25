@@ -1,6 +1,6 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.tiphighscore
 
-class TipsHighScoreEntity() {
+class TipsHighScoreItemResponse() {
     var id: Int? = null
     var title: String? = null
     var content: String? = null
@@ -19,7 +19,7 @@ class TipsHighScoreEntity() {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as TipsHighScoreEntity
+        other as TipsHighScoreItemResponse
 
         if (id != other.id) return false
         if (title != other.title) return false

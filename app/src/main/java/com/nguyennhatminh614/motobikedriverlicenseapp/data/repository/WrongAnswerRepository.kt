@@ -1,13 +1,10 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.data.repository
 
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.questions.QuestionItemResponse
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.WrongAnswer
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
 
 class WrongAnswerRepository(
     private val local: IWrongAnswerDataSource.Local,
-    private val remote: IWrongAnswerDataSource.Remote,
-) : IWrongAnswerDataSource.Local, IWrongAnswerDataSource.Remote {
+) : IWrongAnswerDataSource.Local {
 
     override suspend fun getAllWrongAnswerQuestion(): MutableList<WrongAnswer> =
         local.getAllWrongAnswerQuestion()
@@ -20,9 +17,4 @@ class WrongAnswerRepository(
 
     override suspend fun findWrongAnswerQuestionByID(id: Int)
         = local.findWrongAnswerQuestionByID(id)
-
-    override suspend fun getAllListQuestion(listener: IResponseListener<MutableList<QuestionItemResponse>>) {
-        remote.getAllListQuestion(listener)
-    }
-
 }

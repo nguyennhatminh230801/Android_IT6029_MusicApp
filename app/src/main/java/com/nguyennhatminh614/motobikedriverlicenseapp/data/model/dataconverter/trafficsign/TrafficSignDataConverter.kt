@@ -2,8 +2,8 @@ package com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.
 
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.IDataConverter
 
-object TrafficSignDataConverter : IDataConverter<TrafficSignsEntity, TrafficSigns> {
-    override fun convert(source: TrafficSignsEntity): TrafficSigns {
+object TrafficSignDataConverter : IDataConverter<TrafficSignsItemResponse, TrafficSigns> {
+    override fun convert(source: TrafficSignsItemResponse): TrafficSigns {
         return TrafficSigns(
             id = source.id,
             title = source.title,

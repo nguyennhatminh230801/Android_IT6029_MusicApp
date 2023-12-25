@@ -1,19 +1,12 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.trafficsign
 
-import android.util.Log
 import androidx.annotation.StringRes
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.trafficsign.TrafficSignCategory
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.trafficsign.TrafficSigns
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.trafficsign.TrafficSignsEntity
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.TrafficRepository
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.processDoubleQuotes
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.extensions.processEndline
-import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.IResponseListener
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

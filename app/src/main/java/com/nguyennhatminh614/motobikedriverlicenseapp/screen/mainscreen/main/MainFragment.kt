@@ -8,8 +8,6 @@ import androidx.navigation.fragment.findNavController
 import com.nguyennhatminh614.motobikedriverlicenseapp.R
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentMainBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.screen.mainscreen.MainCategoriesAdapter
-import com.nguyennhatminh614.motobikedriverlicenseapp.screen.question.QuestionFragment
-import com.nguyennhatminh614.motobikedriverlicenseapp.screen.question.QuestionScreenType
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseFragment
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.interfaces.screen.IActivityMainCallback
@@ -54,14 +52,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>(FragmentMainBinding::infl
                 CategoryType.SIGNAL -> findNavController().navigate(R.id.action_nav_main_to_nav_traffic_sign)
                 CategoryType.TIPS_HIGH_SCORE -> findNavController().navigate(R.id.action_nav_main_to_nav_tips_high_score)
                 CategoryType.WRONG_ANSWER -> {
-                    //findNavController().navigate(R.id.action_nav_main_to_nav_wrong_answer)
-                    QuestionFragment.start(
-                        context,
-                        R.id.action_nav_main_to_nav_question2,
-                        QuestionScreenType.WrongAnswer,
-                    )
+                    findNavController().navigate(R.id.action_nav_main_to_nav_wrong_answer)
                 }
-
                 CategoryType.SETTINGS -> findNavController().navigate(R.id.action_nav_main_to_nav_settings)
                 CategoryType.CHANGE_LICENSE_TYPE -> findNavController().navigate(R.id.action_nav_main_to_nav_change_license_type)
                 CategoryType.EXAM_GUIDE -> findNavController().navigate(R.id.action_nav_main_to_nav_instruction)
