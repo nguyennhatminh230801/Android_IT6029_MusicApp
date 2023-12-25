@@ -1,7 +1,6 @@
 package com.nguyennhatminh614.motobikedriverlicenseapp.screen.trafficsign
 
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.trafficsign.TrafficSigns
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.trafficsign.TrafficSignsEntity
 import com.nguyennhatminh614.motobikedriverlicenseapp.databinding.FragmentDetailTrafficSignBinding
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseFragment
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.base.BaseViewModel

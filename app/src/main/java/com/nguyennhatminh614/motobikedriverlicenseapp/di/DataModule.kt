@@ -11,10 +11,6 @@ import com.nguyennhatminh614.motobikedriverlicenseapp.utils.network.InternetConn
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
-val sharedPreferenceModule = module {
-    single { provideSharedPreferences(androidContext()) }
-}
-
 val databaseModule = module {
     single { provideDatabase(androidContext()) }
 
@@ -41,7 +37,3 @@ fun provideDatabase(context: Context): MotorbikeAppDatabase =
         MotorbikeAppDatabase::class.java,
         MotorbikeAppDatabase.DATABASE_NAME,
     ).allowMainThreadQueries().build()
-
-fun provideSharedPreferences(context: Context): SharedPreferences =
-    context.getSharedPreferences(AppConstant.SHARED_PREFERENCES_FILE_PATH,
-        Context.MODE_PRIVATE)

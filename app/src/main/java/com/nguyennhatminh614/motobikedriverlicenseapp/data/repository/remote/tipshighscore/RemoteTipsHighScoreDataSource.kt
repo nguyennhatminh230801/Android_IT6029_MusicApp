@@ -4,7 +4,7 @@ import arrow.core.Either
 import com.google.firebase.firestore.FirebaseFirestore
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.tiphighscore.TipHighScore
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.tiphighscore.TipHighScoreEntityToTipHighScore
-import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.tiphighscore.TipsHighScoreEntity
+import com.nguyennhatminh614.motobikedriverlicenseapp.data.model.dataconverter.tiphighscore.TipsHighScoreItemResponse
 import com.nguyennhatminh614.motobikedriverlicenseapp.data.repository.ITipsHighScoreDataSource
 import com.nguyennhatminh614.motobikedriverlicenseapp.utils.constant.AppConstant
 import kotlin.coroutines.resume
@@ -23,7 +23,7 @@ class RemoteTipsHighScoreDataSource(
             tipsHighScoreCollection.get().addOnCompleteListener { tasks ->
                 if (tasks.isSuccessful) {
                     val result: List<TipHighScore> =
-                        tasks.result.documents.mapNotNull { it.toObject(TipsHighScoreEntity::class.java) }
+                        tasks.result.documents.mapNotNull { it.toObject(TipsHighScoreItemResponse::class.java) }
                             .map { TipHighScoreEntityToTipHighScore.convert(it) }
 
                     continuation.resume(Either.Right(result))

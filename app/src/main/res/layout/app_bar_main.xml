@@ -56,17 +56,6 @@
                 android:textColor="@color/white"
                 android:visibility="gone" />
 
-            <Button
-                android:id="@+id/button_reset_wrong_answer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|center_vertical"
-                android:layout_marginEnd="@dimen/dp_10"
-                android:background="@color/transparent"
-                android:text="@string/button_reset"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:visibility="gone" />
 
             <ImageButton
                 android:id="@+id/button_info_exam_guide"
